@@ -1,0 +1,12 @@
+site
+-page d’acceuil el soura
+-site maftouh lal kel bas awal ma nfout fi menu na2e aya sene w aya majeur w fi sessionet msakara yalle byeftaha (bi bayin aando ano lezim yaaml subscription ta ykoun ma3o yehoun w ybayin had el lock aya session hiye)option subscription esma SOCIALPLUS yale bi koun badda account (username+password)
+nahna mnaati (baddo yhot mail w raem telephono) w nahna badna naati access
++hall lal password recovery bi hal hada daya3o + ykoun fi watermark la kel wahad bel username taba3o bel kbir bi tari2a ma tkhabe el katibe (bas lal sessionet el msakara)+ naaml option ybayin waeta hada yaaml screenshot +ykoun mafina neftaha aa two devices bi nafes el waet (mafine eftaha aa telephone w aal laptop bi nafs el waet)+ykoun fina naaml lock lal sessionet el badna yehoun+ data logs (min fet aa aya session bi aya se3a)+sans telechargement + repartir chaque matiere par matiere (pas annee par annee) faire une interface pour qu’on puisse a chaque debut d annee repartir les matieres par specialite et par annee(nahna na2e kel matiere la aya sene w fiya tkoun la kaza branche)
++calculator bel site laen mech maaeoul nruh aand el esf
+w ykoun fina nazil osas aal site gher el sessionet aal page d’acceuil + notifications (ex ano nazalna sessions jdide lal social plus)
++kel chi khasso bel medde sawa (cours + sessions +tp)
+
+gray: #5c5c5c
+orange: #ec682a
+
