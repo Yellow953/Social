@@ -1,4 +1,6 @@
 @import 'tailwindcss';
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import 'bootstrap-icons/font/bootstrap-icons.css';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -8,4 +10,41 @@
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+/* Custom Admin Panel Styles */
+.admin-sidebar {
+    background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.nav-item-active {
+    background: linear-gradient(135deg, #ec682a 0%, #d45a20 100%);
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(236, 104, 42, 0.3);
+}
+
+.nav-item-active i {
+    color: white !important;
+}
+
+.stat-card {
+    transition: all 0.3s ease;
+    border: 1px solid #e9ecef;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.action-card {
+    transition: all 0.3s ease;
+    border: 2px solid #e9ecef;
+}
+
+.action-card:hover {
+    border-color: #ec682a;
+    box-shadow: 0 8px 20px rgba(236, 104, 42, 0.15);
+    transform: translateY(-3px);
 }

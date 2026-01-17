@@ -1,0 +1,108 @@
+@extends('layouts.app')
+
+@section('title', 'Login - Social Plus')
+
+@section('content')
+<div class="min-vh-100 d-flex align-items-center position-relative" style="background: linear-gradient(135deg, #ec682a 0%, #d45a20 50%, #5c5c5c 100%); overflow: hidden;">
+    <!-- Decorative Elements -->
+    <div class="position-absolute top-0 start-0 w-100 h-100" style="opacity: 0.1;">
+        <div class="position-absolute" style="top: 10%; left: 10%; width: 200px; height: 200px; background: white; border-radius: 50%;"></div>
+        <div class="position-absolute" style="top: 60%; right: 15%; width: 150px; height: 150px; background: white; border-radius: 50%;"></div>
+        <div class="position-absolute" style="bottom: 20%; left: 20%; width: 100px; height: 100px; background: white; border-radius: 50%;"></div>
+    </div>
+
+    <div class="container position-relative">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="card border-0 shadow-lg bg-white">
+                    <div class="card-body p-5">
+                        <!-- Header -->
+                        <div class="text-center mb-4">
+                            <i class="bi bi-box-arrow-in-right fs-1 mb-3" style="color: #ec682a;"></i>
+                            <h3 class="fw-bold mb-1" style="color: #5c5c5c;">Welcome Back</h3>
+                        </div>
+
+                        <!-- Form -->
+                        <form method="POST" action="{{ route('login') }}">
+                            @csrf
+                            
+                            <!-- Email -->
+                            <div class="mb-3">
+                                <input type="email" 
+                                       class="form-control form-control-lg @error('email') is-invalid @enderror" 
+                                       id="email" 
+                                       name="email" 
+                                       value="{{ old('email') }}" 
+                                       placeholder="Email" 
+                                       required 
+                                       autocomplete="email"
+                                       autofocus>
+                                @error('email')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <!-- Password -->
+                            <div class="mb-3">
+                                <div class="input-group">
+                                    <input type="password" 
+                                           class="form-control form-control-lg @error('password') is-invalid @enderror" 
+                                           id="password" 
+                                           name="password" 
+                                           placeholder="Password" 
+                                           required 
+                                           autocomplete="current-password">
+                                    <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                        <i class="bi bi-eye" id="togglePasswordIcon"></i>
+                                    </button>
+                                    @error('password')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <!-- Remember Me & Forgot Password -->
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="remember" name="remember">
+                                    <label class="form-check-label text-muted small" for="remember">Remember me</label>
+                                </div>
+                                <a href="{{ route('password.request') }}" class="text-decoration-none small" style="color: #ec682a;">Forgot password?</a>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn w-100 btn-lg text-white fw-semibold py-2 mb-3" 
+                                    style="background: linear-gradient(135deg, #ec682a 0%, #d45a20 100%); border: none;">
+                                Sign In
+                            </button>
+
+                            <!-- Register Link -->
+                            <div class="text-center">
+                                <span class="text-muted small">Don't have an account? </span>
+                                <a href="{{ route('register') }}" class="text-decoration-none fw-semibold small" style="color: #ec682a;">Register</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('togglePassword')?.addEventListener('click', function() {
+        const passwordInput = document.getElementById('password');
+        const icon = document.getElementById('togglePasswordIcon');
+        
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            icon.classList.remove('bi-eye');
+            icon.classList.add('bi-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            icon.classList.remove('bi-eye-slash');
+            icon.classList.add('bi-eye');
+        }
+    });
+</script>
+@endsection
