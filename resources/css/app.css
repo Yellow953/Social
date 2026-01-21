@@ -48,3 +48,65 @@
     box-shadow: 0 8px 20px rgba(236, 104, 42, 0.15);
     transform: translateY(-3px);
 }
+
+/* Home Page Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+.animate-float {
+    animation: float 3s ease-in-out infinite;
+}
+
+.delay-500 {
+    animation-delay: 0.5s;
+}
+
+.delay-1000 {
+    animation-delay: 1s;
+}
+
+/* Remove underlines and blue color from all links - Force override Bootstrap defaults */
+a, a:link, a:visited, a:hover, a:active,
+[data-inertia-link],
+a[href],
+a[href]:link,
+a[href]:visited,
+a[href]:hover,
+a[href]:active,
+button[type="button"] a,
+.btn a {
+    text-decoration: none !important;
+}
+
+/* Force links to inherit color unless explicitly set */
+a:not([style*="color"]) {
+    color: inherit !important;
+}
+
+/* Specific fix for navigation and footer links */
+nav a, footer a {
+    color: inherit !important;
+    text-decoration: none !important;
+}
+
+/* Override Bootstrap link colors */
+a:not(.btn):not([class*="text-"]) {
+    color: inherit !important;
+}

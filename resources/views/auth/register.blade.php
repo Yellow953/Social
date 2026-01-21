@@ -1,9 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.auth')
 
 @section('title', 'Register - Social Plus')
 
 @section('content')
-<div class="min-vh-100 d-flex align-items-center py-5 position-relative" style="background: linear-gradient(135deg, #ec682a 0%, #d45a20 50%, #5c5c5c 100%); overflow: hidden;">
+<div class="min-vh-100 d-flex align-items-center py-5 position-relative" style="background: linear-gradient(135deg, #ec682a 0%, #d45a20 100%); overflow: hidden;">
     <!-- Decorative Elements -->
     <div class="position-absolute top-0 start-0 w-100 h-100" style="opacity: 0.1;">
         <div class="position-absolute" style="top: 5%; left: 5%; width: 250px; height: 250px; background: white; border-radius: 50%;"></div>
@@ -25,16 +25,16 @@
                         <!-- Form -->
                         <form method="POST" action="{{ route('register') }}">
                             @csrf
-                            
+
                             <!-- Full Name -->
                             <div class="mb-3">
-                                <input type="text" 
-                                       class="form-control form-control-lg @error('name') is-invalid @enderror" 
-                                       id="name" 
-                                       name="name" 
-                                       value="{{ old('name') }}" 
-                                       placeholder="Full Name" 
-                                       required 
+                                <input type="text"
+                                       class="form-control form-control-lg @error('name') is-invalid @enderror"
+                                       id="name"
+                                       name="name"
+                                       value="{{ old('name') }}"
+                                       placeholder="Full Name"
+                                       required
                                        autocomplete="name"
                                        autofocus>
                                 @error('name')
@@ -44,13 +44,13 @@
 
                             <!-- Email -->
                             <div class="mb-3">
-                                <input type="email" 
-                                       class="form-control form-control-lg @error('email') is-invalid @enderror" 
-                                       id="email" 
-                                       name="email" 
-                                       value="{{ old('email') }}" 
-                                       placeholder="Email" 
-                                       required 
+                                <input type="email"
+                                       class="form-control form-control-lg @error('email') is-invalid @enderror"
+                                       id="email"
+                                       name="email"
+                                       value="{{ old('email') }}"
+                                       placeholder="Email"
+                                       required
                                        autocomplete="email">
                                 @error('email')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -59,13 +59,13 @@
 
                             <!-- Phone -->
                             <div class="mb-3">
-                                <input type="tel" 
-                                       class="form-control form-control-lg @error('phone') is-invalid @enderror" 
-                                       id="phone" 
-                                       name="phone" 
-                                       value="{{ old('phone') }}" 
-                                       placeholder="Phone Number" 
-                                       required 
+                                <input type="tel"
+                                       class="form-control form-control-lg @error('phone') is-invalid @enderror"
+                                       id="phone"
+                                       name="phone"
+                                       value="{{ old('phone') }}"
+                                       placeholder="Phone Number"
+                                       required
                                        autocomplete="tel">
                                 @error('phone')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -75,12 +75,12 @@
                             <!-- Password -->
                             <div class="mb-3">
                                 <div class="input-group">
-                                    <input type="password" 
-                                           class="form-control form-control-lg @error('password') is-invalid @enderror" 
-                                           id="password" 
-                                           name="password" 
-                                           placeholder="Password" 
-                                           required 
+                                    <input type="password"
+                                           class="form-control form-control-lg @error('password') is-invalid @enderror"
+                                           id="password"
+                                           name="password"
+                                           placeholder="Password"
+                                           required
                                            autocomplete="new-password">
                                     <button class="btn btn-outline-secondary" type="button" id="togglePassword">
                                         <i class="bi bi-eye" id="togglePasswordIcon"></i>
@@ -94,12 +94,12 @@
                             <!-- Confirm Password -->
                             <div class="mb-4">
                                 <div class="input-group">
-                                    <input type="password" 
-                                           class="form-control form-control-lg" 
-                                           id="password_confirmation" 
-                                           name="password_confirmation" 
-                                           placeholder="Confirm Password" 
-                                           required 
+                                    <input type="password"
+                                           class="form-control form-control-lg"
+                                           id="password_confirmation"
+                                           name="password_confirmation"
+                                           placeholder="Confirm Password"
+                                           required
                                            autocomplete="new-password">
                                     <button class="btn btn-outline-secondary" type="button" id="togglePasswordConfirmation">
                                         <i class="bi bi-eye" id="togglePasswordConfirmationIcon"></i>
@@ -118,7 +118,7 @@
                             </div>
 
                             <!-- Submit Button -->
-                            <button type="submit" class="btn w-100 btn-lg text-white fw-semibold py-2 mb-3" 
+                            <button type="submit" class="btn w-100 btn-lg text-white fw-semibold py-2 mb-3"
                                     style="background: linear-gradient(135deg, #ec682a 0%, #d45a20 100%); border: none;">
                                 Create Account
                             </button>
@@ -143,7 +143,7 @@
             toggle.addEventListener('click', function() {
                 const passwordInput = document.getElementById(inputId);
                 const icon = document.getElementById(iconId);
-                
+
                 if (passwordInput.type === 'password') {
                     passwordInput.type = 'text';
                     icon.classList.remove('bi-eye');

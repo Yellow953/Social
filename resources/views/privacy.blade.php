@@ -62,8 +62,8 @@
                             <section class="mb-5">
                                 <h3 class="fw-bold mb-3" style="color: #5c5c5c;">4. Watermarking</h3>
                                 <p class="text-muted">
-                                    For security purposes, locked sessions may display your username as a watermark. 
-                                    This watermark is designed to be visible but not interfere with content readability. 
+                                    For security purposes, locked sessions may display your username as a watermark.
+                                    This watermark is designed to be visible but not interfere with content readability.
                                     This helps protect intellectual property and prevent unauthorized sharing.
                                 </p>
                             </section>
@@ -71,7 +71,7 @@
                             <section class="mb-5">
                                 <h3 class="fw-bold mb-3" style="color: #5c5c5c;">5. Device Restrictions</h3>
                                 <p class="text-muted">
-                                    To ensure account security and prevent unauthorized access, your account may only be accessed from one device at a time. 
+                                    To ensure account security and prevent unauthorized access, your account may only be accessed from one device at a time.
                                     We track device information to enforce this restriction and protect your account.
                                 </p>
                             </section>
@@ -92,8 +92,8 @@
                             <section class="mb-5">
                                 <h3 class="fw-bold mb-3" style="color: #5c5c5c;">7. Data Security</h3>
                                 <p class="text-muted">
-                                    We implement appropriate technical and organizational security measures to protect your personal information against 
-                                    unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the Internet 
+                                    We implement appropriate technical and organizational security measures to protect your personal information against
+                                    unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the Internet
                                     or electronic storage is 100% secure.
                                 </p>
                             </section>
@@ -113,7 +113,7 @@
                             <section class="mb-5">
                                 <h3 class="fw-bold mb-3" style="color: #5c5c5c;">9. Cookies and Tracking</h3>
                                 <p class="text-muted">
-                                    We use cookies and similar tracking technologies to track activity on our platform and hold certain information. 
+                                    We use cookies and similar tracking technologies to track activity on our platform and hold certain information.
                                     You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent.
                                 </p>
                             </section>
@@ -121,7 +121,7 @@
                             <section class="mb-5">
                                 <h3 class="fw-bold mb-3" style="color: #5c5c5c;">10. Changes to This Policy</h3>
                                 <p class="text-muted">
-                                    We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy 
+                                    We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy
                                     on this page and updating the "Last updated" date.
                                 </p>
                             </section>

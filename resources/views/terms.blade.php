@@ -19,7 +19,7 @@
                             <section class="mb-5">
                                 <h3 class="fw-bold mb-3" style="color: #5c5c5c;">1. Acceptance of Terms</h3>
                                 <p class="text-muted">
-                                    By accessing and using Social Plus, you accept and agree to be bound by the terms and provision of this agreement. 
+                                    By accessing and using Social Plus, you accept and agree to be bound by the terms and provision of this agreement.
                                     If you do not agree to abide by the above, please do not use this service.
                                 </p>
                             </section>
@@ -27,7 +27,7 @@
                             <section class="mb-5">
                                 <h3 class="fw-bold mb-3" style="color: #5c5c5c;">2. Use License</h3>
                                 <p class="text-muted mb-3">
-                                    Permission is granted to temporarily access the materials on Social Plus for personal, non-commercial transitory viewing only. 
+                                    Permission is granted to temporarily access the materials on Social Plus for personal, non-commercial transitory viewing only.
                                     This is the grant of a license, not a transfer of title, and under this license you may not:
                                 </p>
                                 <ul class="text-muted">
@@ -55,7 +55,7 @@
                             <section class="mb-5">
                                 <h3 class="fw-bold mb-3" style="color: #5c5c5c;">4. User Account</h3>
                                 <p class="text-muted mb-3">
-                                    When you create an account with us, you must provide information that is accurate, complete, and current at all times. 
+                                    When you create an account with us, you must provide information that is accurate, complete, and current at all times.
                                     You are responsible for safeguarding the password and for all activities that occur under your account.
                                 </p>
                                 <p class="text-muted">
@@ -79,7 +79,7 @@
                             <section class="mb-5">
                                 <h3 class="fw-bold mb-3" style="color: #5c5c5c;">6. Device Restrictions</h3>
                                 <p class="text-muted">
-                                    Your account may only be accessed from one device at a time. Attempting to access your account from multiple devices simultaneously 
+                                    Your account may only be accessed from one device at a time. Attempting to access your account from multiple devices simultaneously
                                     may result in automatic logout or account suspension.
                                 </p>
                             </section>
@@ -98,7 +98,7 @@
                             <section class="mb-5">
                                 <h3 class="fw-bold mb-3" style="color: #5c5c5c;">8. Termination</h3>
                                 <p class="text-muted">
-                                    We may terminate or suspend your account and bar access to the service immediately, without prior notice or liability, 
+                                    We may terminate or suspend your account and bar access to the service immediately, without prior notice or liability,
                                     under our sole discretion, for any reason whatsoever and without limitation, including but not limited to a breach of the Terms.
                                 </p>
                             </section>

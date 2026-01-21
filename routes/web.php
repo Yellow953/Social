@@ -9,10 +9,11 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\TermsController;
 use App\Http\Controllers\PrivacyController;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 // Public routes
 Route::get('/', function () {
-    return view('welcome');
+    return Inertia::render('Welcome');
 });
 
 // Legal pages

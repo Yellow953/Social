@@ -1,9 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.auth')
 
 @section('title', 'Reset Password - Social Plus')
 
 @section('content')
-<div class="min-vh-100 d-flex align-items-center position-relative" style="background: linear-gradient(135deg, #ec682a 0%, #d45a20 50%, #5c5c5c 100%); overflow: hidden;">
+<div class="min-vh-100 d-flex align-items-center position-relative" style="background: linear-gradient(135deg, #ec682a 0%, #d45a20 100%); overflow: hidden;">
     <!-- Decorative Elements -->
     <div class="position-absolute top-0 start-0 w-100 h-100" style="opacity: 0.1;">
         <div class="position-absolute" style="top: 10%; left: 10%; width: 200px; height: 200px; background: white; border-radius: 50%;"></div>
@@ -24,18 +24,18 @@
                         <!-- Form -->
                         <form method="POST" action="{{ route('password.update') }}">
                             @csrf
-                            
+
                             <input type="hidden" name="token" value="{{ $token }}">
-                            
+
                             <!-- Email -->
                             <div class="mb-3">
-                                <input type="email" 
-                                       class="form-control form-control-lg @error('email') is-invalid @enderror" 
-                                       id="email" 
-                                       name="email" 
-                                       value="{{ $email ?? old('email') }}" 
-                                       placeholder="Email" 
-                                       required 
+                                <input type="email"
+                                       class="form-control form-control-lg @error('email') is-invalid @enderror"
+                                       id="email"
+                                       name="email"
+                                       value="{{ $email ?? old('email') }}"
+                                       placeholder="Email"
+                                       required
                                        autocomplete="email"
                                        readonly>
                                 @error('email')
@@ -46,12 +46,12 @@
                             <!-- New Password -->
                             <div class="mb-3">
                                 <div class="input-group">
-                                    <input type="password" 
-                                           class="form-control form-control-lg @error('password') is-invalid @enderror" 
-                                           id="password" 
-                                           name="password" 
-                                           placeholder="New Password" 
-                                           required 
+                                    <input type="password"
+                                           class="form-control form-control-lg @error('password') is-invalid @enderror"
+                                           id="password"
+                                           name="password"
+                                           placeholder="New Password"
+                                           required
                                            autocomplete="new-password">
                                     <button class="btn btn-outline-secondary" type="button" id="togglePassword">
                                         <i class="bi bi-eye" id="togglePasswordIcon"></i>
@@ -65,12 +65,12 @@
                             <!-- Confirm Password -->
                             <div class="mb-4">
                                 <div class="input-group">
-                                    <input type="password" 
-                                           class="form-control form-control-lg" 
-                                           id="password_confirmation" 
-                                           name="password_confirmation" 
-                                           placeholder="Confirm Password" 
-                                           required 
+                                    <input type="password"
+                                           class="form-control form-control-lg"
+                                           id="password_confirmation"
+                                           name="password_confirmation"
+                                           placeholder="Confirm Password"
+                                           required
                                            autocomplete="new-password">
                                     <button class="btn btn-outline-secondary" type="button" id="togglePasswordConfirmation">
                                         <i class="bi bi-eye" id="togglePasswordConfirmationIcon"></i>
@@ -79,7 +79,7 @@
                             </div>
 
                             <!-- Submit Button -->
-                            <button type="submit" class="btn w-100 btn-lg text-white fw-semibold py-2 mb-3" 
+                            <button type="submit" class="btn w-100 btn-lg text-white fw-semibold py-2 mb-3"
                                     style="background: linear-gradient(135deg, #ec682a 0%, #d45a20 100%); border: none;">
                                 Reset Password
                             </button>
@@ -105,7 +105,7 @@
             toggle.addEventListener('click', function() {
                 const passwordInput = document.getElementById(inputId);
                 const icon = document.getElementById(iconId);
-                
+
                 if (passwordInput.type === 'password') {
                     passwordInput.type = 'text';
                     icon.classList.remove('bi-eye');
