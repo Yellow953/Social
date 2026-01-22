@@ -10,3 +10,8 @@ w ykoun fina nazil osas aal site gher el sessionet aal page d’acceuil + notifi
 gray: #5c5c5c
 orange: #ec682a
 
+each of the normal users will have a studyyear and a major
+sessions are locked by default, to access them the user needs to subscribe to the SOCIALPLUS subscription that will need to be approved from admin so he can access the sessions.
+we need to have logs for the users, so we can see which sessions they have accessed and for how long.
+users cant login from same account on multiple devices at the same time.
+sessions should be classified by course and year, so we can easily find the sessions we need.

@@ -9,6 +9,9 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700" rel="stylesheet" />
 
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <!-- Styles / Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.jsx'])
 </head>
@@ -20,7 +23,7 @@
             <div class="p-4 border-bottom bg-white">
                 <div class="d-flex align-items-center">
                     <div class="bg-gradient rounded-3 p-2 me-3" style="background: linear-gradient(135deg, #ec682a 0%, #d45a20 100%);">
-                        <i class="bi bi-book text-white fs-5"></i>
+                        <i class="fas fa-book text-white fs-5"></i>
                     </div>
                     <div>
                         <a href="{{ route('admin.dashboard') }}" class="text-decoration-none">
@@ -37,40 +40,40 @@
                     <li class="nav-item">
                         <a href="{{ route('admin.dashboard') }}"
                            class="nav-link d-flex align-items-center {{ request()->routeIs('admin.dashboard') ? 'nav-item-active' : 'text-dark' }}">
-                            <i class="bi bi-house-door me-3"></i>
+                            <i class="fas fa-home me-3"></i>
                             <span class="fw-semibold">Dashboard</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link d-flex align-items-center justify-content-between text-dark">
+                        <a href="{{ route('admin.users') }}" class="nav-link d-flex align-items-center justify-content-between {{ request()->routeIs('admin.users') ? 'nav-item-active' : 'text-dark' }}">
                             <div class="d-flex align-items-center">
-                                <i class="bi bi-people me-3"></i>
+                                <i class="fas fa-users me-3"></i>
                                 <span class="fw-semibold">Users</span>
                             </div>
                             <span class="badge bg-primary rounded-pill">{{ \App\Models\User::count() }}</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link d-flex align-items-center text-dark">
-                            <i class="bi bi-book me-3"></i>
+                        <a href="{{ route('courses') }}" class="nav-link d-flex align-items-center {{ request()->routeIs('courses') ? 'nav-item-active' : 'text-dark' }}">
+                            <i class="fas fa-book me-3"></i>
                             <span class="fw-semibold">Courses</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link d-flex align-items-center text-dark">
-                            <i class="bi bi-file-earmark-text me-3"></i>
+                        <a href="{{ route('sessions') }}" class="nav-link d-flex align-items-center {{ request()->routeIs('sessions') ? 'nav-item-active' : 'text-dark' }}">
+                            <i class="fas fa-play-circle me-3"></i>
                             <span class="fw-semibold">Sessions</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link d-flex align-items-center text-dark">
-                            <i class="bi bi-graph-up me-3"></i>
+                        <a href="{{ route('admin.analytics') }}" class="nav-link d-flex align-items-center {{ request()->routeIs('admin.analytics') ? 'nav-item-active' : 'text-dark' }}">
+                            <i class="fas fa-chart-line me-3"></i>
                             <span class="fw-semibold">Analytics & Logs</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link d-flex align-items-center text-dark">
-                            <i class="bi bi-gear me-3"></i>
+                        <a href="{{ route('settings') }}" class="nav-link d-flex align-items-center {{ request()->routeIs('settings') ? 'nav-item-active' : 'text-dark' }}">
+                            <i class="fas fa-cog me-3"></i>
                             <span class="fw-semibold">Settings</span>
                         </a>
                     </li>
@@ -92,13 +95,13 @@
                 <div class="d-flex gap-2">
                     <a href="{{ route('dashboard') }}"
                        class="btn btn-outline-secondary btn-sm flex-grow-1">
-                        <i class="bi bi-globe me-1"></i>Frontend
+                        <i class="fas fa-globe me-1"></i>Frontend
                     </a>
                     <form method="POST" action="{{ route('logout') }}" class="flex-grow-1">
                         @csrf
                         <button type="submit" class="btn btn-sm w-100 text-white"
                                 style="background: linear-gradient(135deg, #ec682a 0%, #d45a20 100%);">
-                            <i class="bi bi-box-arrow-right me-1"></i>Logout
+                            <i class="fas fa-sign-out-alt me-1"></i>Logout
                         </button>
                     </form>
                 </div>
@@ -118,17 +121,17 @@
                         <!-- Search -->
                         <div class="input-group" style="width: 300px;">
                             <span class="input-group-text bg-light border-end-0">
-                                <i class="bi bi-search text-muted"></i>
+                                <i class="fas fa-search text-muted"></i>
                             </span>
                             <input type="text" class="form-control border-start-0" placeholder="Search...">
                         </div>
                         <!-- Notifications -->
-                        <button class="btn btn-light position-relative">
-                            <i class="bi bi-bell fs-5"></i>
+                        <a href="{{ route('notifications') }}" class="btn btn-light position-relative text-decoration-none">
+                            <i class="fas fa-bell fs-5"></i>
                             <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
                                 <span class="visually-hidden">New alerts</span>
                             </span>
-                        </button>
+                        </a>
                     </div>
                 </div>
             </header>

@@ -1,7 +1,10 @@
-@extends('layouts.admin')
+@extends('layouts.dashboard')
 
-@section('title', 'Admin Dashboard')
-@section('page-title', 'Dashboard Overview')
+@section('title', 'Admin Dashboard - Social Plus')
+
+@section('breadcrumb')
+    <li class="breadcrumb-item active" aria-current="page">Overview</li>
+@endsection
 
 @section('content')
 <div class="d-flex flex-column gap-4">
@@ -16,7 +19,7 @@
                 <div class="col-md-4 text-end d-none d-md-block">
                     <div class="bg-white bg-opacity-20 rounded-circle d-inline-flex align-items-center justify-content-center"
                          style="width: 120px; height: 120px; backdrop-filter: blur(10px);">
-                        <i class="bi bi-graph-up-arrow fs-1"></i>
+                        <i class="fas fa-chart-line fa-3x"></i>
                     </div>
                 </div>
             </div>
@@ -30,7 +33,7 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center justify-content-between mb-3">
                         <div class="bg-primary bg-gradient rounded-3 p-3">
-                            <i class="bi bi-people fs-4 text-white"></i>
+                            <i class="fas fa-users fa-2x text-white"></i>
                         </div>
                         <span class="badge bg-primary bg-opacity-10 text-primary">+12%</span>
                     </div>
@@ -46,7 +49,7 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center justify-content-between mb-3">
                         <div class="bg-success bg-gradient rounded-3 p-3">
-                            <i class="bi bi-book fs-4 text-white"></i>
+                            <i class="fas fa-book fa-2x text-white"></i>
                         </div>
                         <span class="badge bg-success bg-opacity-10 text-success">New</span>
                     </div>
@@ -62,7 +65,7 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center justify-content-between mb-3">
                         <div class="bg-info bg-gradient rounded-3 p-3">
-                            <i class="bi bi-file-earmark-text fs-4 text-white"></i>
+                            <i class="fas fa-play-circle fa-2x text-white"></i>
                         </div>
                         <span class="badge bg-info bg-opacity-10 text-info">Active</span>
                     </div>
@@ -78,7 +81,7 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center justify-content-between mb-3">
                         <div class="rounded-3 p-3" style="background: linear-gradient(135deg, #ec682a 0%, #d45a20 100%);">
-                            <i class="bi bi-activity fs-4 text-white"></i>
+                            <i class="fas fa-chart-bar fa-2x text-white"></i>
                         </div>
                         <span class="badge" style="background: rgba(236, 104, 42, 0.1); color: #ec682a;">Live</span>
                     </div>
@@ -99,18 +102,18 @@
         <div class="card-body">
             <div class="row g-4">
                 <div class="col-md-4">
-                    <a href="#" class="text-decoration-none">
+                    <a href="{{ route('admin.users') }}" class="text-decoration-none">
                         <div class="card action-card border h-100">
                             <div class="card-body">
                                 <div class="d-flex align-items-center mb-3">
                                     <div class="bg-primary bg-gradient rounded-3 p-3 me-3">
-                                        <i class="bi bi-people fs-5 text-white"></i>
+                                        <i class="fas fa-users fa-lg text-white"></i>
                                     </div>
                                     <div class="flex-grow-1">
                                         <h6 class="mb-1 fw-bold text-dark">Manage Users</h6>
                                         <p class="text-muted small mb-0">View and manage user accounts</p>
                                     </div>
-                                    <i class="bi bi-chevron-right text-muted"></i>
+                                    <i class="fas fa-chevron-right text-muted"></i>
                                 </div>
                             </div>
                         </div>
@@ -118,18 +121,18 @@
                 </div>
 
                 <div class="col-md-4">
-                    <a href="#" class="text-decoration-none">
+                    <a href="{{ route('courses') }}" class="text-decoration-none">
                         <div class="card action-card border h-100">
                             <div class="card-body">
                                 <div class="d-flex align-items-center mb-3">
                                     <div class="bg-success bg-gradient rounded-3 p-3 me-3">
-                                        <i class="bi bi-book fs-5 text-white"></i>
+                                        <i class="fas fa-book fa-lg text-white"></i>
                                     </div>
                                     <div class="flex-grow-1">
                                         <h6 class="mb-1 fw-bold text-dark">Manage Courses</h6>
                                         <p class="text-muted small mb-0">Organize courses by subject and year</p>
                                     </div>
-                                    <i class="bi bi-chevron-right text-muted"></i>
+                                    <i class="fas fa-chevron-right text-muted"></i>
                                 </div>
                             </div>
                         </div>
@@ -137,18 +140,18 @@
                 </div>
 
                 <div class="col-md-4">
-                    <a href="#" class="text-decoration-none">
+                    <a href="{{ route('admin.analytics') }}" class="text-decoration-none">
                         <div class="card action-card border h-100">
                             <div class="card-body">
                                 <div class="d-flex align-items-center mb-3">
                                     <div class="bg-info bg-gradient rounded-3 p-3 me-3">
-                                        <i class="bi bi-graph-up fs-5 text-white"></i>
+                                        <i class="fas fa-chart-line fa-lg text-white"></i>
                                     </div>
                                     <div class="flex-grow-1">
                                         <h6 class="mb-1 fw-bold text-dark">View Analytics</h6>
                                         <p class="text-muted small mb-0">Access data logs and session history</p>
                                     </div>
-                                    <i class="bi bi-chevron-right text-muted"></i>
+                                    <i class="fas fa-chevron-right text-muted"></i>
                                 </div>
                             </div>
                         </div>
@@ -162,13 +165,13 @@
     <div class="card border-0 shadow-sm">
         <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between">
             <h5 class="mb-0 fw-bold">Recent Activity</h5>
-            <a href="#" class="text-decoration-none small fw-semibold" style="color: #ec682a;">View all <i class="bi bi-arrow-right"></i></a>
+            <a href="{{ route('admin.analytics') }}" class="text-decoration-none small fw-semibold" style="color: #ec682a;">View all <i class="fas fa-arrow-right"></i></a>
         </div>
         <div class="card-body">
             <div class="text-center py-5">
                 <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
                      style="width: 80px; height: 80px;">
-                    <i class="bi bi-clipboard-data fs-1 text-muted"></i>
+                    <i class="fas fa-clipboard-list fa-3x text-muted"></i>
                 </div>
                 <p class="text-muted fw-medium mb-1">No recent activity</p>
                 <p class="text-muted small">Activity will appear here as users interact with the platform</p>
