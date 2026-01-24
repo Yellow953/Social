@@ -28,6 +28,8 @@ class RegisterController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'phone' => 'required|string|max:20',
+            'study_year' => 'required|integer|min:1|max:10',
+            'major' => 'required|string|max:255',
             'password' => ['required', 'confirmed', Password::defaults()],
         ]);
 
@@ -35,6 +37,8 @@ class RegisterController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
+            'study_year' => $request->study_year,
+            'major' => $request->major,
             'password' => Hash::make($request->password),
             'role' => 'user', // Default role
         ]);

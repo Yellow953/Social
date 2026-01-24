@@ -17,6 +17,9 @@
 
     <!-- Dashboard Styles -->
     @include('partials.dashboard.styles')
+
+    <!-- Page-specific styles -->
+    @stack('styles')
 </head>
 <body class="bg-gray-50">
     <div class="d-flex">

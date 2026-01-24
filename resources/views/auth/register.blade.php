@@ -72,6 +72,36 @@
                                 @enderror
                             </div>
 
+                            <!-- Study Year -->
+                            <div class="mb-3">
+                                <select class="form-control form-control-lg @error('study_year') is-invalid @enderror"
+                                        id="study_year"
+                                        name="study_year"
+                                        required>
+                                    <option value="">Select Study Year</option>
+                                    @for($i = 1; $i <= 10; $i++)
+                                        <option value="{{ $i }}" {{ old('study_year') == $i ? 'selected' : '' }}>Year {{ $i }}</option>
+                                    @endfor
+                                </select>
+                                @error('study_year')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <!-- Major -->
+                            <div class="mb-3">
+                                <input type="text"
+                                       class="form-control form-control-lg @error('major') is-invalid @enderror"
+                                       id="major"
+                                       name="major"
+                                       value="{{ old('major') }}"
+                                       placeholder="Major/Field of Study"
+                                       required>
+                                @error('major')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
                             <!-- Password -->
                             <div class="mb-3">
                                 <div class="input-group">

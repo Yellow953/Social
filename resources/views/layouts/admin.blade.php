@@ -45,7 +45,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('admin.users') }}" class="nav-link d-flex align-items-center justify-content-between {{ request()->routeIs('admin.users') ? 'nav-item-active' : 'text-dark' }}">
+                        <a href="{{ route('admin.users.index') }}" class="nav-link d-flex align-items-center justify-content-between {{ request()->routeIs('admin.users*') ? 'nav-item-active' : 'text-dark' }}">
                             <div class="d-flex align-items-center">
                                 <i class="fas fa-users me-3"></i>
                                 <span class="fw-semibold">Users</span>

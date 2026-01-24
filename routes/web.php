@@ -42,21 +42,38 @@ Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showRese
 Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
 
 // Protected routes (require authentication)
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'single.device'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/courses', [CourseController::class, 'index'])->name('courses');
-    Route::get('/sessions', [SessionController::class, 'index'])->name('sessions');
+    Route::middleware('subscription')->group(function () {
+        Route::get('/sessions', [SessionController::class, 'index'])->name('sessions');
+        Route::get('/sessions/{session}', [SessionController::class, 'show'])->name('sessions.show');
+        Route::post('/sessions/{session}/watch-time', [SessionController::class, 'updateWatchTime'])->name('sessions.watch-time');
+    });
     Route::get('/calculator', [CalculatorController::class, 'index'])->name('calculator');
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications');
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
     Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
+    Route::get('/subscriptions', [\App\Http\Controllers\SubscriptionController::class, 'index'])->name('subscriptions.index');
+    Route::get('/subscriptions/create', [\App\Http\Controllers\SubscriptionController::class, 'create'])->name('subscriptions.create');
+    Route::post('/subscriptions', [\App\Http\Controllers\SubscriptionController::class, 'store'])->name('subscriptions.store');
 });
 
 // Admin routes (require authentication + admin role)
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
-    Route::get('/users', [AdminUserController::class, 'index'])->name('users');
+    Route::resource('users', AdminUserController::class);
     Route::get('/analytics', [AdminAnalyticsController::class, 'index'])->name('analytics');
+    Route::get('/subscriptions', [\App\Http\Controllers\Admin\SubscriptionController::class, 'index'])->name('subscriptions');
+    Route::post('/subscriptions/{subscription}/approve', [\App\Http\Controllers\Admin\SubscriptionController::class, 'approve'])->name('subscriptions.approve');
+    Route::post('/subscriptions/{subscription}/reject', [\App\Http\Controllers\Admin\SubscriptionController::class, 'reject'])->name('subscriptions.reject');
+    Route::get('/access-logs', [\App\Http\Controllers\Admin\AccessLogController::class, 'index'])->name('access-logs');
+
+    // Courses CRUD
+    Route::resource('courses', \App\Http\Controllers\Admin\CourseController::class);
+
+    // Sessions CRUD
+    Route::resource('sessions', \App\Http\Controllers\Admin\SessionController::class);
 });

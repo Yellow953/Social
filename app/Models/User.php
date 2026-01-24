@@ -23,6 +23,11 @@ class User extends Authenticatable
         'phone',
         'password',
         'role',
+        'study_year',
+        'major',
+        'device_token',
+        'device_identifier',
+        'last_device_login_at',
     ];
 
     /**
@@ -45,6 +50,8 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'last_device_login_at' => 'datetime',
+            'study_year' => 'integer',
         ];
     }
 
@@ -54,5 +61,78 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
+    }
+
+    /**
+     * Get the user's subscriptions
+     */
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
+    }
+
+    /**
+     * Get the user's active subscription
+     */
+    public function activeSubscription()
+    {
+        return $this->subscriptions()
+            ->where('status', 'approved')
+            ->where(function($query) {
+                $query->whereNull('expires_at')
+                    ->orWhere('expires_at', '>', now());
+            })
+            ->latest()
+            ->first();
+    }
+
+    /**
+     * Check if user has active subscription
+     */
+    public function hasActiveSubscription(): bool
+    {
+        return $this->activeSubscription() !== null;
+    }
+
+    /**
+     * Get the user's session access logs
+     */
+    public function sessionAccessLogs()
+    {
+        return $this->hasMany(SessionAccessLog::class);
+    }
+
+    /**
+     * Generate device identifier from request
+     */
+    public static function generateDeviceIdentifier($request): string
+    {
+        $userAgent = $request->userAgent() ?? '';
+        $ip = $request->ip() ?? '';
+        return md5($userAgent . $ip);
+    }
+
+    /**
+     * Check if device matches current device
+     */
+    public function isDeviceAllowed($deviceIdentifier): bool
+    {
+        if (empty($this->device_identifier)) {
+            return true; // First login, allow it
+        }
+        return $this->device_identifier === $deviceIdentifier;
+    }
+
+    /**
+     * Update device information
+     */
+    public function updateDeviceInfo($deviceIdentifier, $deviceToken = null): void
+    {
+        $this->device_identifier = $deviceIdentifier;
+        if ($deviceToken) {
+            $this->device_token = $deviceToken;
+        }
+        $this->last_device_login_at = now();
+        $this->save();
     }
 }
