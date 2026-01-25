@@ -12,12 +12,12 @@
         <div class="col-lg-6">
             <!-- Page Header -->
             <div class="text-center mb-4">
-                <h2 class="fw-bold mb-1"><i class="fas fa-calculator me-2 text-green-600"></i>Calculator</h2>
+                <h2 class="fw-bold mb-1" style="color: #1e3a8a;"><i class="fas fa-calculator me-2" style="color: #3b82f6;"></i>Calculator</h2>
                 <p class="text-muted mb-0">Built-in calculator for your convenience</p>
             </div>
 
             <!-- Calculator -->
-            <div class="card border-0 shadow-lg">
+            <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
                 <div class="card-body p-4">
                     <!-- Display -->
                     <div class="bg-light rounded p-4 mb-3 text-end">

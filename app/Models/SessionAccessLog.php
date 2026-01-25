@@ -37,7 +37,7 @@ class SessionAccessLog extends Model
      */
     public function videoSession(): BelongsTo
     {
-        return $this->belongsTo(VideoSession::class);
+        return $this->belongsTo(VideoSession::class, 'video_session_id');
     }
 
     /**

@@ -339,4 +339,18 @@
             margin-left: 0;
         }
     }
+
+    /* Action Cards Hover Effect */
+    .action-card-link {
+        display: block;
+    }
+
+    .action-card {
+        transition: all 0.3s ease;
+    }
+
+    .action-card-link:hover .action-card {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15) !important;
+    }
 </style>

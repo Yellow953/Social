@@ -11,7 +11,7 @@
     <!-- Page Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="fw-bold mb-1"><i class="fas fa-credit-card me-2 text-primary"></i>My Subscriptions</h2>
+            <h2 class="fw-bold mb-1" style="color: #1e3a8a;"><i class="fas fa-credit-card me-2" style="color: #3b82f6;"></i>My Subscriptions</h2>
             <p class="text-muted mb-0">Manage your SOCIALPLUS subscription</p>
         </div>
         @if(!$activeSubscription)
@@ -44,8 +44,8 @@
 
     <!-- Active Subscription Card -->
     @if($activeSubscription)
-        <div class="card border-0 shadow-sm mb-4" style="border-left: 4px solid #28a745 !important;">
-            <div class="card-body">
+        <div class="card border-0 shadow-lg mb-4 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+            <div class="card-body p-4">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
                         <h5 class="fw-bold mb-2">
@@ -76,9 +76,9 @@
     @endif
 
     <!-- Subscription History -->
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-white border-bottom">
-            <h5 class="mb-0 fw-bold">Subscription History</h5>
+    <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+        <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-3">
+            <h5 class="mb-0 fw-bold" style="color: #1e3a8a;">Subscription History</h5>
         </div>
         <div class="card-body p-0">
             @if($subscriptions->isEmpty())

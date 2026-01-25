@@ -11,7 +11,7 @@
     <!-- Page Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="fw-bold mb-1"><i class="fas fa-bell me-2 text-warning"></i>Notifications</h2>
+            <h2 class="fw-bold mb-1" style="color: #1e3a8a;"><i class="fas fa-bell me-2" style="color: #3b82f6;"></i>Notifications</h2>
             <p class="text-muted mb-0">Stay updated with your latest activities</p>
         </div>
         <button class="btn btn-outline-secondary">
@@ -44,7 +44,10 @@
     </ul>
 
     <!-- Notifications List -->
-    <div class="card border-0 shadow-sm">
+    <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+        <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-3">
+            <h5 class="mb-0 fw-bold" style="color: #1e3a8a;">All Notifications</h5>
+        </div>
         <div class="card-body p-0">
             @for($i = 1; $i <= 10; $i++)
             <div class="border-bottom p-3 notification-item {{ $i <= 3 ? 'bg-light' : '' }}">

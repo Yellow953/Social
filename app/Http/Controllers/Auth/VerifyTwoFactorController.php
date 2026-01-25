@@ -77,6 +77,11 @@ class VerifyTwoFactorController extends Controller
         // Clear session
         $request->session()->forget(['two_factor_user_id', 'two_factor_remember']);
 
+        // Redirect based on user role
+        if ($user->isAdmin()) {
+            return redirect()->intended('/admin/dashboard')
+                ->with('success', 'Login successful! Welcome back.');
+        }
         return redirect()->intended('/dashboard')
             ->with('success', 'Login successful! Welcome back.');
     }

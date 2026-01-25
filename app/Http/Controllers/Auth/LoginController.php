@@ -19,6 +19,10 @@ class LoginController extends Controller
     {
         // Redirect if already authenticated
         if (Auth::check()) {
+            $user = Auth::user();
+            if ($user->isAdmin()) {
+                return redirect('/admin/dashboard');
+            }
             return redirect('/dashboard');
         }
         
@@ -85,6 +89,10 @@ class LoginController extends Controller
             // Update device info
             $user->updateDeviceInfo($deviceIdentifier);
 
+            // Redirect based on user role
+            if ($user->isAdmin()) {
+                return redirect()->intended('/admin/dashboard');
+            }
             return redirect()->intended('/dashboard');
         }
 

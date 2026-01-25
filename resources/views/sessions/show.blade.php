@@ -12,7 +12,7 @@
     <div class="row">
         <div class="col-lg-8">
             <!-- Video Player -->
-            <div class="card border-0 shadow-sm mb-4">
+            <div class="card border-0 shadow-lg mb-4 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
                 <div class="card-body p-0">
                     <div class="ratio ratio-16x9">
                         <video id="session-video" class="w-100" controls>
@@ -24,8 +24,8 @@
             </div>
 
             <!-- Session Details -->
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
+            <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+                <div class="card-body p-4">
                     <h3 class="fw-bold mb-3">{{ $session->title }}</h3>
                     @if($session->description)
                         <p class="text-muted">{{ $session->description }}</p>
@@ -52,9 +52,9 @@
 
         <div class="col-lg-4">
             <!-- Session Info Card -->
-            <div class="card border-0 shadow-sm mb-4">
-                <div class="card-header bg-white border-bottom">
-                    <h6 class="mb-0 fw-bold">Session Information</h6>
+            <div class="card border-0 shadow-lg mb-4 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+                <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-3">
+                    <h6 class="mb-0 fw-bold" style="color: #1e3a8a;">Session Information</h6>
                 </div>
                 <div class="card-body">
                     <ul class="list-unstyled mb-0">

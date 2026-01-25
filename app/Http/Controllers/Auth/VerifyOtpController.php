@@ -61,6 +61,11 @@ class VerifyOtpController extends Controller
         // Log the user in
         Auth::login($user);
 
+        // Redirect based on user role (though new registrations are always users)
+        if ($user->isAdmin()) {
+            return redirect('/admin/dashboard')
+                ->with('success', 'Email verified successfully! Welcome to ESIB SOCIAL.');
+        }
         return redirect('/dashboard')
             ->with('success', 'Email verified successfully! Welcome to ESIB SOCIAL.');
     }

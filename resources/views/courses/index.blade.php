@@ -11,7 +11,7 @@
     <!-- Page Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="fw-bold mb-1"><i class="fas fa-book-open me-2 text-primary"></i>Courses</h2>
+            <h2 class="fw-bold mb-1" style="color: #1e3a8a;"><i class="fas fa-book-open me-2" style="color: #3b82f6;"></i>Courses</h2>
             <p class="text-muted mb-0">
                 @if(auth()->user()->isAdmin())
                     Manage and organize courses by subject and year
@@ -33,8 +33,8 @@
     </div>
 
     <!-- Search Bar -->
-    <div class="card border-0 shadow-sm mb-4">
-        <div class="card-body">
+    <div class="card border-0 shadow-lg overflow-hidden mb-4" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+        <div class="card-body p-4">
             <div class="input-group">
                 <span class="input-group-text bg-white border-end-0">
                     <i class="fas fa-search text-muted"></i>
@@ -54,8 +54,8 @@
             <div class="card border-0 shadow-sm h-100 course-card">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start mb-3">
-                        <div class="bg-primary bg-opacity-10 rounded p-3">
-                            <i class="fas fa-book fa-2x text-primary"></i>
+                        <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-3 shadow-md" style="background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);">
+                            <i class="fas fa-book fa-lg text-white"></i>
                         </div>
                         <span class="badge bg-success">Active</span>
                     </div>

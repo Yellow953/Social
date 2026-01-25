@@ -20,6 +20,10 @@ class RegisterController extends Controller
     {
         // Redirect if already authenticated
         if (Auth::check()) {
+            $user = Auth::user();
+            if ($user->isAdmin()) {
+                return redirect('/admin/dashboard');
+            }
             return redirect('/dashboard');
         }
         
