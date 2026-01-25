@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
 
@@ -14,6 +15,11 @@ class ForgotPasswordController extends Controller
      */
     public function showForgotPasswordForm()
     {
+        // Redirect if already authenticated
+        if (Auth::check()) {
+            return redirect('/dashboard');
+        }
+        
         return view('auth.forgot-password');
     }
 

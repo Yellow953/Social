@@ -28,6 +28,9 @@ class User extends Authenticatable
         'device_token',
         'device_identifier',
         'last_device_login_at',
+        'email_verified',
+        'email_verified_at',
+        'two_factor_enabled',
     ];
 
     /**
@@ -133,6 +136,32 @@ class User extends Authenticatable
             $this->device_token = $deviceToken;
         }
         $this->last_device_login_at = now();
+        $this->save();
+    }
+
+    /**
+     * Get the user's OTPs
+     */
+    public function otps()
+    {
+        return $this->hasMany(Otp::class);
+    }
+
+    /**
+     * Check if user has verified email
+     */
+    public function hasVerifiedEmail(): bool
+    {
+        return $this->email_verified && $this->email_verified_at !== null;
+    }
+
+    /**
+     * Mark email as verified
+     */
+    public function markEmailAsVerified(): void
+    {
+        $this->email_verified = true;
+        $this->email_verified_at = now();
         $this->save();
     }
 }

@@ -27,6 +27,9 @@ class DatabaseSeeder extends Seeder
                 'role' => 'admin',
                 'study_year' => null,
                 'major' => null,
+                'email_verified' => true,
+                'email_verified_at' => now(),
+                'two_factor_enabled' => false,
             ]
         );
 
@@ -45,6 +48,9 @@ class DatabaseSeeder extends Seeder
                 'role' => 'user',
                 'study_year' => 2,
                 'major' => 'Social Sciences',
+                'email_verified' => true,
+                'email_verified_at' => now(),
+                'two_factor_enabled' => false,
             ]
         );
 

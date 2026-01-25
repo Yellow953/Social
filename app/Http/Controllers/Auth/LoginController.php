@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Otp;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
@@ -15,6 +17,11 @@ class LoginController extends Controller
      */
     public function showLoginForm()
     {
+        // Redirect if already authenticated
+        if (Auth::check()) {
+            return redirect('/dashboard');
+        }
+        
         return view('auth.login');
     }
 
@@ -31,11 +38,37 @@ class LoginController extends Controller
         $credentials = $request->only('email', 'password');
         $remember = $request->boolean('remember');
 
-        if (Auth::attempt($credentials, $remember)) {
+        // First verify credentials
+        if (Auth::validate($credentials)) {
+            $user = User::where('email', $request->email)->first();
+
+            // Check if email is verified
+            if (!$user->hasVerifiedEmail()) {
+                throw ValidationException::withMessages([
+                    'email' => ['Please verify your email address before logging in.'],
+                ]);
+            }
+
+            // Check if 2FA is enabled
+            if ($user->two_factor_enabled) {
+                // Generate and send 2FA code
+                $otp = Otp::createForTwoFactor($user);
+                Notification::route('mail', $user->email)
+                    ->notify(new \App\Notifications\SendTwoFactorCodeNotification($otp->code));
+
+                // Store user ID in session for 2FA verification
+                $request->session()->put('two_factor_user_id', $user->id);
+                $request->session()->put('two_factor_remember', $remember);
+
+                return redirect()->route('verify-2fa')
+                    ->with('success', 'Please check your email for the two-factor authentication code.');
+            }
+
+            // If 2FA is disabled, proceed with normal login
+            Auth::login($user, $remember);
             $request->session()->regenerate();
 
             // Update device information for single device login
-            $user = Auth::user();
             $deviceIdentifier = User::generateDeviceIdentifier($request);
             
             // Check if trying to login from different device

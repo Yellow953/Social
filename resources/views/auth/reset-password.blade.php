@@ -3,12 +3,23 @@
 @section('title', 'Reset Password - Social Plus')
 
 @section('content')
-<div class="min-vh-100 d-flex align-items-center position-relative" style="background: linear-gradient(135deg, #ec682a 0%, #d45a20 100%); overflow: hidden;">
-    <!-- Decorative Elements -->
-    <div class="position-absolute top-0 start-0 w-100 h-100" style="opacity: 0.1;">
-        <div class="position-absolute" style="top: 10%; left: 10%; width: 200px; height: 200px; background: white; border-radius: 50%;"></div>
-        <div class="position-absolute" style="top: 60%; right: 15%; width: 150px; height: 150px; background: white; border-radius: 50%;"></div>
+<div class="min-vh-100 d-flex align-items-center position-relative" style="background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #1e3a8a 100%); overflow: hidden;">
+    <!-- Orange Bubbles -->
+    <div class="position-absolute top-0 start-0 w-100 h-100" style="opacity: 0.4;">
+        <div class="position-absolute" style="top: 10%; left: 10%; width: 200px; height: 200px; background: #ec682a; border-radius: 50%; animation: float 6s ease-in-out infinite;"></div>
+        <div class="position-absolute" style="top: 60%; right: 15%; width: 150px; height: 150px; background: #ec682a; border-radius: 50%; animation: float 8s ease-in-out infinite;"></div>
+        <div class="position-absolute" style="bottom: 25%; left: 20%; width: 130px; height: 130px; background: #ec682a; border-radius: 50%; animation: float 7s ease-in-out infinite;"></div>
+        <div class="position-absolute" style="top: 40%; right: 30%; width: 110px; height: 110px; background: #ec682a; border-radius: 50%; animation: float 9s ease-in-out infinite;"></div>
     </div>
+    
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) translateX(0px); }
+            25% { transform: translateY(-20px) translateX(10px); }
+            50% { transform: translateY(-10px) translateX(-10px); }
+            75% { transform: translateY(-30px) translateX(5px); }
+        }
+    </style>
 
     <div class="container position-relative">
         <div class="row justify-content-center">

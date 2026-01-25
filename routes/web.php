@@ -4,6 +4,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Auth\VerifyOtpController;
+use App\Http\Controllers\Auth\VerifyTwoFactorController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\SessionController;
@@ -43,6 +45,16 @@ Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'register']);
+
+// OTP Verification routes
+Route::get('/verify-otp', [VerifyOtpController::class, 'show'])->name('verify-otp');
+Route::post('/verify-otp', [VerifyOtpController::class, 'verify']);
+Route::post('/resend-otp', [VerifyOtpController::class, 'resend'])->name('resend-otp');
+
+// Two-Factor Authentication routes
+Route::get('/verify-2fa', [VerifyTwoFactorController::class, 'show'])->name('verify-2fa');
+Route::post('/verify-2fa', [VerifyTwoFactorController::class, 'verify']);
+Route::post('/resend-2fa', [VerifyTwoFactorController::class, 'resend'])->name('resend-2fa');
 
 // Password Reset routes
 Route::get('/forgot-password', [ForgotPasswordController::class, 'showForgotPasswordForm'])->name('password.request');

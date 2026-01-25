@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Otp;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\Rules\Password;
 
 class RegisterController extends Controller
@@ -16,6 +18,11 @@ class RegisterController extends Controller
      */
     public function showRegistrationForm()
     {
+        // Redirect if already authenticated
+        if (Auth::check()) {
+            return redirect('/dashboard');
+        }
+        
         return view('auth.register');
     }
 
@@ -33,6 +40,7 @@ class RegisterController extends Controller
             'password' => ['required', 'confirmed', Password::defaults()],
         ]);
 
+        // Create user but don't verify email yet
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -40,11 +48,21 @@ class RegisterController extends Controller
             'study_year' => $request->study_year,
             'major' => $request->major,
             'password' => Hash::make($request->password),
-            'role' => 'user', // Default role
+            'role' => 'user',
+            'email_verified' => false,
+            'two_factor_enabled' => true,
         ]);
 
-        Auth::login($user);
+        // Generate and send OTP
+        $otp = Otp::createForRegistration($user->email);
+        Notification::route('mail', $user->email)
+            ->notify(new \App\Notifications\SendOtpNotification($otp->code));
 
-        return redirect('/dashboard');
+        // Store user email in session for verification
+        $request->session()->put('registration_email', $user->email);
+        $request->session()->put('registration_user_id', $user->id);
+
+        return redirect()->route('verify-otp')
+            ->with('success', 'Registration successful! Please check your email for the verification code.');
     }
 }
