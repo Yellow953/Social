@@ -49,10 +49,10 @@
         sidebarToggle.addEventListener('click', function() {
             const isCollapsed = sidebar.classList.toggle('collapsed');
             mainContent.classList.toggle('expanded');
-            
+
             // Save state to localStorage
             saveSidebarState(isCollapsed);
-            
+
             // Update toggle icon
             updateToggleIcon(isCollapsed);
         });

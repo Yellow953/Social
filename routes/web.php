@@ -21,7 +21,16 @@ use Inertia\Inertia;
 
 // Public routes
 Route::get('/', function () {
-    return Inertia::render('Welcome');
+    return Inertia::render('Welcome', ['page' => 'home']);
+});
+Route::get('/about', function () {
+    return Inertia::render('Welcome', ['page' => 'about']);
+});
+Route::get('/academique', function () {
+    return Inertia::render('Welcome', ['page' => 'academique']);
+});
+Route::get('/calculatrice', function () {
+    return Inertia::render('Welcome', ['page' => 'calculatrice']);
 });
 
 // Legal pages
