@@ -353,4 +353,14 @@
         transform: translateY(-4px);
         box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15) !important;
     }
+
+    /* Recent Courses Hover Effect */
+    .hover-shadow {
+        transition: all 0.3s ease;
+    }
+
+    .hover-shadow:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1) !important;
+    }
 </style>

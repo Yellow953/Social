@@ -84,9 +84,11 @@
                                         id="study_year"
                                         name="study_year">
                                     <option value="">Select Year</option>
-                                    @for($i = 1; $i <= 10; $i++)
-                                        <option value="{{ $i }}" {{ old('study_year') == $i ? 'selected' : '' }}>Year {{ $i }}</option>
-                                    @endfor
+                                    <option value="Sup" {{ old('study_year') == 'Sup' ? 'selected' : '' }}>Sup</option>
+                                    <option value="Spé" {{ old('study_year') == 'Spé' ? 'selected' : '' }}>Spé</option>
+                                    <option value="1e" {{ old('study_year') == '1e' ? 'selected' : '' }}>1e</option>
+                                    <option value="2e" {{ old('study_year') == '2e' ? 'selected' : '' }}>2e</option>
+                                    <option value="3e" {{ old('study_year') == '3e' ? 'selected' : '' }}>3e</option>
                                 </select>
                                 @error('study_year')
                                     <div class="invalid-feedback">{{ $message }}</div>

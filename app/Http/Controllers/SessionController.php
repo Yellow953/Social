@@ -9,14 +9,20 @@ use Illuminate\Support\Facades\Auth;
 
 class SessionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
-        $sessions = VideoSession::with('course')
+        $query = VideoSession::with('course')
             ->orderBy('course_id')
             ->orderBy('year')
-            ->orderBy('order')
-            ->get();
+            ->orderBy('order');
+
+        // Filter by course if provided
+        if ($request->has('course') && $request->course) {
+            $query->where('course_id', $request->course);
+        }
+
+        $sessions = $query->get();
 
         // Group sessions by course and year
         $groupedSessions = $sessions->groupBy(function ($session) {

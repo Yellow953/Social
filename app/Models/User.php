@@ -54,7 +54,6 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'last_device_login_at' => 'datetime',
-            'study_year' => 'integer',
         ];
     }
 
@@ -163,5 +162,21 @@ class User extends Authenticatable
         $this->email_verified = true;
         $this->email_verified_at = now();
         $this->save();
+    }
+
+    /**
+     * Get the user's notifications
+     */
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
+
+    /**
+     * Get unread notifications count
+     */
+    public function unreadNotificationsCount(): int
+    {
+        return $this->notifications()->unread()->count();
     }
 }

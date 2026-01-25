@@ -39,7 +39,7 @@
                         </div>
                         <div class="flex-grow-1">
                             <h6 class="text-muted text-uppercase small fw-semibold mb-1" style="letter-spacing: 0.5px; font-size: 0.7rem;">Active Courses</h6>
-                            <h3 class="fw-bold mb-0" style="color: #1e3a8a; font-size: 1.75rem;">24</h3>
+                            <h3 class="fw-bold mb-0" style="color: #1e3a8a; font-size: 1.75rem;">{{ $activeCourses }}</h3>
                         </div>
                     </div>
                 </div>
@@ -54,7 +54,7 @@
                         </div>
                         <div class="flex-grow-1">
                             <h6 class="text-muted text-uppercase small fw-semibold mb-1" style="letter-spacing: 0.5px; font-size: 0.7rem;">Sessions Completed</h6>
-                            <h3 class="fw-bold mb-0" style="color: #1e3a8a; font-size: 1.75rem;">12</h3>
+                            <h3 class="fw-bold mb-0" style="color: #1e3a8a; font-size: 1.75rem;">{{ $sessionsCompleted }}</h3>
                         </div>
                     </div>
                 </div>
@@ -69,7 +69,7 @@
                         </div>
                         <div class="flex-grow-1">
                             <h6 class="text-muted text-uppercase small fw-semibold mb-1" style="letter-spacing: 0.5px; font-size: 0.7rem;">Study Time</h6>
-                            <h3 class="fw-bold mb-0" style="color: #1e3a8a; font-size: 1.75rem;">8.5h</h3>
+                            <h3 class="fw-bold mb-0" style="color: #1e3a8a; font-size: 1.75rem;">{{ $studyTimeFormatted }}</h3>
                         </div>
                     </div>
                 </div>
@@ -166,49 +166,88 @@
                     <h5 class="mb-0 fw-bold" style="color: #1e3a8a;"><i class="fas fa-history me-2" style="color: #3b82f6;"></i>Recent Activity</h5>
                 </div>
                 <div class="card-body p-4">
-                    <div class="d-flex align-items-start mb-3 pb-3 border-bottom">
-                        <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-circle p-2 me-3 flex-shrink-0" style="background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);">
-                            <i class="fas fa-check text-white small"></i>
+                    @forelse($recentActivity as $activity)
+                        <div class="d-flex align-items-start {{ !$loop->last ? 'mb-3 pb-3 border-bottom' : '' }}">
+                            <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-circle p-2 me-3 flex-shrink-0" style="background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);">
+                                <i class="fas fa-{{ $activity['icon'] }} text-white small"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1 small fw-bold">{{ $activity['title'] }}</h6>
+                                <p class="text-muted small mb-0">{{ $activity['description'] }}</p>
+                                @if(isset($activity['course']))
+                                    <p class="text-muted small mb-0"><i class="fas fa-book me-1"></i>{{ $activity['course'] }}</p>
+                                @endif
+                                <span class="text-muted small">{{ $activity['time'] }}</span>
+                            </div>
                         </div>
-                        <div class="flex-grow-1">
-                            <h6 class="mb-1 small fw-bold">Completed Session</h6>
-                            <p class="text-muted small mb-0">Introduction to Sociology</p>
-                            <span class="text-muted small">2 hours ago</span>
+                    @empty
+                        <div class="text-center py-4">
+                            <i class="fas fa-history text-muted mb-2" style="font-size: 2rem;"></i>
+                            <p class="text-muted small mb-0">No recent activity</p>
+                            <p class="text-muted small">Start watching sessions to see your activity here</p>
                         </div>
-                    </div>
-                    <div class="d-flex align-items-start mb-3 pb-3 border-bottom">
-                        <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-circle p-2 me-3 flex-shrink-0" style="background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);">
-                            <i class="fas fa-book text-white small"></i>
+                    @endforelse
+                    
+                    @if($recentNotifications->count() > 0)
+                        <div class="mt-3 pt-3 border-top">
+                            <h6 class="small fw-bold mb-2" style="color: #1e3a8a;">Notifications</h6>
+                            @foreach($recentNotifications as $notification)
+                                <div class="d-flex align-items-start {{ !$loop->last ? 'mb-2' : '' }}">
+                                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-circle p-2 me-2 flex-shrink-0" style="background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);">
+                                        <i class="fas fa-{{ $notification['icon'] }} text-white" style="font-size: 0.7rem;"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-0 small fw-bold">{{ $notification['title'] }}</h6>
+                                        <p class="text-muted small mb-0">{{ $notification['message'] }}</p>
+                                        <span class="text-muted small">{{ $notification['time'] }}</span>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
-                        <div class="flex-grow-1">
-                            <h6 class="mb-1 small fw-bold">New Course Added</h6>
-                            <p class="text-muted small mb-0">Social Psychology</p>
-                            <span class="text-muted small">5 hours ago</span>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Courses -->
+    @if($recentCourses->count() > 0)
+    <div class="row g-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+                <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-3">
+                    <h5 class="mb-0 fw-bold" style="color: #1e3a8a;"><i class="fas fa-book-open me-2" style="color: #3b82f6;"></i>Recent Courses</h5>
+                    <a href="{{ route('courses') }}" class="btn btn-sm btn-outline-primary">View All</a>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-3">
+                        @foreach($recentCourses as $course)
+                        <div class="col-md-6 col-lg-4">
+                            <a href="{{ route('courses') }}?course={{ $course->id }}" class="text-decoration-none">
+                                <div class="card border-0 shadow-sm h-100 hover-shadow">
+                                    <div class="card-body p-3">
+                                        <div class="d-flex align-items-start mb-2">
+                                            <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded p-2 me-2 flex-shrink-0" style="background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);">
+                                                <i class="fas fa-book text-white small"></i>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="fw-bold mb-1 small" style="color: #1e3a8a;">{{ $course->name }}</h6>
+                                                <p class="text-muted small mb-0">{{ $course->code }}</p>
+                                            </div>
+                                        </div>
+                                        @if($course->description)
+                                            <p class="text-muted small mb-0" style="font-size: 0.75rem;">{{ Str::limit($course->description, 60) }}</p>
+                                        @endif
+                                    </div>
+                                </div>
+                            </a>
                         </div>
-                    </div>
-                    <div class="d-flex align-items-start mb-3 pb-3 border-bottom">
-                        <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-circle p-2 me-3 flex-shrink-0" style="background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);">
-                            <i class="fas fa-bell text-white small"></i>
-                        </div>
-                        <div class="flex-grow-1">
-                            <h6 class="mb-1 small fw-bold">New Notification</h6>
-                            <p class="text-muted small mb-0">Assignment due soon</p>
-                            <span class="text-muted small">1 day ago</span>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-start">
-                        <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-circle p-2 me-3 flex-shrink-0" style="background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);">
-                            <i class="fas fa-trophy text-white small"></i>
-                        </div>
-                        <div class="flex-grow-1">
-                            <h6 class="mb-1 small fw-bold">Achievement Unlocked</h6>
-                            <p class="text-muted small mb-0">10 Sessions Completed</p>
-                            <span class="text-muted small">2 days ago</span>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    @endif
 </div>
 @endsection

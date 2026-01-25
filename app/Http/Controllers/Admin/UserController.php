@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -11,7 +12,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::latest()->get();
+        $users = User::with('subscriptions')->latest()->get();
         return view('admin.users.index', compact('users'));
     }
 
@@ -28,7 +29,7 @@ class UserController extends Controller
             'phone' => 'nullable|string|max:20',
             'password' => 'required|string|min:8|confirmed',
             'role' => 'required|in:user,admin',
-            'study_year' => 'nullable|integer|min:1|max:10',
+            'study_year' => 'nullable|string|in:Sup,Spé,1e,2e,3e',
             'major' => 'nullable|string|max:255',
         ]);
 
@@ -53,7 +54,7 @@ class UserController extends Controller
             'phone' => 'nullable|string|max:20',
             'password' => 'nullable|string|min:8|confirmed',
             'role' => 'required|in:user,admin',
-            'study_year' => 'nullable|integer|min:1|max:10',
+            'study_year' => 'nullable|string|in:Sup,Spé,1e,2e,3e',
             'major' => 'nullable|string|max:255',
         ]);
 
@@ -81,5 +82,34 @@ class UserController extends Controller
 
         return redirect()->route('admin.users.index')
             ->with('success', 'User deleted successfully.');
+    }
+
+    public function createQuickSubscription(User $user)
+    {
+        // Check if user already has an active subscription
+        $activeSubscription = $user->activeSubscription();
+        
+        if ($activeSubscription) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User already has an active subscription.'
+            ], 400);
+        }
+
+        // Create and approve subscription for 1 year
+        $subscription = Subscription::create([
+            'user_id' => $user->id,
+            'status' => 'approved',
+            'subscription_type' => 'SOCIALPLUS',
+            'approved_at' => now(),
+            'approved_by' => auth()->id(),
+            'expires_at' => now()->addYear(), // 1 year from now
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Subscription created successfully for 1 year.',
+            'subscription' => $subscription
+        ]);
     }
 }

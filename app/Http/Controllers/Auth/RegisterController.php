@@ -39,7 +39,7 @@ class RegisterController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'phone' => 'required|string|max:20',
-            'study_year' => 'required|integer|min:1|max:10',
+            'study_year' => 'required|string|in:Sup,Spé,1e,2e,3e',
             'major' => 'required|string|max:255',
             'password' => ['required', 'confirmed', Password::defaults()],
         ]);
