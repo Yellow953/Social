@@ -39,7 +39,7 @@
         <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-3">
             <h5 class="mb-0 fw-bold" style="color: #1e3a8a;">All Courses</h5>
         </div>
-        <div class="card-body p-0">
+        <div class="card-body p-4">
             <div class="table-responsive">
                 <table class="table table-hover mb-0">
                     <thead class="bg-light">
@@ -69,14 +69,14 @@
                             </td>
                             <td>{{ $course->created_at->format('M d, Y') }}</td>
                             <td class="text-end">
-                                <div class="btn-group">
-                                    <a href="{{ route('admin.courses.edit', $course) }}" class="btn btn-sm btn-outline-primary" title="Edit">
+                                <div class="d-flex gap-2 justify-content-end">
+                                    <a href="{{ route('admin.courses.edit', $course) }}" class="btn btn-sm btn-primary shadow-sm" title="Edit" style="border-radius: 8px;">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <form method="POST" action="{{ route('admin.courses.destroy', $course) }}" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this course?');">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
+                                        <button type="submit" class="btn btn-sm btn-danger shadow-sm" title="Delete" style="border-radius: 8px;">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
@@ -99,8 +99,8 @@
             </div>
         </div>
         @if($courses->hasPages())
-            <div class="card-footer bg-white border-top">
-                {{ $courses->links() }}
+            <div class="card-footer bg-white border-top px-4 py-3">
+                {{ $courses->links('pagination::bootstrap-5') }}
             </div>
         @endif
     </div>

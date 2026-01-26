@@ -21,7 +21,7 @@
         </div>
         <div class="d-flex align-items-center gap-3">
             <!-- Notifications -->
-            <a href="{{ route('notifications') }}" class="btn btn-sm position-relative text-[#5c5c5c] text-decoration-none">
+            <a href="{{ route('notifications.index') }}" class="btn btn-sm position-relative text-[#5c5c5c] text-decoration-none">
                 <i class="fas fa-bell"></i>
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
                     3

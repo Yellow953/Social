@@ -70,9 +70,15 @@ Route::middleware(['auth', 'single.device'])->group(function () {
         Route::get('/sessions', [SessionController::class, 'index'])->name('sessions');
         Route::get('/sessions/{session}', [SessionController::class, 'show'])->name('sessions.show');
         Route::post('/sessions/{session}/watch-time', [SessionController::class, 'updateWatchTime'])->name('sessions.watch-time');
+        Route::get('/media/{media}', [\App\Http\Controllers\MediaController::class, 'detail'])->name('media.detail');
+        Route::get('/media/{media}/view', [\App\Http\Controllers\MediaController::class, 'view'])->name('media.view');
+        Route::get('/media/{media}/stream', [\App\Http\Controllers\MediaController::class, 'stream'])->name('media.stream');
     });
     Route::get('/calculator', [CalculatorController::class, 'index'])->name('calculator');
-    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications');
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.mark-read');
+    Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-read');
+    Route::delete('/notifications/{notification}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
     Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');

@@ -14,31 +14,34 @@
             <h2 class="fw-bold mb-1" style="color: #1e3a8a;"><i class="fas fa-bell me-2" style="color: #3b82f6;"></i>Notifications</h2>
             <p class="text-muted mb-0">Stay updated with your latest activities</p>
         </div>
-        <button class="btn btn-outline-secondary">
-            <i class="fas fa-check-double me-2"></i>Mark all as read
-        </button>
+        <form method="POST" action="{{ route('notifications.mark-all-read') }}" class="d-inline">
+            @csrf
+            <button type="submit" class="btn btn-outline-secondary">
+                <i class="fas fa-check-double me-2"></i>Mark all as read
+            </button>
+        </form>
     </div>
 
     <!-- Filter Tabs -->
     <ul class="nav nav-tabs mb-4 border-0">
         <li class="nav-item">
-            <a class="nav-link active" href="#">
+            <a class="nav-link {{ !request('filter') && !request('type') ? 'active' : '' }}" href="{{ route('notifications.index') }}">
                 <i class="fas fa-list me-1"></i>All
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link {{ request('filter') === 'unread' ? 'active' : '' }}" href="{{ route('notifications.index', ['filter' => 'unread']) }}">
                 <i class="fas fa-circle me-1 text-primary"></i>Unread
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link {{ request('type') === 'course' ? 'active' : '' }}" href="{{ route('notifications.index', ['type' => 'course']) }}">
                 <i class="fas fa-book me-1 text-info"></i>Courses
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">
-                <i class="fas fa-bullhorn me-1 text-warning"></i>Announcements
+            <a class="nav-link {{ request('type') === 'session' ? 'active' : '' }}" href="{{ route('notifications.index', ['type' => 'session']) }}">
+                <i class="fas fa-play-circle me-1 text-warning"></i>Sessions
             </a>
         </li>
     </ul>
@@ -49,21 +52,21 @@
             <h5 class="mb-0 fw-bold" style="color: #1e3a8a;">All Notifications</h5>
         </div>
         <div class="card-body p-0">
-            @for($i = 1; $i <= 10; $i++)
-            <div class="border-bottom p-3 notification-item {{ $i <= 3 ? 'bg-light' : '' }}">
+            @forelse($notifications as $notification)
+            <div class="border-bottom p-4 notification-item {{ !$notification->read ? 'bg-light' : '' }}">
                 <div class="d-flex align-items-start">
                     <div class="me-3">
-                        @if($i % 4 == 1)
+                        @if($notification->type === 'course')
                             <div class="bg-primary bg-opacity-10 rounded-circle p-2">
                                 <i class="fas fa-book text-primary"></i>
                             </div>
-                        @elseif($i % 4 == 2)
+                        @elseif($notification->type === 'session')
                             <div class="bg-success bg-opacity-10 rounded-circle p-2">
-                                <i class="fas fa-check-circle text-success"></i>
+                                <i class="fas fa-play-circle text-success"></i>
                             </div>
-                        @elseif($i % 4 == 3)
+                        @elseif($notification->type === 'subscription')
                             <div class="bg-warning bg-opacity-10 rounded-circle p-2">
-                                <i class="fas fa-bullhorn text-warning"></i>
+                                <i class="fas fa-check-circle text-warning"></i>
                             </div>
                         @else
                             <div class="bg-info bg-opacity-10 rounded-circle p-2">
@@ -72,53 +75,55 @@
                         @endif
                     </div>
                     <div class="flex-grow-1">
-                        <div class="d-flex justify-content-between align-items-start mb-1">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
                             <div>
-                                <h6 class="mb-0 fw-bold">
-                                    @if($i % 4 == 1)
-                                        New Course Available
-                                    @elseif($i % 4 == 2)
-                                        Session Completed
-                                    @elseif($i % 4 == 3)
-                                        Important Announcement
-                                    @else
-                                        System Update
+                                <h6 class="mb-1 fw-bold">
+                                    {{ $notification->title }}
+                                    @if(!$notification->read)
+                                        <span class="badge bg-primary ms-2">New</span>
                                     @endif
                                 </h6>
-                                <p class="text-muted small mb-0">
-                                    @if($i % 4 == 1)
-                                        A new course "{{ ['Social Psychology', 'Cultural Studies', 'Research Methods'][$i % 3] }}" has been added to your available courses.
-                                    @elseif($i % 4 == 2)
-                                        You have successfully completed "Session {{ $i }}" in Course {{ rand(1, 5) }}.
-                                    @elseif($i % 4 == 3)
-                                        There will be a maintenance window scheduled for tomorrow at 2 AM.
-                                    @else
-                                        New features have been added to the platform. Check them out!
-                                    @endif
-                                </p>
+                                <p class="text-muted mb-0">{{ $notification->message }}</p>
                             </div>
-                            @if($i <= 3)
-                            <span class="badge bg-primary">New</span>
-                            @endif
                         </div>
                         <div class="d-flex justify-content-between align-items-center mt-2">
                             <small class="text-muted">
-                                <i class="fas fa-clock me-1"></i>{{ now()->subHours(rand(1, 48))->diffForHumans() }}
+                                <i class="fas fa-clock me-1"></i>{{ $notification->created_at->diffForHumans() }}
                             </small>
-                            <div>
-                                <button class="btn btn-sm btn-link text-primary p-0 me-2">
-                                    <i class="fas fa-eye"></i> View
-                                </button>
-                                <button class="btn btn-sm btn-link text-danger p-0">
-                                    <i class="fas fa-trash"></i>
-                                </button>
+                            <div class="d-flex gap-2">
+                                @if(!$notification->read)
+                                    <form method="POST" action="{{ route('notifications.mark-read', $notification) }}" class="d-inline">
+                                        @csrf
+                                        <button type="submit" class="btn btn-sm btn-link text-primary p-0" title="Mark as read">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+                                    </form>
+                                @endif
+                                <form method="POST" action="{{ route('notifications.destroy', $notification) }}" class="d-inline" onsubmit="return confirm('Delete this notification?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-link text-danger p-0" title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            @endfor
+            @empty
+            <div class="p-5 text-center">
+                <i class="fas fa-bell-slash text-muted mb-3" style="font-size: 3rem;"></i>
+                <h5 class="text-muted">No notifications found</h5>
+                <p class="text-muted">You're all caught up!</p>
+            </div>
+            @endforelse
         </div>
+        @if($notifications->hasPages())
+            <div class="card-footer bg-white border-top px-4 py-3">
+                {{ $notifications->links('pagination::bootstrap-5') }}
+            </div>
+        @endif
     </div>
 </div>
 

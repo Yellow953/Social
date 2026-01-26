@@ -18,10 +18,10 @@
                 </div>
                 <div class="col-md-4 text-end d-none d-md-block">
                     <div class="position-relative" style="width: 120px; height: 120px; margin-left: auto;">
-                        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=200&h=200&fit=crop&crop=faces" 
-                             alt="Dashboard" 
-                             class="rounded-circle"
-                             style="width: 120px; height: 120px; object-fit: cover; border: 3px solid rgba(255,255,255,0.3);">
+                        <div class="bg-gradient-to-br from-[#ec682a] to-[#d45a20] rounded-circle d-flex align-items-center justify-content-center shadow-lg" 
+                             style="width: 120px; height: 120px; border: 3px solid rgba(255,255,255,0.3);">
+                            <span class="text-white fw-bold" style="font-size: 3rem;">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
+                        </div>
                     </div>
                 </div>
             </div>

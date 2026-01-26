@@ -39,7 +39,7 @@
         <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-3">
             <h5 class="mb-0 fw-bold" style="color: #1e3a8a;">All Users</h5>
         </div>
-        <div class="card-body p-0">
+        <div class="card-body p-4">
             <div class="table-responsive">
                 <table id="usersTable" class="table table-hover mb-0">
                     <thead>
@@ -111,23 +111,24 @@
                                 <span style="color: #5c5c5c;">{{ $user->created_at->format('M d, Y') }}</span>
                             </td>
                             <td class="text-end">
-                                <div class="btn-group" role="group">
+                                <div class="d-flex gap-2 justify-content-end">
                                     @if(!$user->activeSubscription() && $user->role !== 'admin')
                                         <button type="button" 
-                                                class="btn btn-sm btn-success quick-subscription-btn" 
+                                                class="btn btn-sm btn-success quick-subscription-btn shadow-sm" 
                                                 data-user-id="{{ $user->id }}"
                                                 data-user-name="{{ $user->name }}"
-                                                title="Create 1 Year Subscription">
-                                            <i class="fas fa-gift"></i>
+                                                title="Create 1 Year Subscription"
+                                                style="border-radius: 8px;">
+                                            <i class="fas fa-gift me-1"></i>
                                         </button>
                                     @endif
-                                    <a href="{{ route('admin.users.edit', $user) }}" class="btn btn-sm btn-outline-primary" title="Edit">
+                                    <a href="{{ route('admin.users.edit', $user) }}" class="btn btn-sm btn-primary shadow-sm" title="Edit" style="border-radius: 8px;">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <form method="POST" action="{{ route('admin.users.destroy', $user) }}" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this user?');">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
+                                        <button type="submit" class="btn btn-sm btn-danger shadow-sm" title="Delete" style="border-radius: 8px;">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form>

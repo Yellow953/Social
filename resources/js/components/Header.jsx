@@ -58,14 +58,14 @@ export default function Header({ activeTab }) {
                         </Link>
                     </div>
 
-                    {/* Desktop Sign Up Button */}
+                    {/* Desktop Login Button */}
                     <a
-                        href="/register"
-                        className="hidden sm:flex px-3 py-1.5 rounded-full bg-gradient-to-br from-[#ec682a] to-[#d45a20] text-white items-center space-x-1.5 hover:shadow-lg hover:scale-105 transition-all shadow-md no-underline"
-                        title="Sign Up"
+                        href="/login"
+                        className="hidden sm:flex px-5 py-2.5 rounded-full bg-gradient-to-br from-[#ec682a] to-[#d45a20] text-white items-center space-x-2 hover:shadow-lg hover:scale-105 transition-all shadow-md no-underline"
+                        title="Login"
                     >
-                        <span className="text-base font-bold">+</span>
-                        <span className="text-xs font-semibold">Sign Up</span>
+                        <i className="fas fa-sign-in-alt text-sm"></i>
+                        <span className="text-sm font-bold">Login</span>
                     </a>
 
                     {/* Mobile Menu Button */}
@@ -123,12 +123,12 @@ export default function Header({ activeTab }) {
                                     Calculatrice
                                 </Link>
                                 <a
-                                    href="/register"
-                                    className="block w-full text-center px-4 py-3 rounded-full bg-gradient-to-br from-[#ec682a] to-[#d45a20] text-white font-semibold shadow-md no-underline mt-4"
+                                    href="/login"
+                                    className="block w-full text-center px-5 py-3.5 rounded-full bg-gradient-to-br from-[#ec682a] to-[#d45a20] text-white font-bold text-base shadow-md no-underline mt-4"
                                     onClick={() => setMobileMenuOpen(false)}
                                 >
-                                    <span className="text-base font-bold mr-2">+</span>
-                                    Sign Up
+                                    <i className="fas fa-sign-in-alt mr-2"></i>
+                                    Login
                                 </a>
                             </div>
                         </motion.div>

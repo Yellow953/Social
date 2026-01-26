@@ -16,8 +16,6 @@ class VideoSession extends Model
         'description',
         'course_id',
         'year',
-        'video_url',
-        'duration',
         'is_locked',
         'order',
     ];
@@ -25,7 +23,6 @@ class VideoSession extends Model
     protected $casts = [
         'is_locked' => 'boolean',
         'year' => 'integer',
-        'duration' => 'integer',
         'order' => 'integer',
     ];
 
@@ -43,6 +40,14 @@ class VideoSession extends Model
     public function accessLogs(): HasMany
     {
         return $this->hasMany(SessionAccessLog::class);
+    }
+
+    /**
+     * Get the media files for this session
+     */
+    public function media(): HasMany
+    {
+        return $this->hasMany(SessionMedia::class, 'video_session_id')->orderBy('order');
     }
 
     /**

@@ -19,6 +19,7 @@
         "@inertiajs/react": "^2.3.11",
         "bootstrap": "^5.3.8",
         "bootstrap-icons": "^1.13.1",
+        "dropzone": "^6.0.0-beta.2",
         "framer-motion": "^12.29.0",
         "react": "^19.2.3",
         "react-dom": "^19.2.3"

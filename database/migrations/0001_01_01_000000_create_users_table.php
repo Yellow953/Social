@@ -18,6 +18,17 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+
+            $table->enum('role', ['user', 'admin'])->default('user');
+            $table->string('phone')->nullable();
+            $table->string('study_year')->nullable();
+            $table->string('major')->nullable();
+            $table->string('device_token')->nullable();
+            $table->string('device_identifier')->nullable();
+            $table->timestamp('last_device_login_at')->nullable();
+            $table->boolean('email_verified')->default(false);
+            $table->timestamp('email_verified_at')->nullable();
+            $table->boolean('two_factor_enabled')->default(true);
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

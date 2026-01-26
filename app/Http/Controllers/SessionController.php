@@ -51,6 +51,9 @@ class SessionController extends Controller
             'user_agent' => request()->userAgent(),
         ]);
 
+        // Eager load media with the session
+        $session->load('media');
+
         return view('sessions.show', compact('session'));
     }
 

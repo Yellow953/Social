@@ -16,9 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->foreignId('course_id')->constrained()->onDelete('cascade');
-            $table->integer('year'); // Study year (1, 2, 3, etc.)
-            $table->string('video_url');
-            $table->integer('duration')->nullable(); // Duration in seconds
+            $table->string('year'); // Study year (1, 2, 3, etc.)
             $table->boolean('is_locked')->default(true);
             $table->integer('order')->default(0);
             $table->timestamps();

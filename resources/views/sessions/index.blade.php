@@ -100,7 +100,6 @@
                             <thead class="bg-light">
                                 <tr>
                                     <th class="border-0">Session</th>
-                                    <th class="border-0">Duration</th>
                                     <th class="border-0">Status</th>
                                     <th class="border-0">Date</th>
                                     <th class="border-0 text-end">Actions</th>
@@ -121,13 +120,6 @@
                                                 @endif
                                             </div>
                                         </div>
-                                    </td>
-                                    <td>
-                                        @if($session->duration)
-                                            {{ gmdate('H:i', $session->duration) }}
-                                        @else
-                                            <span class="text-muted">N/A</span>
-                                        @endif
                                     </td>
                                     <td>
                                         @if($session->is_locked)

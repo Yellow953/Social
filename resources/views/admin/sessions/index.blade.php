@@ -32,7 +32,7 @@
         <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-3">
             <h5 class="mb-0 fw-bold" style="color: #1e3a8a;">All Sessions</h5>
         </div>
-        <div class="card-body p-0">
+        <div class="card-body p-4">
             <div class="table-responsive">
                 <table class="table table-hover mb-0">
                     <thead class="bg-light">
@@ -40,7 +40,6 @@
                             <th class="border-0">Title</th>
                             <th class="border-0">Course</th>
                             <th class="border-0">Year</th>
-                            <th class="border-0">Duration</th>
                             <th class="border-0">Status</th>
                             <th class="border-0">Order</th>
                             <th class="border-0">Created</th>
@@ -61,13 +60,6 @@
                             <td>{{ $session->course->name }}</td>
                             <td>Year {{ $session->year }}</td>
                             <td>
-                                @if($session->duration)
-                                    {{ gmdate('H:i', $session->duration) }}
-                                @else
-                                    <span class="text-muted">-</span>
-                                @endif
-                            </td>
-                            <td>
                                 @if($session->is_locked)
                                     <span class="badge bg-warning">Locked</span>
                                 @else
@@ -77,14 +69,14 @@
                             <td>{{ $session->order }}</td>
                             <td>{{ $session->created_at->format('M d, Y') }}</td>
                             <td class="text-end">
-                                <div class="btn-group">
-                                    <a href="{{ route('admin.sessions.edit', $session) }}" class="btn btn-sm btn-outline-primary" title="Edit">
+                                <div class="d-flex gap-2 justify-content-end">
+                                    <a href="{{ route('admin.sessions.edit', $session) }}" class="btn btn-sm btn-primary shadow-sm" title="Edit" style="border-radius: 8px;">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <form method="POST" action="{{ route('admin.sessions.destroy', $session) }}" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this session?');">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
+                                        <button type="submit" class="btn btn-sm btn-danger shadow-sm" title="Delete" style="border-radius: 8px;">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
@@ -93,7 +85,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="8" class="text-center py-5">
+                            <td colspan="7" class="text-center py-5">
                                 <i class="fas fa-play-circle text-muted mb-3" style="font-size: 3rem;"></i>
                                 <h5 class="text-muted">No sessions found</h5>
                                 <a href="{{ route('admin.sessions.create') }}" class="btn btn-primary mt-3">
@@ -107,8 +99,8 @@
             </div>
         </div>
         @if($sessions->hasPages())
-            <div class="card-footer bg-white border-top">
-                {{ $sessions->links() }}
+            <div class="card-footer bg-white border-top px-4 py-3">
+                {{ $sessions->links('pagination::bootstrap-5') }}
             </div>
         @endif
     </div>

@@ -73,7 +73,7 @@
         <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-3">
             <h5 class="mb-0 fw-bold" style="color: #1e3a8a;">Access Logs</h5>
         </div>
-        <div class="card-body p-0">
+        <div class="card-body p-4">
             <div class="table-responsive">
                 <table class="table table-hover mb-0">
                     <thead class="bg-light">
@@ -129,8 +129,8 @@
             </div>
         </div>
         @if($logs->hasPages())
-            <div class="card-footer bg-white border-top">
-                {{ $logs->links() }}
+            <div class="card-footer bg-white border-top px-4 py-3">
+                {{ $logs->links('pagination::bootstrap-5') }}
             </div>
         @endif
     </div>

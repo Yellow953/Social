@@ -21,12 +21,9 @@ const Welcome = () => {
                             <li className="nav-item">
                                 <a className="nav-link" href="#subscription">Subscription</a>
                             </li>
-                            <li className="nav-item">
-                                <a className="nav-link" href="/login">Login</a>
-                            </li>
                             <li className="nav-item ms-2">
-                                <a className="btn btn-primary" href="/register" style={{background: '#ec682a', border: 'none'}}>
-                                    Get Started
+                                <a className="btn btn-primary" href="/login" style={{background: '#ec682a', border: 'none'}}>
+                                    Login
                                 </a>
                             </li>
                         </ul>

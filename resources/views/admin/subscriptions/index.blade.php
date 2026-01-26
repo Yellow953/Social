@@ -78,7 +78,7 @@
         <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-3">
             <h5 class="mb-0 fw-bold" style="color: #1e3a8a;">All Subscriptions</h5>
         </div>
-        <div class="card-body p-0">
+        <div class="card-body p-4">
             <div class="table-responsive">
                 <table class="table table-hover mb-0">
                     <thead class="bg-light">
@@ -134,14 +134,14 @@
                             </td>
                             <td class="text-end">
                                 @if($subscription->status === 'pending')
-                                    <div class="btn-group">
+                                    <div class="d-flex gap-2 justify-content-end">
                                         <form method="POST" action="{{ route('admin.subscriptions.approve', $subscription) }}" class="d-inline">
                                             @csrf
-                                            <button type="submit" class="btn btn-sm btn-success" onclick="return confirm('Approve this subscription?')">
+                                            <button type="submit" class="btn btn-sm btn-success shadow-sm" onclick="return confirm('Approve this subscription?')" style="border-radius: 8px;">
                                                 <i class="fas fa-check me-1"></i>Approve
                                             </button>
                                         </form>
-                                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#rejectModal{{ $subscription->id }}">
+                                        <button type="button" class="btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#rejectModal{{ $subscription->id }}" style="border-radius: 8px;">
                                             <i class="fas fa-times me-1"></i>Reject
                                         </button>
                                     </div>
@@ -188,8 +188,8 @@
             </div>
         </div>
         @if($subscriptions->hasPages())
-            <div class="card-footer bg-white border-top">
-                {{ $subscriptions->links() }}
+            <div class="card-footer bg-white border-top px-4 py-3">
+                {{ $subscriptions->links('pagination::bootstrap-5') }}
             </div>
         @endif
     </div>

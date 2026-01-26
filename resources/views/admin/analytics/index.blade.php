@@ -15,9 +15,9 @@
             <p class="text-muted mb-0">Platform statistics and insights</p>
         </div>
         <div class="btn-group">
-            <button class="btn btn-outline-secondary active">Last 7 Days</button>
-            <button class="btn btn-outline-secondary">Last 30 Days</button>
-            <button class="btn btn-outline-secondary">Last Year</button>
+            <a href="{{ route('admin.analytics', ['period' => '7']) }}" class="btn btn-outline-secondary {{ $period == '7' ? 'active' : '' }}">Last 7 Days</a>
+            <a href="{{ route('admin.analytics', ['period' => '30']) }}" class="btn btn-outline-secondary {{ $period == '30' ? 'active' : '' }}">Last 30 Days</a>
+            <a href="{{ route('admin.analytics', ['period' => '365']) }}" class="btn btn-outline-secondary {{ $period == '365' ? 'active' : '' }}">Last Year</a>
         </div>
     </div>
 
@@ -32,7 +32,7 @@
                         </div>
                         <div class="flex-grow-1">
                             <h6 class="text-muted text-uppercase small fw-semibold mb-1" style="letter-spacing: 0.5px; font-size: 0.7rem;">Total Users</h6>
-                            <h3 class="fw-bold mb-0" style="color: #1e3a8a; font-size: 1.75rem;">1,234</h3>
+                            <h3 class="fw-bold mb-0" style="color: #1e3a8a; font-size: 1.75rem;">{{ number_format($totalUsers) }}</h3>
                         </div>
                     </div>
                 </div>
@@ -47,7 +47,7 @@
                         </div>
                         <div class="flex-grow-1">
                             <h6 class="text-muted text-uppercase small fw-semibold mb-1" style="letter-spacing: 0.5px; font-size: 0.7rem;">Total Courses</h6>
-                            <h3 class="fw-bold mb-0" style="color: #1e3a8a; font-size: 1.75rem;">156</h3>
+                            <h3 class="fw-bold mb-0" style="color: #1e3a8a; font-size: 1.75rem;">{{ number_format($totalCourses) }}</h3>
                         </div>
                     </div>
                 </div>
@@ -62,7 +62,7 @@
                         </div>
                         <div class="flex-grow-1">
                             <h6 class="text-muted text-uppercase small fw-semibold mb-1" style="letter-spacing: 0.5px; font-size: 0.7rem;">Sessions Completed</h6>
-                            <h3 class="fw-bold mb-0" style="color: #1e3a8a; font-size: 1.75rem;">2,456</h3>
+                            <h3 class="fw-bold mb-0" style="color: #1e3a8a; font-size: 1.75rem;">{{ number_format($sessionsCompleted) }}</h3>
                         </div>
                     </div>
                 </div>
@@ -77,7 +77,7 @@
                         </div>
                         <div class="flex-grow-1">
                             <h6 class="text-muted text-uppercase small fw-semibold mb-1" style="letter-spacing: 0.5px; font-size: 0.7rem;">Total Study Time</h6>
-                            <h3 class="fw-bold mb-0" style="color: #1e3a8a; font-size: 1.75rem;">1,234h</h3>
+                            <h3 class="fw-bold mb-0" style="color: #1e3a8a; font-size: 1.75rem;">{{ number_format($totalStudyTimeHours) }}h</h3>
                         </div>
                     </div>
                 </div>
@@ -116,21 +116,32 @@
                 <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-3">
                     <h5 class="mb-0 fw-bold" style="color: #1e3a8a;">Top Courses</h5>
                 </div>
-                <div class="card-body">
+                <div class="card-body p-4">
                     <div class="list-group list-group-flush">
-                        @for($i = 1; $i <= 5; $i++)
-                        <div class="list-group-item border-0 px-0">
+                        @forelse($topCourses as $course)
+                        <div class="list-group-item border-0 px-0 {{ !$loop->last ? 'mb-3' : '' }}">
                             <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1 fw-bold">Course {{ $i }}</h6>
-                                    <div class="progress" style="height: 6px; width: 200px;">
-                                        <div class="progress-bar bg-primary" style="width: {{ rand(60, 95) }}%"></div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1 fw-bold">{{ $course->name }}</h6>
+                                    <small class="text-muted">{{ $course->code }}</small>
+                                    @php
+                                        $maxAccesses = $topCourses->max('total_accesses') ?: 1;
+                                        $courseAccesses = $course->total_accesses ?? 0;
+                                        $percentage = $maxAccesses > 0 ? ($courseAccesses / $maxAccesses) * 100 : 0;
+                                    @endphp
+                                    <div class="progress mt-2" style="height: 6px;">
+                                        <div class="progress-bar" style="width: {{ $percentage }}%; background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);"></div>
                                     </div>
                                 </div>
-                                <span class="badge bg-primary">{{ rand(50, 200) }} users</span>
+                                <span class="badge bg-primary ms-3">{{ number_format($course->total_accesses ?? 0) }} accesses</span>
                             </div>
                         </div>
-                        @endfor
+                        @empty
+                        <div class="text-center py-4">
+                            <i class="fas fa-book text-muted mb-2" style="font-size: 2rem;"></i>
+                            <p class="text-muted mb-0">No course data available</p>
+                        </div>
+                        @endforelse
                     </div>
                 </div>
             </div>
@@ -140,22 +151,30 @@
                 <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-3">
                     <h5 class="mb-0 fw-bold" style="color: #1e3a8a;">Recent Activity</h5>
                 </div>
-                <div class="card-body">
+                <div class="card-body p-4">
                     <div class="list-group list-group-flush">
-                        @for($i = 1; $i <= 5; $i++)
-                        <div class="list-group-item border-0 px-0">
+                        @forelse($recentActivity as $activity)
+                        <div class="list-group-item border-0 px-0 {{ !$loop->last ? 'mb-3 pb-3 border-bottom' : '' }}">
                             <div class="d-flex align-items-start">
-                                <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-3">
-                                    <i class="fas fa-user-plus text-primary"></i>
+                                <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-3 flex-shrink-0">
+                                    <i class="fas fa-{{ $activity['icon'] }} text-primary"></i>
                                 </div>
                                 <div class="flex-grow-1">
-                                    <h6 class="mb-1 small fw-bold">New User Registered</h6>
-                                    <p class="text-muted small mb-0">User {{ $i }} joined the platform</p>
-                                    <small class="text-muted">{{ now()->subHours(rand(1, 24))->diffForHumans() }}</small>
+                                    <h6 class="mb-1 small fw-bold">{{ $activity['title'] }}</h6>
+                                    <p class="text-muted small mb-0">{{ $activity['description'] }}</p>
+                                    @if(isset($activity['course']))
+                                        <p class="text-muted small mb-1"><i class="fas fa-book me-1"></i>{{ $activity['course'] }}</p>
+                                    @endif
+                                    <small class="text-muted">{{ $activity['time'] }}</small>
                                 </div>
                             </div>
                         </div>
-                        @endfor
+                        @empty
+                        <div class="text-center py-4">
+                            <i class="fas fa-history text-muted mb-2" style="font-size: 2rem;"></i>
+                            <p class="text-muted mb-0">No recent activity</p>
+                        </div>
+                        @endforelse
                     </div>
                 </div>
             </div>
@@ -170,13 +189,14 @@
     new Chart(ctx1, {
         type: 'line',
         data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            labels: @json($growthLabels),
             datasets: [{
                 label: 'Users',
-                data: [800, 950, 1100, 1200, 1300, 1400],
+                data: @json($growthData),
                 borderColor: '#ec682a',
                 backgroundColor: 'rgba(236, 104, 42, 0.1)',
-                tension: 0.4
+                tension: 0.4,
+                fill: true
             }]
         },
         options: {
@@ -185,6 +205,20 @@
             plugins: {
                 legend: {
                     display: false
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    padding: 12,
+                    titleFont: { size: 14, weight: 'bold' },
+                    bodyFont: { size: 13 }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    }
                 }
             }
         }
@@ -197,13 +231,26 @@
         data: {
             labels: ['Active', 'Inactive', 'New'],
             datasets: [{
-                data: [70, 20, 10],
+                data: [{{ $activeUsers }}, {{ $inactiveUsers }}, {{ $newUsers }}],
                 backgroundColor: ['#ec682a', '#5c5c5c', '#28a745']
             }]
         },
         options: {
             responsive: true,
-            maintainAspectRatio: true
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 15,
+                        font: { size: 12 }
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    padding: 12
+                }
+            }
         }
     });
 </script>

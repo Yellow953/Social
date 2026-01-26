@@ -51,7 +51,7 @@
                     <i class="fas fa-history fa-lg me-3"></i>
                     <span class="nav-text" id="nav-admin-access-logs">Access Logs</span>
                 </a>
-                <a href="{{ route('notifications') }}" data-tooltip="Notifications" class="sidebar-item d-flex align-items-center px-3 py-3 mb-2 rounded text-decoration-none {{ request()->is('notifications*') ? 'active' : '' }}">
+                <a href="{{ route('notifications.index') }}" data-tooltip="Notifications" class="sidebar-item d-flex align-items-center px-3 py-3 mb-2 rounded text-decoration-none {{ request()->is('notifications*') ? 'active' : '' }}">
                     <i class="fas fa-bell fa-lg me-3"></i>
                     <span class="nav-text" id="nav-notifications">Notifications</span>
                 </a>
@@ -81,7 +81,7 @@
                     <i class="fas fa-calculator fa-lg me-3"></i>
                     <span class="nav-text" id="nav-calculator">Calculator</span>
                 </a>
-                <a href="{{ route('notifications') }}" data-tooltip="Notifications" class="sidebar-item d-flex align-items-center px-3 py-3 mb-2 rounded text-decoration-none {{ request()->is('notifications*') ? 'active' : '' }}">
+                <a href="{{ route('notifications.index') }}" data-tooltip="Notifications" class="sidebar-item d-flex align-items-center px-3 py-3 mb-2 rounded text-decoration-none {{ request()->is('notifications*') ? 'active' : '' }}">
                     <i class="fas fa-bell fa-lg me-3"></i>
                     <span class="nav-text" id="nav-notifications">Notifications</span>
                 </a>

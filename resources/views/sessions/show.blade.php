@@ -11,20 +11,8 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-8">
-            <!-- Video Player -->
-            <div class="card border-0 shadow-lg mb-4 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
-                <div class="card-body p-0">
-                    <div class="ratio ratio-16x9">
-                        <video id="session-video" class="w-100" controls>
-                            <source src="{{ $session->video_url }}" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
-                    </div>
-                </div>
-            </div>
-
             <!-- Session Details -->
-            <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+            <div class="card border-0 shadow-lg overflow-hidden mb-4" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
                 <div class="card-body p-4">
                     <h3 class="fw-bold mb-3">{{ $session->title }}</h3>
                     @if($session->description)
@@ -39,15 +27,58 @@
                             <i class="fas fa-calendar me-2"></i>
                             <strong>Year:</strong> {{ $session->year }}
                         </div>
-                        @if($session->duration)
-                            <div>
-                                <i class="fas fa-clock me-2"></i>
-                                <strong>Duration:</strong> {{ gmdate('H:i', $session->duration) }}
-                            </div>
-                        @endif
                     </div>
                 </div>
             </div>
+
+            <!-- Media Files -->
+            @if($session->media && $session->media->count() > 0)
+            <div class="card border-0 shadow-lg overflow-hidden mb-4" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+                <div class="card-header bg-white border-bottom">
+                    <h5 class="mb-0 fw-bold"><i class="fas fa-file me-2 text-primary"></i>Session Media</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-3">
+                        @foreach($session->media as $media)
+                            <div class="col-md-4 col-sm-6">
+                                <a href="{{ route('media.detail', $media) }}" class="text-decoration-none">
+                                    <div class="card border shadow-sm h-100 media-card" style="transition: all 0.3s ease; cursor: pointer;">
+                                        <div class="card-body text-center p-4">
+                                            <div class="mb-3">
+                                                @if($media->type === 'pdf')
+                                                    <i class="fas fa-file-pdf fa-4x text-danger"></i>
+                                                @elseif($media->type === 'video')
+                                                    <i class="fas fa-file-video fa-4x text-primary"></i>
+                                                @else
+                                                    <i class="fas fa-file-image fa-4x text-success"></i>
+                                                @endif
+                                            </div>
+                                            <h6 class="mb-2 text-dark text-truncate" style="max-width: 100%;" title="{{ $media->original_filename }}">
+                                                {{ $media->original_filename }}
+                                            </h6>
+                                            <small class="text-muted">{{ $media->formatted_file_size }}</small>
+                                            <div class="mt-3">
+                                                <span class="badge bg-{{ $media->type === 'pdf' ? 'danger' : ($media->type === 'video' ? 'primary' : 'success') }}">
+                                                    {{ ucfirst($media->type) }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+            @else
+            <!-- No Media Message -->
+            <div class="card border-0 shadow-lg overflow-hidden mb-4" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+                <div class="card-body p-4 text-center">
+                    <i class="fas fa-file text-muted mb-3" style="font-size: 3rem;"></i>
+                    <h6 class="text-muted">No media files available for this session</h6>
+                </div>
+            </div>
+            @endif
         </div>
 
         <div class="col-lg-4">
@@ -66,12 +97,6 @@
                             <strong>Study Year:</strong><br>
                             <span class="text-muted">Year {{ $session->year }}</span>
                         </li>
-                        @if($session->duration)
-                            <li class="mb-3">
-                                <strong>Duration:</strong><br>
-                                <span class="text-muted">{{ gmdate('H:i', $session->duration) }}</span>
-                            </li>
-                        @endif
                         <li>
                             <strong>Status:</strong><br>
                             @if($session->is_locked)
@@ -95,52 +120,17 @@
     </div>
 </div>
 
-@push('scripts')
-<script>
-    // Track watch time
-    const video = document.getElementById('session-video');
-    let watchTime = 0;
-    let lastUpdate = Date.now();
-
-    // Update watch time every 30 seconds
-    setInterval(() => {
-        if (!video.paused && !video.ended) {
-            watchTime += Math.floor((Date.now() - lastUpdate) / 1000);
-            lastUpdate = Date.now();
-
-            // Send update to server every 30 seconds
-            if (watchTime % 30 === 0) {
-                fetch('{{ route("sessions.watch-time", $session) }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({
-                        duration_seconds: watchTime
-                    })
-                });
-            }
-        }
-    }, 1000);
-
-    // Send final watch time when video ends or page unloads
-    video.addEventListener('ended', () => {
-        sendWatchTime();
-    });
-
-    window.addEventListener('beforeunload', () => {
-        sendWatchTime();
-    });
-
-    function sendWatchTime() {
-        if (watchTime > 0) {
-            navigator.sendBeacon('{{ route("sessions.watch-time", $session) }}', JSON.stringify({
-                duration_seconds: watchTime,
-                _token: '{{ csrf_token() }}'
-            }));
-        }
+@push('styles')
+<style>
+    .media-card {
+        transition: all 0.3s ease;
     }
-</script>
+    
+    .media-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.15) !important;
+        border-color: #3b82f6 !important;
+    }
+</style>
 @endpush
 @endsection

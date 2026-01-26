@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Models\Notification;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class CourseController extends Controller
@@ -30,7 +32,13 @@ class CourseController extends Controller
             'description' => 'nullable|string',
         ]);
 
-        Course::create($validated);
+        $course = Course::create($validated);
+
+        // Notify all users about new course
+        $this->notifyUsers('course', 'New Course Available', "A new course \"{$course->name}\" has been added to the platform.", [
+            'course_id' => $course->id,
+            'course_name' => $course->name,
+        ]);
 
         return redirect()->route('admin.courses.index')
             ->with('success', 'Course created successfully.');
@@ -51,6 +59,12 @@ class CourseController extends Controller
 
         $course->update($validated);
 
+        // Notify all users about course update
+        $this->notifyUsers('course', 'Course Updated', "The course \"{$course->name}\" has been updated.", [
+            'course_id' => $course->id,
+            'course_name' => $course->name,
+        ]);
+
         return redirect()->route('admin.courses.index')
             ->with('success', 'Course updated successfully.');
     }
@@ -67,5 +81,24 @@ class CourseController extends Controller
 
         return redirect()->route('admin.courses.index')
             ->with('success', 'Course deleted successfully.');
+    }
+
+    /**
+     * Notify users about course changes
+     */
+    private function notifyUsers(string $type, string $title, string $message, array $data = [])
+    {
+        $users = User::where('role', 'user')->get();
+        
+        foreach ($users as $user) {
+            Notification::create([
+                'user_id' => $user->id,
+                'type' => $type,
+                'title' => $title,
+                'message' => $message,
+                'data' => $data,
+                'read' => false,
+            ]);
+        }
     }
 }

@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Admin Panel') - Social Plus</title>
 
     <!-- Fonts -->
@@ -126,7 +127,7 @@
                             <input type="text" class="form-control border-start-0" placeholder="Search...">
                         </div>
                         <!-- Notifications -->
-                        <a href="{{ route('notifications') }}" class="btn btn-light position-relative text-decoration-none">
+                        <a href="{{ route('notifications.index') }}" class="btn btn-light position-relative text-decoration-none">
                             <i class="fas fa-bell fs-5"></i>
                             <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
                                 <span class="visually-hidden">New alerts</span>
