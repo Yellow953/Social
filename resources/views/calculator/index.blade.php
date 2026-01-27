@@ -45,12 +45,12 @@
                                         <i class="fas fa-file-alt me-2" style="color: #3b82f6;"></i>Midterm Exam Score
                                     </label>
                                     <div class="input-group">
-                                        <input type="number" 
-                                               class="form-control form-control-lg" 
-                                               id="midtermScore" 
+                                        <input type="number"
+                                               class="form-control form-control-lg"
+                                               id="midtermScore"
                                                name="midtermScore"
-                                               min="0" 
-                                               max="20" 
+                                               min="0"
+                                               max="20"
                                                step="0.01"
                                                placeholder="Enter score"
                                                required>
@@ -64,12 +64,12 @@
                                         <i class="fas fa-graduation-cap me-2" style="color: #3b82f6;"></i>Final Exam Score
                                     </label>
                                     <div class="input-group">
-                                        <input type="number" 
-                                               class="form-control form-control-lg" 
-                                               id="finalScore" 
+                                        <input type="number"
+                                               class="form-control form-control-lg"
+                                               id="finalScore"
                                                name="finalScore"
-                                               min="0" 
-                                               max="20" 
+                                               min="0"
+                                               max="20"
                                                step="0.01"
                                                placeholder="Enter score"
                                                required>
@@ -83,12 +83,12 @@
                                         <i class="fas fa-flask me-2" style="color: #3b82f6;"></i>TP (Practical Work) Score
                                     </label>
                                     <div class="input-group">
-                                        <input type="number" 
-                                               class="form-control form-control-lg" 
-                                               id="tpScore" 
+                                        <input type="number"
+                                               class="form-control form-control-lg"
+                                               id="tpScore"
                                                name="tpScore"
-                                               min="0" 
-                                               max="20" 
+                                               min="0"
+                                               max="20"
                                                step="0.01"
                                                placeholder="Enter score"
                                                required>
@@ -107,18 +107,18 @@
                                 <i class="fas fa-info-circle me-2"></i>
                                 <small>Adjust the percentages below. They should total 100%.</small>
                             </div>
-                            
+
                             <div class="row g-3">
                                 <!-- Midterm Percentage -->
                                 <div class="col-md-4">
                                     <label for="midtermPercent" class="form-label fw-semibold">Midterm %</label>
                                     <div class="input-group">
-                                        <input type="number" 
-                                               class="form-control form-control-lg" 
-                                               id="midtermPercent" 
+                                        <input type="number"
+                                               class="form-control form-control-lg"
+                                               id="midtermPercent"
                                                name="midtermPercent"
-                                               min="0" 
-                                               max="100" 
+                                               min="0"
+                                               max="100"
                                                step="0.1"
                                                value="30"
                                                required>
@@ -130,12 +130,12 @@
                                 <div class="col-md-4">
                                     <label for="finalPercent" class="form-label fw-semibold">Final %</label>
                                     <div class="input-group">
-                                        <input type="number" 
-                                               class="form-control form-control-lg" 
-                                               id="finalPercent" 
+                                        <input type="number"
+                                               class="form-control form-control-lg"
+                                               id="finalPercent"
                                                name="finalPercent"
-                                               min="0" 
-                                               max="100" 
+                                               min="0"
+                                               max="100"
                                                step="0.1"
                                                value="50"
                                                required>
@@ -147,12 +147,12 @@
                                 <div class="col-md-4">
                                     <label for="tpPercent" class="form-label fw-semibold">TP %</label>
                                     <div class="input-group">
-                                        <input type="number" 
-                                               class="form-control form-control-lg" 
-                                               id="tpPercent" 
+                                        <input type="number"
+                                               class="form-control form-control-lg"
+                                               id="tpPercent"
                                                name="tpPercent"
-                                               min="0" 
-                                               max="100" 
+                                               min="0"
+                                               max="100"
                                                step="0.1"
                                                value="20"
                                                required>
@@ -168,12 +168,12 @@
                                     <span id="totalPercent" class="fw-bold" style="color: #1e3a8a; font-size: 1.2rem;">100%</span>
                                 </div>
                                 <div class="progress mt-2" style="height: 8px;">
-                                    <div id="percentProgress" 
-                                         class="progress-bar" 
-                                         role="progressbar" 
+                                    <div id="percentProgress"
+                                         class="progress-bar"
+                                         role="progressbar"
                                          style="width: 100%; background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);"
-                                         aria-valuenow="100" 
-                                         aria-valuemin="0" 
+                                         aria-valuenow="100"
+                                         aria-valuemin="0"
                                          aria-valuemax="100"></div>
                                 </div>
                                 <small id="percentWarning" class="text-danger d-none">
@@ -184,7 +184,7 @@
 
                         <!-- Calculate Button -->
                         <div class="text-center mb-4">
-                            <button type="button" 
+                            <button type="button"
                                     class="btn btn-lg text-white fw-bold px-5 py-3"
                                     style="background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);"
                                     onclick="calculateGrade()">
@@ -198,7 +198,7 @@
                                 <h5 class="fw-bold mb-3" style="color: #1e3a8a;">
                                     <i class="fas fa-chart-line me-2" style="color: #3b82f6;"></i>Final Grade
                                 </h5>
-                                
+
                                 <div class="card bg-gradient mb-3" style="background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);">
                                     <div class="card-body text-center p-4">
                                         <div class="mb-2">
@@ -258,24 +258,24 @@
     function toggleGradeScale() {
         const toggle = document.getElementById('gradeScaleToggle');
         gradeScale = toggle.checked ? 100 : 20;
-        
+
         const maxValue = gradeScale;
         const maxText = '/ ' + gradeScale;
-        
+
         // Update max values and labels
         document.getElementById('midtermScore').max = maxValue;
         document.getElementById('finalScore').max = maxValue;
         document.getElementById('tpScore').max = maxValue;
-        
+
         document.getElementById('midtermMax').textContent = maxText;
         document.getElementById('finalMax').textContent = maxText;
         document.getElementById('tpMax').textContent = maxText;
-        
+
         // Update placeholders
         document.getElementById('midtermScore').placeholder = 'Enter score (0-' + maxValue + ')';
         document.getElementById('finalScore').placeholder = 'Enter score (0-' + maxValue + ')';
         document.getElementById('tpScore').placeholder = 'Enter score (0-' + maxValue + ')';
-        
+
         // Clear any existing results
         document.getElementById('resultSection').classList.add('d-none');
     }
@@ -289,15 +289,15 @@
         const midterm = parseFloat(document.getElementById('midtermPercent').value) || 0;
         const final = parseFloat(document.getElementById('finalPercent').value) || 0;
         const tp = parseFloat(document.getElementById('tpPercent').value) || 0;
-        
+
         const total = midterm + final + tp;
         const totalElement = document.getElementById('totalPercent');
         const progressElement = document.getElementById('percentProgress');
         const warningElement = document.getElementById('percentWarning');
-        
+
         totalElement.textContent = total.toFixed(1) + '%';
         progressElement.style.width = Math.min(total, 100) + '%';
-        
+
         if (total !== 100) {
             totalElement.style.color = '#dc3545';
             progressElement.style.background = 'linear-gradient(135deg, #dc3545 0%, #c82333 100%)';
@@ -314,50 +314,50 @@
         const midtermScore = parseFloat(document.getElementById('midtermScore').value) || 0;
         const finalScore = parseFloat(document.getElementById('finalScore').value) || 0;
         const tpScore = parseFloat(document.getElementById('tpScore').value) || 0;
-        
+
         const midtermPercent = parseFloat(document.getElementById('midtermPercent').value) || 0;
         const finalPercent = parseFloat(document.getElementById('finalPercent').value) || 0;
         const tpPercent = parseFloat(document.getElementById('tpPercent').value) || 0;
-        
+
         // Validate percentages total 100
         const totalPercent = midtermPercent + finalPercent + tpPercent;
         if (Math.abs(totalPercent - 100) > 0.1) {
             alert('Percentages must total exactly 100%. Current total: ' + totalPercent.toFixed(1) + '%');
             return;
         }
-        
+
         // Validate scores are within range
-        if (midtermScore < 0 || midtermScore > gradeScale || 
-            finalScore < 0 || finalScore > gradeScale || 
+        if (midtermScore < 0 || midtermScore > gradeScale ||
+            finalScore < 0 || finalScore > gradeScale ||
             tpScore < 0 || tpScore > gradeScale) {
             alert('All scores must be between 0 and ' + gradeScale);
             return;
         }
-        
+
         // Calculate contributions based on grade scale
         const midtermContribution = (midtermScore / gradeScale) * midtermPercent;
         const finalContribution = (finalScore / gradeScale) * finalPercent;
         const tpContribution = (tpScore / gradeScale) * tpPercent;
-        
+
         // Calculate final grade
         const finalGrade = midtermContribution + finalContribution + tpContribution;
         const finalGradeOutOfScale = (finalGrade / 100) * gradeScale;
-        
+
         // Display results
         document.getElementById('finalGrade').textContent = finalGradeOutOfScale.toFixed(2);
         document.getElementById('gradeOutOf').textContent = '/ ' + gradeScale;
         document.getElementById('midtermContribution').textContent = midtermContribution.toFixed(2);
         document.getElementById('finalContribution').textContent = finalContribution.toFixed(2);
         document.getElementById('tpContribution').textContent = tpContribution.toFixed(2);
-        
+
         // Grade interpretation (based on /20 scale equivalent for consistency)
         const finalGradeOutOf20 = (finalGrade / 100) * 20;
         const interpretationElement = document.getElementById('gradeInterpretation');
         const messageElement = document.getElementById('gradeMessage');
-        
+
         let message = '';
         let alertClass = '';
-        
+
         if (finalGradeOutOf20 >= 16) {
             message = 'Excellent! You have achieved a very high grade.';
             alertClass = 'alert-success';
@@ -374,13 +374,13 @@
             message = 'Below passing grade. You may need to retake the course.';
             alertClass = 'alert-danger';
         }
-        
+
         interpretationElement.className = 'alert ' + alertClass;
         messageElement.textContent = message;
-        
+
         // Show result section
         document.getElementById('resultSection').classList.remove('d-none');
-        
+
         // Scroll to result
         document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
