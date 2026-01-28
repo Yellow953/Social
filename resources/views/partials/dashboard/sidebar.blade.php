@@ -59,10 +59,6 @@
                     <i class="fas fa-user fa-lg me-3"></i>
                     <span class="nav-text" id="nav-profile">Profile</span>
                 </a>
-                <a href="{{ route('settings') }}" data-tooltip="Settings" class="sidebar-item d-flex align-items-center px-3 py-3 mb-2 rounded text-decoration-none {{ request()->is('settings*') ? 'active' : '' }}">
-                    <i class="fas fa-cog fa-lg me-3"></i>
-                    <span class="nav-text" id="nav-settings">Settings</span>
-                </a>
             @else
                 <!-- Regular User Navigation -->
                 <a href="{{ route('dashboard') }}" data-tooltip="Dashboard" class="sidebar-item d-flex align-items-center px-3 py-3 mb-2 rounded text-decoration-none {{ request()->is('dashboard') && !request()->is('admin/*') ? 'active' : '' }}">
@@ -88,10 +84,6 @@
                 <a href="{{ route('profile') }}" data-tooltip="Profile" class="sidebar-item d-flex align-items-center px-3 py-3 mb-2 rounded text-decoration-none {{ request()->is('profile*') ? 'active' : '' }}">
                     <i class="fas fa-user fa-lg me-3"></i>
                     <span class="nav-text" id="nav-profile">Profile</span>
-                </a>
-                <a href="{{ route('settings') }}" data-tooltip="Settings" class="sidebar-item d-flex align-items-center px-3 py-3 mb-2 rounded text-decoration-none {{ request()->is('settings*') ? 'active' : '' }}">
-                    <i class="fas fa-cog fa-lg me-3"></i>
-                    <span class="nav-text" id="nav-settings">Settings</span>
                 </a>
             @endif
         </nav>

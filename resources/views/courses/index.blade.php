@@ -26,14 +26,14 @@
                     <i class="fas fa-plus me-2"></i>Add Course
                 </a>
             @endif
-            <button class="btn btn-primary">
+            <button type="button" class="btn btn-primary" id="coursesFilterToggle" aria-expanded="false">
                 <i class="fas fa-filter me-2"></i>Filter
             </button>
         </div>
     </div>
 
-    <!-- Search Bar -->
-    <div class="card border-0 shadow-lg overflow-hidden mb-4" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+    <!-- Search / Filter Bar (toggleable) -->
+    <div class="card border-0 shadow-lg overflow-hidden mb-4" id="coursesFilterCard" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important; display: none;">
         <div class="card-body p-4">
             <form method="GET" action="{{ route('courses') }}">
                 <div class="input-group">
@@ -44,7 +44,7 @@
                            class="form-control border-start-0" 
                            name="search"
                            value="{{ request('search') }}"
-                           placeholder="Search courses...">
+                           placeholder="Search courses by name, code or description...">
                     <button class="btn btn-outline-secondary" type="submit">
                         <i class="fas fa-search"></i> Search
                     </button>
@@ -57,6 +57,18 @@
             </form>
         </div>
     </div>
+    <script>
+        document.getElementById('coursesFilterToggle').addEventListener('click', function() {
+            var card = document.getElementById('coursesFilterCard');
+            var open = card.style.display !== 'none';
+            card.style.display = open ? 'none' : 'block';
+            this.setAttribute('aria-expanded', !open);
+        });
+        @if(request('search'))
+        document.getElementById('coursesFilterCard').style.display = 'block';
+        document.getElementById('coursesFilterToggle').setAttribute('aria-expanded', 'true');
+        @endif
+    </script>
 
     <!-- Courses Grid -->
     <div class="row g-4">
@@ -96,7 +108,7 @@
                             <a href="{{ route('admin.courses.edit', $course) }}" class="btn btn-primary btn-sm flex-grow-1">
                                 <i class="fas fa-edit me-1"></i>Edit
                             </a>
-                            <form method="POST" action="{{ route('admin.courses.destroy', $course) }}" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this course?');">
+                            <form method="POST" action="{{ route('admin.courses.destroy', $course) }}" class="d-inline form-delete" data-confirm="Are you sure you want to delete this course?">
                                 @csrf
                                 @method('DELETE')
                                 <button class="btn btn-outline-danger btn-sm" type="submit">
@@ -133,19 +145,11 @@
     </div>
 
     <!-- Pagination -->
+    @if($courses->hasPages())
     <nav aria-label="Page navigation" class="mt-4">
-        <ul class="pagination justify-content-center">
-            <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1">Previous</a>
-            </li>
-            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-                <a class="page-link" href="#">Next</a>
-            </li>
-        </ul>
+        {{ $courses->withQueryString()->links() }}
     </nav>
+    @endif
 </div>
 
 <style>

@@ -9,388 +9,327 @@
 @section('content')
 <div class="container-fluid">
     <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <!-- Page Header -->
-            <div class="text-center mb-4">
-                <h2 class="fw-bold mb-1" style="color: #1e3a8a;"><i class="fas fa-calculator me-2" style="color: #3b82f6;"></i>University Grade Calculator</h2>
-                <p class="text-muted mb-0">Calculate your final grade based on exam scores and percentages</p>
+        <div class="col-xl-10">
+            <div class="d-flex flex-column flex-md-row align-items-center justify-content-between gap-3 mb-4">
+                <div>
+                    <h2 class="fw-bold mb-1" style="color: #1e3a8a;">University Grade Calculator</h2>
+                    <p class="text-muted small mb-0">Midterm, final &amp; TP — weighted average</p>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <span class="text-muted small">Scale</span>
+                    <div class="btn-group btn-group-sm" role="group">
+                        <input type="radio" class="btn-check" name="scale" id="scale20" checked>
+                        <label class="btn btn-outline-primary" for="scale20">/ 20</label>
+                        <input type="radio" class="btn-check" name="scale" id="scale100">
+                        <label class="btn btn-outline-primary" for="scale100">/ 100</label>
+                    </div>
+                </div>
             </div>
 
-            <!-- Calculator Card -->
-            <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
-                <div class="card-body p-4">
-                    <form id="gradeCalculatorForm">
-                        <!-- Grade Scale Toggle -->
-                        <div class="mb-4">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="fw-bold mb-0" style="color: #1e3a8a;">
-                                    <i class="fas fa-clipboard-list me-2" style="color: #3b82f6;"></i>Exam Scores
-                                </h5>
-                                <div class="d-flex align-items-center gap-2">
-                                    <span class="fw-semibold" style="color: #5c5c5c;">/20</span>
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="gradeScaleToggle" onchange="toggleGradeScale()" style="width: 3rem; height: 1.5rem; cursor: pointer;">
-                                    </div>
-                                    <span class="fw-semibold" style="color: #5c5c5c;">/100</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Exam Scores Section -->
-                        <div class="mb-4">
-                            <div class="row g-3">
-                                <!-- Midterm Exam -->
-                                <div class="col-md-4">
-                                    <label for="midtermScore" class="form-label fw-semibold">
-                                        <i class="fas fa-file-alt me-2" style="color: #3b82f6;"></i>Midterm Exam Score
-                                    </label>
-                                    <div class="input-group">
-                                        <input type="number"
-                                               class="form-control form-control-lg"
-                                               id="midtermScore"
-                                               name="midtermScore"
-                                               min="0"
-                                               max="20"
-                                               step="0.01"
-                                               placeholder="Enter score"
-                                               required>
-                                        <span class="input-group-text bg-light" id="midtermMax">/ 20</span>
-                                    </div>
-                                </div>
-
-                                <!-- Final Exam -->
-                                <div class="col-md-4">
-                                    <label for="finalScore" class="form-label fw-semibold">
-                                        <i class="fas fa-graduation-cap me-2" style="color: #3b82f6;"></i>Final Exam Score
-                                    </label>
-                                    <div class="input-group">
-                                        <input type="number"
-                                               class="form-control form-control-lg"
-                                               id="finalScore"
-                                               name="finalScore"
-                                               min="0"
-                                               max="20"
-                                               step="0.01"
-                                               placeholder="Enter score"
-                                               required>
-                                        <span class="input-group-text bg-light" id="finalMax">/ 20</span>
-                                    </div>
-                                </div>
-
-                                <!-- TP Exam -->
-                                <div class="col-md-4">
-                                    <label for="tpScore" class="form-label fw-semibold">
-                                        <i class="fas fa-flask me-2" style="color: #3b82f6;"></i>TP (Practical Work) Score
-                                    </label>
-                                    <div class="input-group">
-                                        <input type="number"
-                                               class="form-control form-control-lg"
-                                               id="tpScore"
-                                               name="tpScore"
-                                               min="0"
-                                               max="20"
-                                               step="0.01"
-                                               placeholder="Enter score"
-                                               required>
-                                        <span class="input-group-text bg-light" id="tpMax">/ 20</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Percentages Section -->
-                        <div class="mb-4">
-                            <h5 class="fw-bold mb-3" style="color: #1e3a8a;">
-                                <i class="fas fa-percentage me-2" style="color: #3b82f6;"></i>Weight Percentages
+            <div class="row g-4">
+                <!-- Input panel -->
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-lg h-100 calculator-card" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+                        <div class="card-header bg-transparent border-0 pb-0 pt-4 px-4">
+                            <h5 class="mb-0 fw-bold" style="color: #1e3a8a;">
+                                <i class="fas fa-edit me-2" style="color: #3b82f6;"></i>Input Scores
                             </h5>
-                            <div class="alert alert-info mb-3">
-                                <i class="fas fa-info-circle me-2"></i>
-                                <small>Adjust the percentages below. They should total 100%.</small>
-                            </div>
-
-                            <div class="row g-3">
-                                <!-- Midterm Percentage -->
-                                <div class="col-md-4">
-                                    <label for="midtermPercent" class="form-label fw-semibold">Midterm %</label>
-                                    <div class="input-group">
-                                        <input type="number"
-                                               class="form-control form-control-lg"
-                                               id="midtermPercent"
-                                               name="midtermPercent"
-                                               min="0"
-                                               max="100"
-                                               step="0.1"
-                                               value="30"
-                                               required>
-                                        <span class="input-group-text bg-light">%</span>
-                                    </div>
-                                </div>
-
-                                <!-- Final Percentage -->
-                                <div class="col-md-4">
-                                    <label for="finalPercent" class="form-label fw-semibold">Final %</label>
-                                    <div class="input-group">
-                                        <input type="number"
-                                               class="form-control form-control-lg"
-                                               id="finalPercent"
-                                               name="finalPercent"
-                                               min="0"
-                                               max="100"
-                                               step="0.1"
-                                               value="50"
-                                               required>
-                                        <span class="input-group-text bg-light">%</span>
-                                    </div>
-                                </div>
-
-                                <!-- TP Percentage -->
-                                <div class="col-md-4">
-                                    <label for="tpPercent" class="form-label fw-semibold">TP %</label>
-                                    <div class="input-group">
-                                        <input type="number"
-                                               class="form-control form-control-lg"
-                                               id="tpPercent"
-                                               name="tpPercent"
-                                               min="0"
-                                               max="100"
-                                               step="0.1"
-                                               value="20"
-                                               required>
-                                        <span class="input-group-text bg-light">%</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Total Percentage Display -->
-                            <div class="mt-3">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="fw-semibold">Total:</span>
-                                    <span id="totalPercent" class="fw-bold" style="color: #1e3a8a; font-size: 1.2rem;">100%</span>
-                                </div>
-                                <div class="progress mt-2" style="height: 8px;">
-                                    <div id="percentProgress"
-                                         class="progress-bar"
-                                         role="progressbar"
-                                         style="width: 100%; background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);"
-                                         aria-valuenow="100"
-                                         aria-valuemin="0"
-                                         aria-valuemax="100"></div>
-                                </div>
-                                <small id="percentWarning" class="text-danger d-none">
-                                    <i class="fas fa-exclamation-triangle me-1"></i>Percentages must total 100%
-                                </small>
-                            </div>
                         </div>
-
-                        <!-- Calculate Button -->
-                        <div class="text-center mb-4">
-                            <button type="button"
-                                    class="btn btn-lg text-white fw-bold px-5 py-3"
-                                    style="background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);"
-                                    onclick="calculateGrade()">
-                                <i class="fas fa-calculator me-2"></i>Calculate Final Grade
-                            </button>
+                        <div class="card-body p-4">
+                            <form id="gradeCalculatorForm">
+                                <div class="table-responsive">
+                                    <table class="table table-borderless align-middle mb-0">
+                                        <thead>
+                                            <tr class="border-bottom" style="border-color: #e5e7eb !important;">
+                                                <th class="text-muted fw-semibold small text-uppercase pb-3" style="letter-spacing: 0.5px;">Exam</th>
+                                                <th class="text-muted fw-semibold small text-uppercase pb-3 text-end" style="letter-spacing: 0.5px;">Score</th>
+                                                <th class="text-muted fw-semibold small text-uppercase pb-3 text-end" style="letter-spacing: 0.5px;">Weight %</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="exam-row">
+                                                <td class="py-3">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="exam-icon me-2" style="width: 32px; height: 32px; background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                                            <i class="fas fa-file-alt text-white small"></i>
+                                                        </div>
+                                                        <span class="fw-semibold" style="color: #1e3a8a;">Midterm</span>
+                                                    </div>
+                                                </td>
+                                                <td class="py-3 text-end">
+                                                    <div class="input-group input-group-sm ms-auto" style="max-width: 110px;">
+                                                        <input type="number" class="form-control border" id="midtermScore" min="0" max="20" step="0.01" placeholder="0" required style="border-radius: 6px 0 0 6px !important;">
+                                                        <span class="input-group-text border-start-0 small" id="midtermMax" style="background: #f8fafc; border-radius: 0 6px 6px 0 !important;">/20</span>
+                                                    </div>
+                                                </td>
+                                                <td class="py-3 text-end">
+                                                    <div class="input-group input-group-sm ms-auto" style="max-width: 90px;">
+                                                        <input type="number" class="form-control border" id="midtermPercent" min="0" max="100" step="0.1" value="30" required style="border-radius: 6px 0 0 6px !important;">
+                                                        <span class="input-group-text border-start-0 small" style="background: #f8fafc; border-radius: 0 6px 6px 0 !important;">%</span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="exam-row">
+                                                <td class="py-3">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="exam-icon me-2" style="width: 32px; height: 32px; background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                                            <i class="fas fa-graduation-cap text-white small"></i>
+                                                        </div>
+                                                        <span class="fw-semibold" style="color: #1e3a8a;">Final</span>
+                                                    </div>
+                                                </td>
+                                                <td class="py-3 text-end">
+                                                    <div class="input-group input-group-sm ms-auto" style="max-width: 110px;">
+                                                        <input type="number" class="form-control border" id="finalScore" min="0" max="20" step="0.01" placeholder="0" required style="border-radius: 6px 0 0 6px !important;">
+                                                        <span class="input-group-text border-start-0 small" id="finalMax" style="background: #f8fafc; border-radius: 0 6px 6px 0 !important;">/20</span>
+                                                    </div>
+                                                </td>
+                                                <td class="py-3 text-end">
+                                                    <div class="input-group input-group-sm ms-auto" style="max-width: 90px;">
+                                                        <input type="number" class="form-control border" id="finalPercent" min="0" max="100" step="0.1" value="50" required style="border-radius: 6px 0 0 6px !important;">
+                                                        <span class="input-group-text border-start-0 small" style="background: #f8fafc; border-radius: 0 6px 6px 0 !important;">%</span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="exam-row">
+                                                <td class="py-3">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="exam-icon me-2" style="width: 32px; height: 32px; background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                                            <i class="fas fa-flask text-white small"></i>
+                                                        </div>
+                                                        <span class="fw-semibold" style="color: #1e3a8a;">TP</span>
+                                                    </div>
+                                                </td>
+                                                <td class="py-3 text-end">
+                                                    <div class="input-group input-group-sm ms-auto" style="max-width: 110px;">
+                                                        <input type="number" class="form-control border" id="tpScore" min="0" max="20" step="0.01" placeholder="0" required style="border-radius: 6px 0 0 6px !important;">
+                                                        <span class="input-group-text border-start-0 small" id="tpMax" style="background: #f8fafc; border-radius: 0 6px 6px 0 !important;">/20</span>
+                                                    </div>
+                                                </td>
+                                                <td class="py-3 text-end">
+                                                    <div class="input-group input-group-sm ms-auto" style="max-width: 90px;">
+                                                        <input type="number" class="form-control border" id="tpPercent" min="0" max="100" step="0.1" value="20" required style="border-radius: 6px 0 0 6px !important;">
+                                                        <span class="input-group-text border-start-0 small" style="background: #f8fafc; border-radius: 0 6px 6px 0 !important;">%</span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between mt-4 pt-3" style="border-top: 2px solid #e5e7eb;">
+                                    <div>
+                                        <small class="text-muted d-block">Weights total</small>
+                                        <strong id="totalPercent" style="color: #1e3a8a; font-size: 1.1rem;">100</strong><small class="text-muted">%</small>
+                                    </div>
+                                    <span id="percentWarning" class="text-danger small d-none">
+                                        <i class="fas fa-exclamation-triangle me-1"></i>Must equal 100%
+                                    </span>
+                                    <button type="button" class="btn px-4 py-2 fw-semibold" id="btnCalculate" onclick="calculateGrade()" style="background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%); color: white; border-radius: 8px; border: none;">
+                                        <i class="fas fa-calculator me-2"></i>Calculate
+                                    </button>
+                                </div>
+                            </form>
                         </div>
+                    </div>
+                </div>
 
-                        <!-- Result Display -->
-                        <div id="resultSection" class="d-none">
-                            <div class="border-top pt-4 mt-4">
-                                <h5 class="fw-bold mb-3" style="color: #1e3a8a;">
-                                    <i class="fas fa-chart-line me-2" style="color: #3b82f6;"></i>Final Grade
-                                </h5>
-
-                                <div class="card bg-gradient mb-3" style="background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);">
-                                    <div class="card-body text-center p-4">
-                                        <div class="mb-2">
-                                            <small class="text-white opacity-75" style="color: #ffffff !important;">Your Final Grade</small>
-                                        </div>
-                                        <div class="display-3 fw-bold mb-2 text-white" id="finalGrade" style="color: #ffffff !important;">0.00</div>
-                                        <div class="h5 mb-0 text-white" id="gradeOutOf" style="color: #ffffff !important;">/ 20</div>
+                <!-- Result panel -->
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-lg h-100 result-card" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
+                        <div class="card-header bg-transparent border-0 pb-0 pt-4 px-4">
+                            <h5 class="mb-0 fw-bold" style="color: #1e3a8a;">
+                                <i class="fas fa-chart-line me-2" style="color: #ec682a;"></i>Result
+                            </h5>
+                        </div>
+                        <div class="card-body p-4 d-flex flex-column justify-content-center min-vh-md-0">
+                            <div id="resultPlaceholder" class="text-center text-muted py-5">
+                                <div class="mb-3 opacity-50">
+                                    <div style="width: 80px; height: 80px; margin: 0 auto; background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%); border-radius: 20px; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-calculator fa-2x text-muted"></i>
                                     </div>
                                 </div>
-
-                                <!-- Breakdown -->
-                                <div class="row g-3 mb-3">
-                                    <div class="col-md-4">
-                                        <div class="card border-0 shadow-sm h-100">
-                                            <div class="card-body text-center">
-                                                <small class="text-muted d-block mb-1">Midterm Contribution</small>
-                                                <div class="h4 fw-bold mb-0" style="color: #3b82f6;" id="midtermContribution">0.00</div>
-                                            </div>
+                                <p class="mb-0 small fw-medium">Enter scores and weights,<br>then click Calculate.</p>
+                            </div>
+                            <div id="resultSection" class="d-none">
+                                <div class="text-center mb-4 pb-3" style="border-bottom: 2px solid #e5e7eb;">
+                                    <p class="text-muted small mb-2 fw-semibold text-uppercase" style="letter-spacing: 1px;">Final Grade</p>
+                                    <div class="d-flex align-items-baseline justify-content-center gap-2">
+                                        <span class="display-3 fw-bold" id="finalGrade" style="color: #1e3a8a; line-height: 1;">0.00</span>
+                                        <span class="fs-3 text-muted fw-normal" id="gradeOutOf">/ 20</span>
+                                    </div>
+                                </div>
+                                <div class="pt-3">
+                                    <p class="small text-muted mb-3 fw-semibold text-uppercase" style="letter-spacing: 0.5px;">Breakdown</p>
+                                    <div class="breakdown-item mb-2 pb-2" style="border-bottom: 1px solid #f3f4f6;">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="small fw-medium">Midterm</span>
+                                            <span class="fw-bold" id="midtermContribution" style="color: #3b82f6;">0</span>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <div class="card border-0 shadow-sm h-100">
-                                            <div class="card-body text-center">
-                                                <small class="text-muted d-block mb-1">Final Contribution</small>
-                                                <div class="h4 fw-bold mb-0" style="color: #3b82f6;" id="finalContribution">0.00</div>
-                                            </div>
+                                    <div class="breakdown-item mb-2 pb-2" style="border-bottom: 1px solid #f3f4f6;">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="small fw-medium">Final</span>
+                                            <span class="fw-bold" id="finalContribution" style="color: #3b82f6;">0</span>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <div class="card border-0 shadow-sm h-100">
-                                            <div class="card-body text-center">
-                                                <small class="text-muted d-block mb-1">TP Contribution</small>
-                                                <div class="h4 fw-bold mb-0" style="color: #3b82f6;" id="tpContribution">0.00</div>
-                                            </div>
+                                    <div class="breakdown-item mb-3">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="small fw-medium">TP</span>
+                                            <span class="fw-bold" id="tpContribution" style="color: #3b82f6;">0</span>
                                         </div>
                                     </div>
                                 </div>
-
-                                <!-- Grade Interpretation -->
-                                <div class="alert" id="gradeInterpretation" role="alert">
+                                <div class="alert mb-0 py-2 px-3 small rounded" id="gradeInterpretation" role="alert" style="border-radius: 8px !important;">
                                     <i class="fas fa-info-circle me-2"></i>
                                     <span id="gradeMessage"></span>
                                 </div>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<style>
+    .min-vh-md-0 { min-height: 0; }
+    @media (min-width: 992px) {
+        .min-vh-md-0 { min-height: 18rem; }
+    }
+    #resultCard .card-body { min-height: 16rem; }
+    
+    /* Enhanced card styling */
+    .calculator-card, .result-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .calculator-card:hover, .result-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    .exam-row {
+        transition: background-color 0.2s ease;
+    }
+    
+    .exam-row:hover {
+        background-color: #f8fafc;
+        border-radius: 8px;
+    }
+    
+    .form-control:focus {
+        border-color: #3b82f6 !important;
+        box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.15) !important;
+    }
+    
+    #btnCalculate {
+        transition: all 0.2s ease;
+    }
+    
+    #btnCalculate:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+    
+    .breakdown-item {
+        transition: background-color 0.2s ease;
+        padding-left: 8px;
+        padding-right: 8px;
+        margin-left: -8px;
+        margin-right: -8px;
+        border-radius: 6px;
+    }
+    
+    .breakdown-item:hover {
+        background-color: #f8fafc;
+    }
+</style>
+
 <script>
-    let gradeScale = 20; // Default to /20
+    let gradeScale = 20;
 
-    // Toggle between /20 and /100 grade scales
-    function toggleGradeScale() {
-        const toggle = document.getElementById('gradeScaleToggle');
-        gradeScale = toggle.checked ? 100 : 20;
+    document.getElementById('scale20').addEventListener('change', function() {
+        if (this.checked) setScale(20);
+    });
+    document.getElementById('scale100').addEventListener('change', function() {
+        if (this.checked) setScale(100);
+    });
 
-        const maxValue = gradeScale;
-        const maxText = '/ ' + gradeScale;
-
-        // Update max values and labels
-        document.getElementById('midtermScore').max = maxValue;
-        document.getElementById('finalScore').max = maxValue;
-        document.getElementById('tpScore').max = maxValue;
-
+    function setScale(scale) {
+        gradeScale = scale;
+        var maxText = '/' + scale;
+        document.getElementById('midtermScore').max = scale;
+        document.getElementById('finalScore').max = scale;
+        document.getElementById('tpScore').max = scale;
         document.getElementById('midtermMax').textContent = maxText;
         document.getElementById('finalMax').textContent = maxText;
         document.getElementById('tpMax').textContent = maxText;
-
-        // Update placeholders
-        document.getElementById('midtermScore').placeholder = 'Enter score (0-' + maxValue + ')';
-        document.getElementById('finalScore').placeholder = 'Enter score (0-' + maxValue + ')';
-        document.getElementById('tpScore').placeholder = 'Enter score (0-' + maxValue + ')';
-
-        // Clear any existing results
         document.getElementById('resultSection').classList.add('d-none');
+        document.getElementById('resultPlaceholder').classList.remove('d-none');
     }
 
-    // Update total percentage when percentages change
     document.getElementById('midtermPercent').addEventListener('input', updateTotalPercent);
     document.getElementById('finalPercent').addEventListener('input', updateTotalPercent);
     document.getElementById('tpPercent').addEventListener('input', updateTotalPercent);
 
     function updateTotalPercent() {
-        const midterm = parseFloat(document.getElementById('midtermPercent').value) || 0;
-        const final = parseFloat(document.getElementById('finalPercent').value) || 0;
-        const tp = parseFloat(document.getElementById('tpPercent').value) || 0;
-
-        const total = midterm + final + tp;
-        const totalElement = document.getElementById('totalPercent');
-        const progressElement = document.getElementById('percentProgress');
-        const warningElement = document.getElementById('percentWarning');
-
-        totalElement.textContent = total.toFixed(1) + '%';
-        progressElement.style.width = Math.min(total, 100) + '%';
-
-        if (total !== 100) {
-            totalElement.style.color = '#dc3545';
-            progressElement.style.background = 'linear-gradient(135deg, #dc3545 0%, #c82333 100%)';
-            warningElement.classList.remove('d-none');
-        } else {
-            totalElement.style.color = '#1e3a8a';
-            progressElement.style.background = 'linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%)';
-            warningElement.classList.add('d-none');
-        }
+        var m = parseFloat(document.getElementById('midtermPercent').value) || 0;
+        var f = parseFloat(document.getElementById('finalPercent').value) || 0;
+        var t = parseFloat(document.getElementById('tpPercent').value) || 0;
+        var total = m + f + t;
+        document.getElementById('totalPercent').textContent = total.toFixed(1);
+        var w = document.getElementById('percentWarning');
+        if (Math.abs(total - 100) > 0.1) w.classList.remove('d-none'); else w.classList.add('d-none');
     }
 
     function calculateGrade() {
-        // Get values
-        const midtermScore = parseFloat(document.getElementById('midtermScore').value) || 0;
-        const finalScore = parseFloat(document.getElementById('finalScore').value) || 0;
-        const tpScore = parseFloat(document.getElementById('tpScore').value) || 0;
+        var midtermScore = parseFloat(document.getElementById('midtermScore').value) || 0;
+        var finalScore = parseFloat(document.getElementById('finalScore').value) || 0;
+        var tpScore = parseFloat(document.getElementById('tpScore').value) || 0;
+        var midtermPercent = parseFloat(document.getElementById('midtermPercent').value) || 0;
+        var finalPercent = parseFloat(document.getElementById('finalPercent').value) || 0;
+        var tpPercent = parseFloat(document.getElementById('tpPercent').value) || 0;
+        var totalPercent = midtermPercent + finalPercent + tpPercent;
 
-        const midtermPercent = parseFloat(document.getElementById('midtermPercent').value) || 0;
-        const finalPercent = parseFloat(document.getElementById('finalPercent').value) || 0;
-        const tpPercent = parseFloat(document.getElementById('tpPercent').value) || 0;
-
-        // Validate percentages total 100
-        const totalPercent = midtermPercent + finalPercent + tpPercent;
         if (Math.abs(totalPercent - 100) > 0.1) {
-            alert('Percentages must total exactly 100%. Current total: ' + totalPercent.toFixed(1) + '%');
+            alert('Weights must total 100%. Current: ' + totalPercent.toFixed(1) + '%');
+            return;
+        }
+        if (midtermScore < 0 || midtermScore > gradeScale || finalScore < 0 || finalScore > gradeScale || tpScore < 0 || tpScore > gradeScale) {
+            alert('Scores must be between 0 and ' + gradeScale);
             return;
         }
 
-        // Validate scores are within range
-        if (midtermScore < 0 || midtermScore > gradeScale ||
-            finalScore < 0 || finalScore > gradeScale ||
-            tpScore < 0 || tpScore > gradeScale) {
-            alert('All scores must be between 0 and ' + gradeScale);
-            return;
-        }
+        var midtermContribution = (midtermScore / gradeScale) * midtermPercent;
+        var finalContribution = (finalScore / gradeScale) * finalPercent;
+        var tpContribution = (tpScore / gradeScale) * tpPercent;
+        var finalGrade = midtermContribution + finalContribution + tpContribution;
+        var finalGradeOutOfScale = (finalGrade / 100) * gradeScale;
+        var finalGradeOutOf20 = (finalGrade / 100) * 20;
 
-        // Calculate contributions based on grade scale
-        const midtermContribution = (midtermScore / gradeScale) * midtermPercent;
-        const finalContribution = (finalScore / gradeScale) * finalPercent;
-        const tpContribution = (tpScore / gradeScale) * tpPercent;
-
-        // Calculate final grade
-        const finalGrade = midtermContribution + finalContribution + tpContribution;
-        const finalGradeOutOfScale = (finalGrade / 100) * gradeScale;
-
-        // Display results
         document.getElementById('finalGrade').textContent = finalGradeOutOfScale.toFixed(2);
         document.getElementById('gradeOutOf').textContent = '/ ' + gradeScale;
         document.getElementById('midtermContribution').textContent = midtermContribution.toFixed(2);
         document.getElementById('finalContribution').textContent = finalContribution.toFixed(2);
         document.getElementById('tpContribution').textContent = tpContribution.toFixed(2);
 
-        // Grade interpretation (based on /20 scale equivalent for consistency)
-        const finalGradeOutOf20 = (finalGrade / 100) * 20;
-        const interpretationElement = document.getElementById('gradeInterpretation');
-        const messageElement = document.getElementById('gradeMessage');
+        var message = '', alertClass = '';
+        if (finalGradeOutOf20 >= 16) { message = 'Excellent!'; alertClass = 'alert-success'; }
+        else if (finalGradeOutOf20 >= 14) { message = 'Very good!'; alertClass = 'alert-success'; }
+        else if (finalGradeOutOf20 >= 12) { message = 'Good — satisfactory.'; alertClass = 'alert-info'; }
+        else if (finalGradeOutOf20 >= 10) { message = 'Passing.'; alertClass = 'alert-warning'; }
+        else { message = 'Below passing.'; alertClass = 'alert-danger'; }
 
-        let message = '';
-        let alertClass = '';
+        document.getElementById('gradeInterpretation').className = 'alert ' + alertClass + ' py-2 small';
+        document.getElementById('gradeMessage').textContent = message;
 
-        if (finalGradeOutOf20 >= 16) {
-            message = 'Excellent! You have achieved a very high grade.';
-            alertClass = 'alert-success';
-        } else if (finalGradeOutOf20 >= 14) {
-            message = 'Very Good! You have a strong performance.';
-            alertClass = 'alert-success';
-        } else if (finalGradeOutOf20 >= 12) {
-            message = 'Good! You have passed with a satisfactory grade.';
-            alertClass = 'alert-info';
-        } else if (finalGradeOutOf20 >= 10) {
-            message = 'Passing grade. You have met the minimum requirements.';
-            alertClass = 'alert-warning';
-        } else {
-            message = 'Below passing grade. You may need to retake the course.';
-            alertClass = 'alert-danger';
-        }
-
-        interpretationElement.className = 'alert ' + alertClass;
-        messageElement.textContent = message;
-
-        // Show result section
+        document.getElementById('resultPlaceholder').classList.add('d-none');
         document.getElementById('resultSection').classList.remove('d-none');
-
-        // Scroll to result
-        document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
-    // Allow Enter key to calculate
     document.getElementById('gradeCalculatorForm').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            calculateGrade();
-        }
+        if (e.key === 'Enter') { e.preventDefault(); calculateGrade(); }
     });
 </script>
 @endsection

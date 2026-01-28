@@ -1,5 +1,37 @@
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    // Global delete confirmation with SweetAlert
+    function attachDeleteConfirmations() {
+        document.querySelectorAll('form.form-delete').forEach(function(form) {
+            if (form.dataset.swalAttached) return;
+            form.dataset.swalAttached = '1';
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                var msg = form.getAttribute('data-confirm') || 'Are you sure?';
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: msg,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#dc3545',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Yes, delete it'
+                }).then(function(result) {
+                    if (result.isConfirmed) form.submit();
+                });
+            });
+        });
+    }
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', attachDeleteConfirmations);
+    } else {
+        attachDeleteConfirmations();
+    }
+</script>
 
 <script>
     // Sidebar toggle functionality

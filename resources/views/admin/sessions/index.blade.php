@@ -73,7 +73,7 @@
                                     <a href="{{ route('admin.sessions.edit', $session) }}" class="btn btn-sm btn-primary shadow-sm" title="Edit" style="border-radius: 8px;">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form method="POST" action="{{ route('admin.sessions.destroy', $session) }}" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this session?');">
+                                    <form method="POST" action="{{ route('admin.sessions.destroy', $session) }}" class="d-inline form-delete" data-confirm="Are you sure you want to delete this session?">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-danger shadow-sm" title="Delete" style="border-radius: 8px;">

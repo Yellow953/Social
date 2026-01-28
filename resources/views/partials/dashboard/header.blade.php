@@ -23,9 +23,11 @@
             <!-- Notifications -->
             <a href="{{ route('notifications.index') }}" class="btn btn-sm position-relative text-[#5c5c5c] text-decoration-none">
                 <i class="fas fa-bell"></i>
+                @if(auth()->user()->unreadNotificationsCount() > 0)
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
-                    3
+                    {{ auth()->user()->unreadNotificationsCount() }}
                 </span>
+                @endif
             </a>
             <!-- User Menu -->
             <div class="dropdown">
@@ -37,7 +39,6 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li><a class="dropdown-item" href="{{ route('profile') }}"><i class="fas fa-user me-2"></i> Profile</a></li>
-                    <li><a class="dropdown-item" href="{{ route('settings') }}"><i class="fas fa-cog me-2"></i> Settings</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li>
                         <form method="POST" action="{{ route('logout') }}">

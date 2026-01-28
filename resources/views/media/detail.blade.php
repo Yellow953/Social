@@ -33,22 +33,22 @@
                 <div class="card-body p-0">
                     <div class="media-container" data-media-type="{{ $media->type }}" data-media-id="{{ $media->id }}">
                         @if($media->type === 'pdf')
-                            <div class="pdf-viewer-container" style="position: relative; width: 100%; min-height: 80vh; border: 1px solid #ddd; background: #f5f5f5;">
-                                <iframe id="pdf-viewer-{{ $media->id }}" 
-                                        src="{{ route('media.view', $media) }}" 
-                                        style="width: 100%; height: 80vh; border: none;"
-                                        oncontextmenu="return false;"
-                                        onselectstart="return false;">
-                                </iframe>
-                                <div class="watermark-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10;">
+                            <div id="pdf-viewer-container-{{ $media->id }}" class="pdf-viewer-container" style="position: relative; width: 100%; min-height: 80vh; border: 1px solid #ddd; background: #f5f5f5; overflow: auto;">
+                                <div id="pdf-watermark-{{ $media->id }}" class="pdf-watermark-overlay" style="position: fixed; pointer-events: none; z-index: 50; display: flex; align-items: center; justify-content: center; flex-direction: column;">
                                     <img src="{{ asset('assets/images/logo-transparent.png') }}" 
                                          alt="Watermark" 
-                                         style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 200px; opacity: 0.3; pointer-events: none;">
-                                    <div style="position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); color: rgba(92, 92, 92, 0.5); font-size: 24px; font-weight: bold; pointer-events: none;">
+                                         style="width: 200px; opacity: 0.35; pointer-events: none;">
+                                    <div style="margin-top: auto; padding-bottom: 40px; color: rgba(92, 92, 92, 0.6); font-size: 24px; font-weight: bold; pointer-events: none;">
                                         {{ strtoupper(auth()->user()->name) }}
                                     </div>
                                 </div>
+                                <div id="pdf-pages-{{ $media->id }}" class="pdf-pages" style="padding: 20px; position: relative; z-index: 1;"></div>
+                                <div id="pdf-loading-{{ $media->id }}" class="text-center py-5 text-muted" style="position: relative; z-index: 60;">
+                                    <div class="spinner-border mb-2" role="status"></div>
+                                    <p class="mb-0">Loading document...</p>
+                                </div>
                             </div>
+                            <input type="hidden" id="pdf-view-url-{{ $media->id }}" value="{{ route('media.view', $media) }}">
                         @elseif($media->type === 'image')
                             <div class="image-viewer-container" style="position: relative; width: 100%; text-align: center; background: #f5f5f5; min-height: 80vh; display: flex; align-items: center; justify-content: center;">
                                 <img src="{{ route('media.view', $media) }}" 
@@ -118,7 +118,8 @@
     /* Disable drag and drop */
     .media-container img,
     .media-container video,
-    .media-container iframe {
+    .media-container iframe,
+    .media-container canvas {
         -webkit-user-drag: none;
         -khtml-user-drag: none;
         -moz-user-drag: none;
@@ -126,11 +127,89 @@
         user-drag: none;
     }
 
-    .watermark-overlay {
+    .watermark-overlay,
+    .pdf-watermark-overlay {
         pointer-events: none !important;
+    }
+
+    .pdf-viewer-container {
+        position: relative;
     }
 </style>
 @endpush
+
+@if($media->type === 'pdf')
+@push('scripts')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+    (function() {
+        var mediaId = {{ $media->id }};
+        var viewUrl = document.getElementById('pdf-view-url-' + mediaId).value;
+        var container = document.getElementById('pdf-pages-' + mediaId);
+        var loadingEl = document.getElementById('pdf-loading-' + mediaId);
+        var viewerEl = document.getElementById('pdf-viewer-container-' + mediaId);
+        var watermarkEl = document.getElementById('pdf-watermark-' + mediaId);
+
+        function positionPdfWatermark() {
+            if (!viewerEl || !watermarkEl) return;
+            var r = viewerEl.getBoundingClientRect();
+            watermarkEl.style.top = r.top + 'px';
+            watermarkEl.style.left = r.left + 'px';
+            watermarkEl.style.width = r.width + 'px';
+            watermarkEl.style.height = r.height + 'px';
+        }
+
+        window.addEventListener('scroll', positionPdfWatermark, true);
+        window.addEventListener('resize', positionPdfWatermark);
+        positionPdfWatermark();
+
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        fetch(viewUrl, {
+            headers: { 'X-PDF-Viewer-Request': '1' },
+            credentials: 'same-origin'
+        }).then(function(res) {
+            if (!res.ok) throw new Error('Failed to load PDF');
+            return res.arrayBuffer();
+        }).then(function(arrayBuffer) {
+            return pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        }).then(function(pdf) {
+            loadingEl.style.display = 'none';
+            positionPdfWatermark();
+            var totalPages = pdf.numPages;
+            function renderPage(num) {
+                return pdf.getPage(num).then(function(page) {
+                    var scale = 1.5;
+                    var viewport = page.getViewport({ scale: scale });
+                    var wrapper = document.createElement('div');
+                    wrapper.className = 'mb-4';
+                    wrapper.style.textAlign = 'center';
+                    var canvas = document.createElement('canvas');
+                    var ctx = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    canvas.style.maxWidth = '100%';
+                    canvas.style.height = 'auto';
+                    wrapper.appendChild(canvas);
+                    container.appendChild(wrapper);
+                    return page.render({ canvasContext: ctx, viewport: viewport }).promise;
+                });
+            }
+            var chain = renderPage(1);
+            for (var i = 2; i <= totalPages; i++) {
+                (function(n) {
+                    chain = chain.then(function() { return renderPage(n); });
+                })(i);
+            }
+            return chain;
+        }).catch(function(err) {
+            loadingEl.innerHTML = '<p class="text-danger">Unable to load the document. You may need to refresh the page.</p>';
+            console.error(err);
+        });
+    })();
+</script>
+@endpush
+@endif
 
 @push('scripts')
 <script>

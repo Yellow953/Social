@@ -131,12 +131,16 @@ class MediaController extends Controller
     }
 
     /**
-     * View PDF (we'll use PDF.js in frontend, but serve the file here)
+     * View PDF - only allow when requested by our viewer (XHR with header).
+     * Direct browser/iframe access returns 403 to prevent download/save.
      */
     private function viewPdf(SessionMedia $media, string $filePath, $user)
     {
-        // For PDFs, we'll serve them through a viewer that prevents downloads
-        // The actual watermarking will be done via PDF.js overlay in frontend
+        // Only serve PDF to our PDF.js viewer (sends this header), not to direct navigation/iframe
+        if (!request()->header('X-PDF-Viewer-Request')) {
+            abort(403, 'Direct access to this resource is not allowed. View the document from the session page.');
+        }
+
         return Response::file($filePath, [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline; filename="' . $media->original_filename . '"',

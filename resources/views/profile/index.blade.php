@@ -8,6 +8,12 @@
 
 @section('content')
 <div class="container-fluid">
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
     <div class="row">
         <!-- Profile Sidebar -->
         <div class="col-lg-4 mb-4">
@@ -33,12 +39,12 @@
                             <span class="fw-bold">{{ auth()->user()->created_at->format('M Y') }}</span>
                         </div>
                         <div class="d-flex justify-content-between mb-2">
-                            <span class="text-muted">Courses</span>
-                            <span class="fw-bold">24</span>
+                            <span class="text-muted">Courses accessed</span>
+                            <span class="fw-bold">{{ $coursesCount ?? 0 }}</span>
                         </div>
                         <div class="d-flex justify-content-between">
-                            <span class="text-muted">Sessions</span>
-                            <span class="fw-bold">12</span>
+                            <span class="text-muted">Sessions completed</span>
+                            <span class="fw-bold">{{ $sessionsCount ?? 0 }}</span>
                         </div>
                     </div>
                 </div>
@@ -62,11 +68,11 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">Email</label>
-                                <input type="email" class="form-control" name="email" value="{{ auth()->user()->email }}" required>
+                                <input type="email" class="form-control" name="email" value="{{ auth()->user()->email }}" required autocomplete="off">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">Phone Number</label>
-                                <input type="tel" class="form-control" name="phone" value="{{ auth()->user()->phone }}" required>
+                                <input type="tel" class="form-control" name="phone" value="{{ auth()->user()->phone }}">
                             </div>
                             <div class="col-12">
                                 <button type="submit" class="btn btn-primary">
@@ -84,20 +90,20 @@
                     <h5 class="mb-0 fw-bold"><i class="fas fa-lock me-2 text-warning"></i>Change Password</h5>
                 </div>
                 <div class="card-body">
-                    <form method="POST" action="{{ route('profile.password') }}">
+                    <form method="POST" action="{{ route('profile.password') }}" autocomplete="off" id="profile-password-form">
                         @csrf
                         <div class="row g-3">
                             <div class="col-12">
                                 <label class="form-label fw-bold">Current Password</label>
-                                <input type="password" class="form-control" name="current_password" required>
+                                <input type="password" class="form-control profile-password-noautofill" name="current_password" required autocomplete="new-password" readonly tabindex="0" data-readonly-remove>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">New Password</label>
-                                <input type="password" class="form-control" name="password" required>
+                                <input type="password" class="form-control profile-password-noautofill" name="password" required autocomplete="new-password" readonly tabindex="0" data-readonly-remove>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">Confirm New Password</label>
-                                <input type="password" class="form-control" name="password_confirmation" required>
+                                <input type="password" class="form-control profile-password-noautofill" name="password_confirmation" required autocomplete="new-password" readonly tabindex="0" data-readonly-remove>
                             </div>
                             <div class="col-12">
                                 <button type="submit" class="btn btn-warning text-white">
@@ -106,6 +112,24 @@
                             </div>
                         </div>
                     </form>
+                    <script>
+                        (function() {
+                            var form = document.getElementById('profile-password-form');
+                            if (!form) return;
+                            var inputs = form.querySelectorAll('[data-readonly-remove]');
+                            function removeReadonly(el) {
+                                el.removeAttribute('readonly');
+                            }
+                            inputs.forEach(function(el) {
+                                el.addEventListener('focus', function() { removeReadonly(el); }, { once: true });
+                                el.addEventListener('click', function() { removeReadonly(el); }, { once: true });
+                            });
+                            // Remove readonly after a short delay so browser autofill runs first on readonly fields (and skips them)
+                            setTimeout(function() {
+                                inputs.forEach(removeReadonly);
+                            }, 400);
+                        })();
+                    </script>
                 </div>
             </div>
 
@@ -115,33 +139,22 @@
                     <h5 class="mb-0 fw-bold" style="color: #1e3a8a;"><i class="fas fa-cog me-2" style="color: #3b82f6;"></i>Account Settings</h5>
                 </div>
                 <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
-                        <div>
-                            <h6 class="mb-1 fw-bold">Email Notifications</h6>
-                            <p class="text-muted small mb-0">Receive email updates about your courses</p>
+                    <form method="POST" action="{{ route('profile.two-factor') }}" id="two-factor-form">
+                        @csrf
+                        <input type="hidden" name="enabled" value="0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1 fw-bold">Two-Factor Authentication</h6>
+                                <p class="text-muted small mb-0">Require a code sent to your email when signing in</p>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" name="enabled" value="1" id="twoFactorEnabled" {{ auth()->user()->two_factor_enabled ? 'checked' : '' }}>
+                            </div>
                         </div>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" checked>
+                        <div class="mt-2">
+                            <button type="submit" class="btn btn-sm btn-primary">Save</button>
                         </div>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
-                        <div>
-                            <h6 class="mb-1 fw-bold">SMS Notifications</h6>
-                            <p class="text-muted small mb-0">Receive SMS updates</p>
-                        </div>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox">
-                        </div>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="mb-1 fw-bold">Two-Factor Authentication</h6>
-                            <p class="text-muted small mb-0">Add an extra layer of security</p>
-                        </div>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox">
-                        </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>

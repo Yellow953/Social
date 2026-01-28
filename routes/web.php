@@ -12,7 +12,6 @@ use App\Http\Controllers\SessionController;
 use App\Http\Controllers\CalculatorController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\AnalyticsController as AdminAnalyticsController;
@@ -82,7 +81,7 @@ Route::middleware(['auth', 'single.device'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
     Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
-    Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
+    Route::post('/profile/two-factor', [ProfileController::class, 'updateTwoFactor'])->name('profile.two-factor');
     Route::get('/subscriptions', [\App\Http\Controllers\SubscriptionController::class, 'index'])->name('subscriptions.index');
     Route::get('/subscriptions/create', [\App\Http\Controllers\SubscriptionController::class, 'create'])->name('subscriptions.create');
     Route::post('/subscriptions', [\App\Http\Controllers\SubscriptionController::class, 'store'])->name('subscriptions.store');

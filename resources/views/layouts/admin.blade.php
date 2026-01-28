@@ -72,12 +72,6 @@
                             <span class="fw-semibold">Analytics & Logs</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="{{ route('settings') }}" class="nav-link d-flex align-items-center {{ request()->routeIs('settings') ? 'nav-item-active' : 'text-dark' }}">
-                            <i class="fas fa-cog me-3"></i>
-                            <span class="fw-semibold">Settings</span>
-                        </a>
-                    </li>
                 </ul>
             </nav>
 
@@ -119,19 +113,14 @@
                         <span class="badge bg-light text-dark border">{{ now()->format('M j, Y') }}</span>
                     </div>
                     <div class="d-flex align-items-center gap-3">
-                        <!-- Search -->
-                        <div class="input-group" style="width: 300px;">
-                            <span class="input-group-text bg-light border-end-0">
-                                <i class="fas fa-search text-muted"></i>
-                            </span>
-                            <input type="text" class="form-control border-start-0" placeholder="Search...">
-                        </div>
                         <!-- Notifications -->
                         <a href="{{ route('notifications.index') }}" class="btn btn-light position-relative text-decoration-none">
                             <i class="fas fa-bell fs-5"></i>
-                            <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
-                                <span class="visually-hidden">New alerts</span>
-                            </span>
+                            @auth
+                            @if(auth()->user()->unreadNotificationsCount() > 0)
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.65rem;">{{ auth()->user()->unreadNotificationsCount() }}</span>
+                            @endif
+                            @endauth
                         </a>
                     </div>
                 </div>

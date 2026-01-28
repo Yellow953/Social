@@ -36,22 +36,26 @@
 
     <!-- Users Table -->
     <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
-        <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-3">
+        <div class="card-header bg-white border-bottom d-flex flex-wrap align-items-center justify-content-between gap-2 py-3">
             <h5 class="mb-0 fw-bold" style="color: #1e3a8a;">All Users</h5>
+            <div class="d-flex align-items-center">
+                <label class="me-2 mb-0 small text-muted">Search:</label>
+                <input type="search" id="usersTableSearch" class="form-control form-control-sm" placeholder="Search users..." style="width: 220px;">
+            </div>
         </div>
         <div class="card-body p-4">
             <div class="table-responsive">
                 <table id="usersTable" class="table table-hover mb-0">
                     <thead>
-                        <tr style="background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);">
-                            <th style="color: white; font-weight: 600; border: none;">User</th>
-                            <th style="color: white; font-weight: 600; border: none;">Email</th>
-                            <th style="color: white; font-weight: 600; border: none;">Phone</th>
-                            <th style="color: white; font-weight: 600; border: none;">Role</th>
-                            <th style="color: white; font-weight: 600; border: none;">Study Year</th>
-                            <th style="color: white; font-weight: 600; border: none;">Subscription</th>
-                            <th style="color: white; font-weight: 600; border: none;">Joined</th>
-                            <th style="color: white; font-weight: 600; border: none; text-align: right;">Actions</th>
+                        <tr>
+                            <th>User</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Role</th>
+                            <th>Study Year</th>
+                            <th>Subscription</th>
+                            <th>Joined</th>
+                            <th class="text-end">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -125,7 +129,7 @@
                                     <a href="{{ route('admin.users.edit', $user) }}" class="btn btn-sm btn-primary shadow-sm" title="Edit" style="border-radius: 8px;">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form method="POST" action="{{ route('admin.users.destroy', $user) }}" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this user?');">
+                                    <form method="POST" action="{{ route('admin.users.destroy', $user) }}" class="d-inline form-delete" data-confirm="Are you sure you want to delete this user?">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-danger shadow-sm" title="Delete" style="border-radius: 8px;">
@@ -176,6 +180,12 @@
         border: none;
     }
     
+    #usersTable thead th {
+        background: #f8f9fa !important;
+        color: #212529 !important;
+        font-weight: 600;
+    }
+
     /* DataTables Custom Styling */
     .dataTables_wrapper .dataTables_filter input {
         border: 2px solid #e5e7eb;
@@ -207,17 +217,10 @@
         border-radius: 0.5rem;
         margin: 0 2px;
         padding: 0.5rem 0.75rem;
-        transition: all 0.3s ease;
-    }
-    
-    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-        background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);
-        color: white !important;
-        border: none;
     }
     
     .dataTables_wrapper .dataTables_paginate .paginate_button.current {
-        background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);
+        background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%) !important;
         color: white !important;
         border: none;
     }
@@ -263,74 +266,77 @@
     $(document).ready(function() {
         $('#usersTable').DataTable({
             responsive: true,
-            pageLength: 25,
-            lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-            order: [[7, 'desc']], // Sort by joined date (column index updated)
+            pageLength: 10,
+            lengthChange: false,
+            order: [[7, 'desc']],
             language: {
                 search: "Search users:",
-                lengthMenu: "Show _MENU_ users",
                 info: "Showing _START_ to _END_ of _TOTAL_ users",
                 infoEmpty: "No users found",
                 infoFiltered: "(filtered from _MAX_ total users)",
                 zeroRecords: "No matching users found"
             },
-            dom: '<"row mb-3"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>rt<"row mt-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+            dom: 'rt<"row mt-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
             columnDefs: [
-                { orderable: false, targets: 7 } // Disable sorting on Actions column
+                { orderable: false, targets: 7 }
             ],
             drawCallback: function() {
-                // Re-attach event listeners after table redraw
                 attachQuickSubscriptionHandlers();
             }
         });
+        var table = $('#usersTable').DataTable();
+        $('#usersTableSearch').on('keyup', function() {
+            table.search(this.value).draw();
+        });
         
-        // Quick subscription handler
+        function doQuickSubscription(btn, userId) {
+            btn.prop('disabled', true);
+            btn.html('<i class="fas fa-spinner fa-spin"></i>');
+            $.ajax({
+                url: '/admin/users/' + userId + '/quick-subscription',
+                method: 'POST',
+                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                success: function(response) {
+                    if (response.success) {
+                        var alert = $('<div class="alert alert-success alert-dismissible fade show" role="alert">' +
+                            '<i class="fas fa-check-circle me-2"></i>' + response.message +
+                            '<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
+                        $('.container-fluid').prepend(alert);
+                        setTimeout(function() { location.reload(); }, 1000);
+                    }
+                },
+                error: function(xhr) {
+                    var message = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'An error occurred. Please try again.';
+                    var alert = $('<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
+                        '<i class="fas fa-exclamation-circle me-2"></i>' + message +
+                        '<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
+                    $('.container-fluid').prepend(alert);
+                    btn.prop('disabled', false);
+                    btn.html('<i class="fas fa-gift me-1"></i>');
+                }
+            });
+        }
+        
         function attachQuickSubscriptionHandlers() {
             $('.quick-subscription-btn').off('click').on('click', function() {
-                const btn = $(this);
-                const userId = btn.data('user-id');
-                const userName = btn.data('user-name');
-                
-                if (!confirm(`Create a free 1-year subscription for ${userName}?`)) {
-                    return;
+                var btn = $(this);
+                var userId = btn.data('user-id');
+                var userName = btn.data('user-name');
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        title: 'Create subscription?',
+                        text: 'Create a free 1-year subscription for ' + userName + '?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#10b981',
+                        cancelButtonColor: '#6c757d',
+                        confirmButtonText: 'Yes, create it'
+                    }).then(function(result) {
+                        if (result.isConfirmed) doQuickSubscription(btn, userId);
+                    });
+                } else {
+                    if (confirm('Create a free 1-year subscription for ' + userName + '?')) doQuickSubscription(btn, userId);
                 }
-                
-                btn.prop('disabled', true);
-                btn.html('<i class="fas fa-spinner fa-spin"></i>');
-                
-                $.ajax({
-                    url: `/admin/users/${userId}/quick-subscription`,
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            // Show success message
-                            const alert = $('<div class="alert alert-success alert-dismissible fade show" role="alert">' +
-                                '<i class="fas fa-check-circle me-2"></i>' + response.message +
-                                '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>' +
-                                '</div>');
-                            $('.container-fluid').prepend(alert);
-                            
-                            // Reload page after 1 second to show updated subscription status
-                            setTimeout(function() {
-                                location.reload();
-                            }, 1000);
-                        }
-                    },
-                    error: function(xhr) {
-                        const message = xhr.responseJSON?.message || 'An error occurred. Please try again.';
-                        const alert = $('<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
-                            '<i class="fas fa-exclamation-circle me-2"></i>' + message +
-                            '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>' +
-                            '</div>');
-                        $('.container-fluid').prepend(alert);
-                        
-                        btn.prop('disabled', false);
-                        btn.html('<i class="fas fa-gift"></i>');
-                    }
-                });
             });
         }
         

@@ -99,7 +99,7 @@
                                         </button>
                                     </form>
                                 @endif
-                                <form method="POST" action="{{ route('notifications.destroy', $notification) }}" class="d-inline" onsubmit="return confirm('Delete this notification?');">
+                                <form method="POST" action="{{ route('notifications.destroy', $notification) }}" class="d-inline form-delete" data-confirm="Delete this notification?">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-link text-danger p-0" title="Delete">
