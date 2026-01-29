@@ -72,21 +72,8 @@ class LoginController extends Controller
             Auth::login($user, $remember);
             $request->session()->regenerate();
 
-            // Update device information for single device login
+            // Update device information: this device becomes the only allowed one; any other device will be logged out on next request
             $deviceIdentifier = User::generateDeviceIdentifier($request);
-            
-            // Check if trying to login from different device
-            if (!empty($user->device_identifier) && !$user->isDeviceAllowed($deviceIdentifier)) {
-                Auth::logout();
-                $request->session()->invalidate();
-                $request->session()->regenerateToken();
-
-                throw ValidationException::withMessages([
-                    'email' => ['You cannot be logged in from multiple devices at the same time. Please log out from other devices first.'],
-                ]);
-            }
-
-            // Update device info
             $user->updateDeviceInfo($deviceIdentifier);
 
             // Redirect based on user role

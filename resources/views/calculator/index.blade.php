@@ -157,6 +157,20 @@
                                         <span class="display-3 fw-bold" id="finalGrade" style="color: #1e3a8a; line-height: 1;">0.00</span>
                                         <span class="fs-3 text-muted fw-normal" id="gradeOutOf">/ 20</span>
                                     </div>
+                                    <div class="d-flex justify-content-center gap-4 mt-3 flex-wrap">
+                                        <div>
+                                            <span class="text-muted small">USJ Rank (Letter)</span>
+                                            <span class="d-block fw-bold fs-4" id="gpaLetter" style="color: #1e3a8a;">—</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-muted small">Rank Value / GPA</span>
+                                            <span class="d-block fw-bold fs-4" id="gpaNumeric" style="color: #1e3a8a;">—</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-muted small">Definition</span>
+                                            <span class="d-block fw-bold small" id="gpaDefinition" style="color: #1e3a8a;">—</span>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="pt-3">
                                     <p class="small text-muted mb-3 fw-semibold text-uppercase" style="letter-spacing: 0.5px;">Breakdown</p>
@@ -283,6 +297,25 @@
         if (Math.abs(total - 100) > 0.1) w.classList.remove('d-none'); else w.classList.add('d-none');
     }
 
+    // USJ grading system (Table 1 - grade/20 scale)
+    function getUsjGrade(gradeOutOf20) {
+        var g = gradeOutOf20;
+        if (g >= 18) return { letter: 'A+', gpa: 4.0, definition: 'Excellent' };
+        if (g >= 17) return { letter: 'A', gpa: 4.0, definition: 'Excellent' };
+        if (g >= 16) return { letter: 'A-', gpa: 3.7, definition: 'Very Good' };
+        if (g >= 15.34) return { letter: 'B+', gpa: 3.3, definition: 'Good' };
+        if (g >= 14.67) return { letter: 'B', gpa: 3.1, definition: 'Good' };
+        if (g >= 14) return { letter: 'B-', gpa: 3.0, definition: 'Good' };
+        if (g >= 13.34) return { letter: 'C+', gpa: 2.7, definition: 'Fair' };
+        if (g >= 12.67) return { letter: 'C', gpa: 2.3, definition: 'Fair' };
+        if (g >= 12) return { letter: 'C-', gpa: 2.1, definition: 'Fair' };
+        if (g >= 11.34) return { letter: 'D+', gpa: 2.0, definition: 'Passing' };
+        if (g >= 10.67) return { letter: 'D', gpa: 1.7, definition: 'Passing' };
+        if (g >= 10) return { letter: 'D-', gpa: 1.3, definition: 'Passing' };
+        if (g >= 8) return { letter: '(jury)*', gpa: null, definition: '(jury)' };
+        return { letter: 'F', gpa: null, definition: 'Fail' };
+    }
+
     function calculateGrade() {
         var midtermScore = parseFloat(document.getElementById('midtermScore').value) || 0;
         var finalScore = parseFloat(document.getElementById('finalScore').value) || 0;
@@ -314,12 +347,19 @@
         document.getElementById('finalContribution').textContent = finalContribution.toFixed(2);
         document.getElementById('tpContribution').textContent = tpContribution.toFixed(2);
 
+        var usj = getUsjGrade(finalGradeOutOf20);
+        document.getElementById('gpaLetter').textContent = usj.letter;
+        document.getElementById('gpaNumeric').textContent = usj.gpa !== null ? usj.gpa.toFixed(1) : '—';
+        document.getElementById('gpaDefinition').textContent = usj.definition;
+
         var message = '', alertClass = '';
-        if (finalGradeOutOf20 >= 16) { message = 'Excellent!'; alertClass = 'alert-success'; }
-        else if (finalGradeOutOf20 >= 14) { message = 'Very good!'; alertClass = 'alert-success'; }
-        else if (finalGradeOutOf20 >= 12) { message = 'Good — satisfactory.'; alertClass = 'alert-info'; }
-        else if (finalGradeOutOf20 >= 10) { message = 'Passing.'; alertClass = 'alert-warning'; }
-        else { message = 'Below passing.'; alertClass = 'alert-danger'; }
+        if (finalGradeOutOf20 >= 18) { message = 'Excellent (A+).'; alertClass = 'alert-success'; }
+        else if (finalGradeOutOf20 >= 16) { message = 'Excellent to Very Good (A to A-).'; alertClass = 'alert-success'; }
+        else if (finalGradeOutOf20 >= 14) { message = 'Good (B+ to B-).'; alertClass = 'alert-info'; }
+        else if (finalGradeOutOf20 >= 12) { message = 'Fair (C+ to C-).'; alertClass = 'alert-info'; }
+        else if (finalGradeOutOf20 >= 10) { message = 'Passing (D+ to D-).'; alertClass = 'alert-warning'; }
+        else if (finalGradeOutOf20 >= 8) { message = 'Jury range — grade may be adjusted by the jury (ref. Table 2).'; alertClass = 'alert-warning'; }
+        else { message = 'Fail (F).'; alertClass = 'alert-danger'; }
 
         document.getElementById('gradeInterpretation').className = 'alert ' + alertClass + ' py-2 small';
         document.getElementById('gradeMessage').textContent = message;

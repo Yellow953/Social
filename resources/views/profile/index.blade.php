@@ -26,11 +26,6 @@
                     </div>
                     <h4 class="fw-bold mb-1">{{ auth()->user()->name }}</h4>
                     <p class="text-muted mb-3">{{ auth()->user()->email }}</p>
-                    <div class="d-grid gap-2">
-                        <button class="btn btn-outline-primary">
-                            <i class="fas fa-camera me-2"></i>Change Photo
-                        </button>
-                    </div>
                     <hr class="my-4">
                     <div class="text-start">
                         <h6 class="fw-bold mb-3">Account Stats</h6>
