@@ -73,28 +73,6 @@
                                                 <td class="py-3">
                                                     <div class="d-flex align-items-center">
                                                         <div class="exam-icon me-2" style="width: 32px; height: 32px; background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                                                            <i class="fas fa-graduation-cap text-white small"></i>
-                                                        </div>
-                                                        <span class="fw-semibold" style="color: #1e3a8a;">Final</span>
-                                                    </div>
-                                                </td>
-                                                <td class="py-3 text-end">
-                                                    <div class="input-group input-group-sm ms-auto" style="max-width: 110px;">
-                                                        <input type="number" class="form-control border" id="finalScore" min="0" max="20" step="0.01" placeholder="0" required style="border-radius: 6px 0 0 6px !important;">
-                                                        <span class="input-group-text border-start-0 small" id="finalMax" style="background: #f8fafc; border-radius: 0 6px 6px 0 !important;">/20</span>
-                                                    </div>
-                                                </td>
-                                                <td class="py-3 text-end">
-                                                    <div class="input-group input-group-sm ms-auto" style="max-width: 90px;">
-                                                        <input type="number" class="form-control border" id="finalPercent" min="0" max="100" step="0.1" value="50" required style="border-radius: 6px 0 0 6px !important;">
-                                                        <span class="input-group-text border-start-0 small" style="background: #f8fafc; border-radius: 0 6px 6px 0 !important;">%</span>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr class="exam-row">
-                                                <td class="py-3">
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="exam-icon me-2" style="width: 32px; height: 32px; background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
                                                             <i class="fas fa-flask text-white small"></i>
                                                         </div>
                                                         <span class="fw-semibold" style="color: #1e3a8a;">TP</span>
@@ -109,6 +87,28 @@
                                                 <td class="py-3 text-end">
                                                     <div class="input-group input-group-sm ms-auto" style="max-width: 90px;">
                                                         <input type="number" class="form-control border" id="tpPercent" min="0" max="100" step="0.1" value="20" required style="border-radius: 6px 0 0 6px !important;">
+                                                        <span class="input-group-text border-start-0 small" style="background: #f8fafc; border-radius: 0 6px 6px 0 !important;">%</span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="exam-row">
+                                                <td class="py-3">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="exam-icon me-2" style="width: 32px; height: 32px; background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                                            <i class="fas fa-graduation-cap text-white small"></i>
+                                                        </div>
+                                                        <span class="fw-semibold" style="color: #1e3a8a;">Final</span>
+                                                    </div>
+                                                </td>
+                                                <td class="py-3 text-end">
+                                                    <div class="input-group input-group-sm ms-auto" style="max-width: 110px;">
+                                                        <input type="number" class="form-control border" id="finalScore" min="0" max="20" step="0.01" placeholder="0" required style="border-radius: 6px 0 0 6px !important;">
+                                                        <span class="input-group-text border-start-0 small" id="finalMax" style="background: #f8fafc; border-radius: 0 6px 6px 0 !important;">/20</span>
+                                                    </div>
+                                                </td>
+                                                <td class="py-3 text-end">
+                                                    <div class="input-group input-group-sm ms-auto" style="max-width: 90px;">
+                                                        <input type="number" class="form-control border" id="finalPercent" min="0" max="100" step="0.1" value="50" required style="border-radius: 6px 0 0 6px !important;">
                                                         <span class="input-group-text border-start-0 small" style="background: #f8fafc; border-radius: 0 6px 6px 0 !important;">%</span>
                                                     </div>
                                                 </td>
@@ -182,14 +182,14 @@
                                     </div>
                                     <div class="breakdown-item mb-2 pb-2" style="border-bottom: 1px solid #f3f4f6;">
                                         <div class="d-flex justify-content-between align-items-center">
-                                            <span class="small fw-medium">Final</span>
-                                            <span class="fw-bold" id="finalContribution" style="color: #3b82f6;">0</span>
+                                            <span class="small fw-medium">TP</span>
+                                            <span class="fw-bold" id="tpContribution" style="color: #3b82f6;">0</span>
                                         </div>
                                     </div>
                                     <div class="breakdown-item mb-3">
                                         <div class="d-flex justify-content-between align-items-center">
-                                            <span class="small fw-medium">TP</span>
-                                            <span class="fw-bold" id="tpContribution" style="color: #3b82f6;">0</span>
+                                            <span class="small fw-medium">Final</span>
+                                            <span class="fw-bold" id="finalContribution" style="color: #3b82f6;">0</span>
                                         </div>
                                     </div>
                                 </div>
