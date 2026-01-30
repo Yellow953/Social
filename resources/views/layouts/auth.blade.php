@@ -3,7 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title', config('app.name', 'Social Plus'))</title>
+    <title>@yield('title', 'ESIB SOCIAL - Learning Platform for Social Sciences')</title>
+    @include('partials.head-meta')
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">

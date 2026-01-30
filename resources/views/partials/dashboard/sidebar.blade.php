@@ -4,9 +4,7 @@
         <!-- Logo -->
         <div class="logo-container d-flex align-items-center justify-content-between mb-4 position-relative">
             <a href="{{ auth()->user()->isAdmin() ? route('admin.dashboard') : route('dashboard') }}" class="text-decoration-none d-flex align-items-center logo-link">
-                <div class="bg-gradient-to-br from-[#ec682a] to-[#d45a20] rounded-xl d-flex align-items-center justify-content-center flex-shrink-0" style="width: 40px; height: 40px;">
-                    <i class="fas fa-book text-white"></i>
-                </div>
+                <img src="{{ asset('assets/images/logo-transparent.png') }}" alt="ESIB Social" class="flex-shrink-0" style="width: 40px; height: 40px; object-fit: contain;">
                 <div class="logo-text-container ms-2">
                     <span class="logo-text fw-bold text-white d-block" id="logo-text">Social Plus</span>
                     @if(auth()->user()->isAdmin())

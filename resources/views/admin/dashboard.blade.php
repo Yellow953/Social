@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Admin Dashboard - Social Plus')
+@section('title', 'Admin Dashboard | ESIB SOCIAL')
 
 @section('breadcrumb')
     <li class="breadcrumb-item active" aria-current="page">Overview</li>

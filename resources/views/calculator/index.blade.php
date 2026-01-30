@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Grade Calculator - Social Plus')
+@section('title', 'Grade Calculator | ESIB SOCIAL')
 
 @section('breadcrumb')
     <li class="breadcrumb-item active" aria-current="page">Calculator</li>

@@ -1,5 +1,5 @@
-import { Link } from '@inertiajs/react';
-import { motion } from 'framer-motion';
+import { Link } from "@inertiajs/react";
+import { motion } from "framer-motion";
 
 export default function Footer() {
     const containerVariants = {
@@ -7,9 +7,9 @@ export default function Footer() {
         visible: {
             opacity: 1,
             transition: {
-                staggerChildren: 0.1
-            }
-        }
+                staggerChildren: 0.1,
+            },
+        },
     };
 
     const itemVariants = {
@@ -18,22 +18,25 @@ export default function Footer() {
             opacity: 1,
             y: 0,
             transition: {
-                duration: 0.5
-            }
-        }
+                duration: 0.5,
+            },
+        },
     };
 
     return (
-        <motion.footer 
-            className="bg-gradient-to-br from-[#1e3a8a] via-[#3b82f6] to-[#1e3a8a] py-10 sm:py-12 md:py-16 px-4 border-t-4 border-[#ec682a] overflow-visible" 
-            style={{ borderTopLeftRadius: '3rem', borderTopRightRadius: '3rem' }}
+        <motion.footer
+            className="bg-gradient-to-br from-[#1e3a8a] via-[#3b82f6] to-[#1e3a8a] py-10 sm:py-12 md:py-16 px-4 border-t-4 border-[#ec682a] overflow-visible"
+            style={{
+                borderTopLeftRadius: "3rem",
+                borderTopRightRadius: "3rem",
+            }}
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6 }}
         >
             <div className="container mx-auto max-w-6xl">
-                <motion.div 
+                <motion.div
                     className="grid sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-10 md:gap-12 mb-8 sm:mb-10 md:mb-12"
                     variants={containerVariants}
                     initial="hidden"
@@ -41,21 +44,31 @@ export default function Footer() {
                     viewport={{ once: true }}
                 >
                     {/* Brand Section */}
-                    <motion.div className="sm:col-span-2 md:col-span-1" variants={itemVariants}>
+                    <motion.div
+                        className="sm:col-span-2 md:col-span-1"
+                        variants={itemVariants}
+                    >
                         <div className="flex items-center space-x-2 mb-3 sm:mb-4">
-                            <div className="w-10 h-10 bg-gradient-to-br from-[#ec682a] to-[#d45a20] rounded-xl flex items-center justify-center">
-                                <i className="fas fa-book text-white"></i>
-                            </div>
-                            <span className="text-lg sm:text-xl font-bold text-white">ESIB SOCIAL</span>
+                            <img
+                                src="/assets/images/logo-transparent.png"
+                                alt="ESIB Social"
+                                className="w-25 h-25 object-contain"
+                            />
+                            <span className="text-lg sm:text-xl font-bold text-white">
+                                ESIB SOCIAL
+                            </span>
                         </div>
                         <p className="text-white/80 text-xs sm:text-sm leading-relaxed">
-                            Your comprehensive learning platform for social sciences.
+                            Your comprehensive learning platform for social
+                            sciences.
                         </p>
                     </motion.div>
 
                     {/* Quick Links */}
                     <motion.div variants={itemVariants}>
-                        <h4 className="font-bold text-base sm:text-lg mb-3 sm:mb-4 text-white">Quick Links</h4>
+                        <h4 className="font-bold text-base sm:text-lg mb-3 sm:mb-4 text-white">
+                            Quick Links
+                        </h4>
                         <ul className="space-y-2">
                             <li>
                                 <Link
@@ -94,25 +107,39 @@ export default function Footer() {
 
                     {/* Resources */}
                     <motion.div variants={itemVariants}>
-                        <h4 className="font-bold text-base sm:text-lg mb-3 sm:mb-4 text-white">Resources</h4>
+                        <h4 className="font-bold text-base sm:text-lg mb-3 sm:mb-4 text-white">
+                            Resources
+                        </h4>
                         <ul className="space-y-2">
                             <li>
-                                <a href="/login" className="text-white/80 hover:text-white transition-colors text-xs sm:text-sm no-underline">
+                                <a
+                                    href="/login"
+                                    className="text-white/80 hover:text-white transition-colors text-xs sm:text-sm no-underline"
+                                >
                                     Login
                                 </a>
                             </li>
                             <li>
-                                <a href="/register" className="text-white/80 hover:text-white transition-colors text-xs sm:text-sm no-underline">
+                                <a
+                                    href="/register"
+                                    className="text-white/80 hover:text-white transition-colors text-xs sm:text-sm no-underline"
+                                >
                                     Sign Up
                                 </a>
                             </li>
                             <li>
-                                <a href="/calculator" className="text-white/80 hover:text-white transition-colors text-xs sm:text-sm no-underline">
+                                <a
+                                    href="/calculator"
+                                    className="text-white/80 hover:text-white transition-colors text-xs sm:text-sm no-underline"
+                                >
                                     Calculator
                                 </a>
                             </li>
                             <li>
-                                <a href="/subscriptions" className="text-white/80 hover:text-white transition-colors text-xs sm:text-sm no-underline">
+                                <a
+                                    href="/subscriptions"
+                                    className="text-white/80 hover:text-white transition-colors text-xs sm:text-sm no-underline"
+                                >
                                     SOCIALPLUS
                                 </a>
                             </li>
@@ -121,7 +148,9 @@ export default function Footer() {
 
                     {/* Social Media */}
                     <motion.div variants={itemVariants}>
-                        <h4 className="font-bold text-base sm:text-lg mb-3 sm:mb-4 text-white">Connect</h4>
+                        <h4 className="font-bold text-base sm:text-lg mb-3 sm:mb-4 text-white">
+                            Connect
+                        </h4>
                         <div className="flex space-x-3 sm:space-x-4 mb-3 sm:mb-4">
                             <a
                                 href="https://instagram.com"
@@ -158,7 +187,7 @@ export default function Footer() {
                 </motion.div>
 
                 {/* Bottom Bar */}
-                <motion.div 
+                <motion.div
                     className="border-t border-white/20 pt-6 sm:pt-8 mt-6 sm:mt-8"
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
@@ -167,14 +196,27 @@ export default function Footer() {
                 >
                     <div className="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0 text-center sm:text-left">
                         <p className="text-white/70 text-xs sm:text-sm">
-                            © {new Date().getFullYear()} ESIB SOCIAL. All rights reserved.
+                            © {new Date().getFullYear()} ESIB SOCIAL. All rights
+                            reserved.
                         </p>
                         <div className="flex flex-wrap justify-center sm:justify-end gap-4 sm:gap-6 text-xs sm:text-sm">
-                            <a href="/privacy" className="text-white/70 hover:text-white transition-colors no-underline">
+                            <a
+                                href="/privacy"
+                                className="text-white/70 hover:text-white transition-colors no-underline"
+                            >
                                 Privacy Policy
                             </a>
-                            <a href="/terms" className="text-white/70 hover:text-white transition-colors no-underline">
+                            <a
+                                href="/terms"
+                                className="text-white/70 hover:text-white transition-colors no-underline"
+                            >
                                 Terms of Service
+                            </a>
+                            <a
+                                href="/cookie-policy"
+                                className="text-white/70 hover:text-white transition-colors no-underline"
+                            >
+                                Cookie Policy
                             </a>
                         </div>
                     </div>

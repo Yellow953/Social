@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Request Subscription - Social Plus')
+@section('title', 'Request Subscription | ESIB SOCIAL')
 
 @section('breadcrumb')
     <li class="breadcrumb-item"><a href="{{ route('subscriptions.index') }}">Subscriptions</a></li>

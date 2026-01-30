@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Sessions - Social Plus')
+@section('title', 'Sessions | ESIB SOCIAL')
 
 @section('breadcrumb')
     <li class="breadcrumb-item active" aria-current="page">Sessions</li>

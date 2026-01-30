@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\AnalyticsController as AdminAnalyticsController;
 use App\Http\Controllers\TermsController;
 use App\Http\Controllers\PrivacyController;
+use App\Http\Controllers\CookiePolicyController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -37,6 +38,7 @@ Route::get('/calculatrice', function () {
 // Legal pages
 Route::get('/terms', [TermsController::class, 'index'])->name('terms');
 Route::get('/privacy', [PrivacyController::class, 'index'])->name('privacy');
+Route::get('/cookie-policy', [CookiePolicyController::class, 'index'])->name('cookie-policy');
 
 // Authentication routes
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');

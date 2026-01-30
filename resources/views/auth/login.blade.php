@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', 'Login - Social Plus')
+@section('title', 'Login | ESIB SOCIAL')
 
 @section('content')
 <div class="min-vh-100 d-flex align-items-center position-relative" style="background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #1e3a8a 100%); overflow: hidden;">
@@ -29,7 +29,7 @@
                     <div class="card-body p-5">
                         <!-- Header -->
                         <div class="text-center mb-4">
-                            <i class="bi bi-box-arrow-in-right fs-1 mb-3" style="color: #ec682a;"></i>
+                            <img src="{{ asset('assets/images/logo.png') }}" alt="ESIB Social" class="d-block mx-auto mb-3" style="max-height: 64px; width: auto; object-fit: contain;">
                             <h3 class="fw-bold mb-1" style="color: #5c5c5c;">Welcome Back</h3>
                         </div>
 

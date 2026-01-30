@@ -7,8 +7,8 @@ const Welcome = () => {
             <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
                 <div className="container">
                     <a className="navbar-brand fw-bold d-flex align-items-center" href="/">
-                        <i className="bi bi-book-fill me-2" style={{color: '#ec682a'}}></i>
-                        <span>Social Plus</span>
+                        <img src="/assets/images/logo.png" alt="ESIB Social" className="me-2" style={{ height: '36px', width: 'auto', objectFit: 'contain' }} />
+                        <span>ESIB SOCIAL</span>
                     </a>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                         <span className="navbar-toggler-icon"></span>
@@ -69,8 +69,8 @@ const Welcome = () => {
                         <div className="col-lg-6 text-center mt-5 mt-lg-0">
                             <div className="position-relative">
                                 <div className="bg-white rounded-4 shadow-lg p-5" style={{border: '3px solid #ec682a'}}>
-                                    <i className="bi bi-book-half display-1 d-block mb-3" style={{color: '#ec682a'}}></i>
-                                    <h3 className="fw-bold mb-2">Social Plus</h3>
+                                    <img src="/assets/images/logo.png" alt="ESIB Social" className="d-block mx-auto mb-3" style={{ maxHeight: '120px', width: 'auto', objectFit: 'contain' }} />
+                                    <h3 className="fw-bold mb-2">ESIB SOCIAL</h3>
                                     <p className="text-muted mb-0">Your learning journey starts here</p>
                                 </div>
                                 <div className="position-absolute top-0 start-0 translate-middle bg-primary rounded-circle p-3 shadow"

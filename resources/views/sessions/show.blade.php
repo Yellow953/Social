@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', $session->title . ' - Social Plus')
+@section('title', $session->title . ' | ESIB SOCIAL')
 
 @section('breadcrumb')
     <li class="breadcrumb-item"><a href="{{ route('sessions') }}">Sessions</a></li>

@@ -4,7 +4,12 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>{{ config('app.name', 'Social Plus') }}</title>
+        <title>ESIB SOCIAL - Learning Platform for Social Sciences</title>
+        <meta name="robots" content="index, follow">
+        <link rel="icon" type="image/png" href="{{ asset('assets/images/logo.png') }}" sizes="32x32">
+        <link rel="icon" type="image/png" href="{{ asset('assets/images/logo.png') }}" sizes="16x16">
+        <link rel="apple-touch-icon" href="{{ asset('assets/images/logo.png') }}">
+        <meta name="description" content="ESIB SOCIAL - Your comprehensive learning platform for social sciences. Access courses, sessions, and materials organized by subject.">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">

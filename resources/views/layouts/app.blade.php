@@ -3,7 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title', config('app.name', 'Social Plus'))</title>
+    <title>@yield('title', 'ESIB SOCIAL - Learning Platform for Social Sciences')</title>
+    @include('partials.head-meta')
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -18,8 +19,8 @@
             <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
                 <div class="container">
                     <a class="navbar-brand fw-bold d-flex align-items-center" href="/dashboard">
-                        <i class="bi bi-book-fill me-2" style="color: #ec682a;"></i>
-                        <span>Social Plus</span>
+                        <img src="{{ asset('assets/images/logo.png') }}" alt="ESIB Social" class="me-2" style="height: 36px; width: auto; object-fit: contain;">
+                        <span>ESIB SOCIAL</span>
                     </a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                         <span class="navbar-toggler-icon"></span>

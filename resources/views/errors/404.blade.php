@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', '404 - Page Not Found | Social Plus')
+@section('title', '404 Page Not Found | ESIB SOCIAL')
 
 @section('content')
 <div class="min-vh-100 d-flex align-items-center position-relative" style="background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #1e3a8a 100%); overflow: hidden;">

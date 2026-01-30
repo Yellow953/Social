@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Access Logs - Social Plus')
+@section('title', 'Access Logs | ESIB SOCIAL Admin')
 
 @section('breadcrumb')
     <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Admin</a></li>

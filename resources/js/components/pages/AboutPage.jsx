@@ -69,12 +69,14 @@ export default function AboutPage() {
                 >
                     <motion.div
                         className="inline-block mb-6"
-                        whileHover={{ scale: 1.1, rotate: 5 }}
+                        whileHover={{ scale: 1.05 }}
                         transition={{ type: "spring", stiffness: 300 }}
                     >
-                        <div className="w-24 h-24 sm:w-32 sm:h-32 bg-gradient-to-br from-[#ec682a] to-[#d45a20] rounded-2xl flex items-center justify-center shadow-2xl mx-auto">
-                            <i className="fas fa-graduation-cap text-white text-4xl sm:text-5xl"></i>
-                        </div>
+                        <img
+                            src="/assets/images/logo-transparent.png"
+                            alt="ESIB Social"
+                            className="h-24 w-auto sm:h-32 object-contain drop-shadow-2xl mx-auto"
+                        />
                     </motion.div>
                     <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-[#5c5c5c] mb-4 sm:mb-6">
                         About{" "}
@@ -96,14 +98,16 @@ export default function AboutPage() {
                     initial="hidden"
                     animate="visible"
                 >
-                    {stats.map((stat, index) => (
+                    {stats.map((stat, index) => {
+                        const isOrange = index % 2 === 0;
+                        return (
                         <motion.div
                             key={index}
-                            className="bg-white rounded-2xl p-6 sm:p-8 shadow-lg border-2 border-gray-100 hover:border-[#ec682a] transition-all text-center"
+                            className={`bg-white rounded-2xl p-6 sm:p-8 shadow-lg border-2 border-gray-100 transition-all text-center ${isOrange ? "hover:border-[#ec682a]" : "hover:border-blue-500"}`}
                             variants={itemVariants}
                             whileHover={{ scale: 1.05, y: -5 }}
                         >
-                            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                            <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-xl flex items-center justify-center mx-auto mb-3 sm:mb-4 ${isOrange ? "bg-gradient-to-br from-[#ec682a] to-[#c2410c]" : "bg-gradient-to-br from-blue-500 to-blue-600"}`}>
                                 <i
                                     className={`${stat.icon} text-white text-lg sm:text-2xl`}
                                 ></i>
@@ -115,7 +119,8 @@ export default function AboutPage() {
                                 {stat.label}
                             </div>
                         </motion.div>
-                    ))}
+                        );
+                    })}
                 </motion.div>
 
                 {/* Mission & Vision Cards */}

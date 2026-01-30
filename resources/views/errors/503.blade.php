@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', '503 - Service Unavailable | Social Plus')
+@section('title', '503 Service Unavailable | ESIB SOCIAL')
 
 @section('content')
 <div class="min-vh-100 d-flex align-items-center position-relative" style="background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #1e3a8a 100%); overflow: hidden;">
