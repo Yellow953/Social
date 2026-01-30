@@ -9,7 +9,7 @@
 @section('content')
 <div class="d-flex flex-column gap-4">
     <!-- Welcome Card -->
-    <div class="card border-0 shadow-lg text-white overflow-hidden" style="background: linear-gradient(135deg, #c2410c 0%, #ec682a 50%, #c2410c 100%); position: relative;">
+    <div class="card border-0 shadow-lg text-white overflow-hidden" style="background: linear-gradient(180deg, #1a1a1a 0%, #2d2d2d 100%); position: relative;">
         <div class="card-body p-4">
             <div class="row align-items-center">
                 <div class="col-md-8">
@@ -18,8 +18,8 @@
                 </div>
                 <div class="col-md-4 text-end d-none d-md-block">
                     <div class="position-relative" style="width: 100px; height: 100px; margin-left: auto;">
-                        <div class="bg-gradient-to-br from-[#ec682a] to-[#d45a20] rounded-circle d-flex align-items-center justify-content-center shadow-lg"
-                             style="width: 100px; height: 100px; border: 3px solid rgba(255,255,255,0.3);">
+                        <div class="bg-gradient-to-br from-[#1e3a8a] to-[#3b82f6] rounded-circle d-flex align-items-center justify-content-center shadow-lg"
+                             style="width: 100px; height: 100px;">
                             <span class="text-white fw-bold" style="font-size: 2.5rem;">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
                         </div>
                     </div>

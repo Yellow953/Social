@@ -20,7 +20,7 @@
             <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                 <div class="card-body text-center p-4">
                     <div class="mb-3">
-                        <div class="bg-gradient-to-br from-[#ec682a] to-[#d45a20] rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 120px; height: 120px;">
+                        <div class="bg-gradient-to-br from-[#1e3a8a] to-[#3b82f6] rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 120px; height: 120px;">
                             <span class="text-white fw-bold" style="font-size: 3rem;">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
                         </div>
                     </div>
@@ -80,9 +80,9 @@
             </div>
 
             <!-- Change Password -->
-            <div class="card border-0 shadow-sm mb-4">
+            <div class="card border-0 shadow-sm mb-4" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                 <div class="card-header bg-white border-0 py-3">
-                    <h5 class="mb-0 fw-bold"><i class="fas fa-lock me-2 text-warning"></i>Change Password</h5>
+                    <h5 class="mb-0 fw-bold" style="color: #c2410c;"><i class="fas fa-lock me-2" style="color: #ec682a;"></i>Change Password</h5>
                 </div>
                 <div class="card-body">
                     <form method="POST" action="{{ route('profile.password') }}" autocomplete="off" id="profile-password-form">
@@ -101,7 +101,7 @@
                                 <input type="password" class="form-control profile-password-noautofill" name="password_confirmation" required autocomplete="new-password" readonly tabindex="0" data-readonly-remove>
                             </div>
                             <div class="col-12">
-                                <button type="submit" class="btn btn-warning text-white">
+                                <button type="submit" class="btn btn-primary text-white">
                                     <i class="fas fa-key me-2"></i>Update Password
                                 </button>
                             </div>
@@ -147,7 +147,9 @@
                             </div>
                         </div>
                         <div class="mt-2">
-                            <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Save Changes
+                            </button>
                         </div>
                     </form>
                 </div>

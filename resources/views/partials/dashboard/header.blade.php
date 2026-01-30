@@ -32,7 +32,7 @@
             <!-- User Menu -->
             <div class="dropdown">
                 <button class="btn btn-sm d-flex align-items-center text-[#5c5c5c] dropdown-toggle" type="button" id="userMenu" data-bs-toggle="dropdown">
-                    <div class="bg-gradient-to-br from-[#ec682a] to-[#d45a20] rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                    <div class="bg-gradient-to-br from-[#1e3a8a] to-[#3b82f6] rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
                         <span class="text-white fw-bold small">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
                     </div>
                     <span class="d-none d-md-inline">{{ auth()->user()->name }}</span>

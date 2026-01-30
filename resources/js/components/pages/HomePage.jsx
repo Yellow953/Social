@@ -425,14 +425,16 @@ export default function HomePage() {
                                 title: "Single Device",
                                 desc: "Secure single-device login for account protection",
                             },
-                        ].map((feature, index) => (
+                        ].map((feature, index) => {
+                            const isOrange = index % 2 === 0;
+                            return (
                             <motion.div
                                 key={index}
-                                className="group bg-white rounded-2xl p-6 sm:p-8 border-2 border-gray-200 hover:border-blue-500 transition-all shadow-md hover:shadow-2xl transform hover:-translate-y-2"
+                                className={`group bg-white rounded-2xl p-6 sm:p-8 border-2 border-gray-200 transition-all shadow-md hover:shadow-2xl transform hover:-translate-y-2 ${isOrange ? "hover:border-[#ec682a]" : "hover:border-blue-500"}`}
                                 variants={itemVariants}
                                 whileHover={{ scale: 1.02 }}
                             >
-                                <div className="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform">
+                                <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-xl flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform ${isOrange ? "bg-gradient-to-br from-[#ec682a] to-[#c2410c]" : "bg-gradient-to-br from-blue-500 to-blue-600"}`}>
                                     <i
                                         className={`${feature.icon} text-white text-xl sm:text-2xl`}
                                     ></i>
@@ -444,7 +446,8 @@ export default function HomePage() {
                                     {feature.desc}
                                 </p>
                             </motion.div>
-                        ))}
+                            );
+                        })}
                     </motion.div>
                 </div>
             </motion.section>
