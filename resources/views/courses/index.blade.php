@@ -11,7 +11,7 @@
     <!-- Page Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="fw-bold mb-1" style="color: #1e3a8a;"><i class="fas fa-book-open me-2" style="color: #3b82f6;"></i>Courses</h2>
+            <h2 class="fw-bold mb-1" style="color: #c2410c;"><i class="fas fa-book-open me-2" style="color: #ec682a;"></i>Courses</h2>
             <p class="text-muted mb-0">
                 @if(auth()->user()->isAdmin())
                     Manage and organize courses by subject and year
@@ -40,8 +40,8 @@
                     <span class="input-group-text bg-white border-end-0">
                         <i class="fas fa-search text-muted"></i>
                     </span>
-                    <input type="text" 
-                           class="form-control border-start-0" 
+                    <input type="text"
+                           class="form-control border-start-0"
                            name="search"
                            value="{{ request('search') }}"
                            placeholder="Search courses by name, code or description...">
@@ -74,15 +74,15 @@
     <div class="row g-4">
         @forelse($courses as $course)
         <div class="col-md-6 col-lg-4">
-            <div class="card border-0 shadow-lg h-100 course-card overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+            <div class="card border-0 shadow-lg h-100 course-card overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-start mb-3">
-                        <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-3 shadow-md" style="background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);">
+                        <div class="bg-gradient-to-br from-[#ec682a] to-[#c2410c] rounded-xl p-3 shadow-md" style="background: linear-gradient(135deg, #ec682a 0%, #c2410c 100%);">
                             <i class="fas fa-book fa-lg text-white"></i>
                         </div>
                         <span class="badge bg-success">Active</span>
                     </div>
-                    <h5 class="fw-bold mb-2" style="color: #1e3a8a;">{{ $course->name }}</h5>
+                    <h5 class="fw-bold mb-2" style="color: #c2410c;">{{ $course->name }}</h5>
                     <p class="text-muted small mb-2">
                         <strong>Code:</strong> {{ $course->code }}
                     </p>
@@ -92,7 +92,7 @@
                     <div class="d-flex align-items-center justify-content-between mb-3">
                         <div>
                             <small class="text-muted d-block">Sessions</small>
-                            <span class="fw-bold" style="color: #1e3a8a;">{{ $course->video_sessions_count }}</span>
+                            <span class="fw-bold" style="color: #c2410c;">{{ $course->video_sessions_count }}</span>
                         </div>
                         <span class="badge bg-info">{{ $course->video_sessions_count }} {{ Str::plural('Session', $course->video_sessions_count) }}</span>
                     </div>
@@ -122,7 +122,7 @@
         </div>
         @empty
         <div class="col-12">
-            <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+            <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                 <div class="card-body text-center py-5">
                     <i class="fas fa-book text-muted mb-3" style="font-size: 3rem;"></i>
                     <h5 class="text-muted">No courses found</h5>

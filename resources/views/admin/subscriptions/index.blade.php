@@ -12,7 +12,7 @@
     <!-- Page Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="fw-bold mb-1" style="color: #1e3a8a;"><i class="fas fa-credit-card me-2" style="color: #3b82f6;"></i>Subscriptions Management</h2>
+            <h2 class="fw-bold mb-1" style="color: #c2410c;"><i class="fas fa-credit-card me-2" style="color: #ec682a;"></i>Subscriptions Management</h2>
             <p class="text-muted mb-0">Review and manage user subscription requests</p>
         </div>
     </div>
@@ -27,45 +27,45 @@
     <!-- Stats Cards -->
     <div class="row g-4 mb-4">
         <div class="col-md-4">
-            <div class="card border-0 shadow-lg h-100 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+            <div class="card border-0 shadow-lg h-100 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center gap-3">
-                        <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-3 shadow-md flex-shrink-0" style="background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);">
+                        <div class="bg-gradient-to-br from-[#ec682a] to-[#c2410c] rounded-xl p-3 shadow-md flex-shrink-0" style="background: linear-gradient(135deg, #ec682a 0%, #c2410c 100%);">
                             <i class="fas fa-clock fa-lg text-white"></i>
                         </div>
                         <div class="flex-grow-1">
                             <h6 class="text-muted text-uppercase small fw-semibold mb-1" style="letter-spacing: 0.5px; font-size: 0.7rem;">Pending</h6>
-                            <h3 class="fw-bold mb-0" style="color: #1e3a8a; font-size: 1.75rem;">{{ $stats['pending'] }}</h3>
+                            <h3 class="fw-bold mb-0" style="color: #c2410c; font-size: 1.75rem;">{{ $stats['pending'] }}</h3>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card border-0 shadow-lg h-100 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+            <div class="card border-0 shadow-lg h-100 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center gap-3">
-                        <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-3 shadow-md flex-shrink-0" style="background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);">
+                        <div class="rounded-xl p-3 shadow-md flex-shrink-0" style="background: linear-gradient(135deg, #ec682a 0%, #c2410c 100%);">
                             <i class="fas fa-check-circle fa-lg text-white"></i>
                         </div>
                         <div class="flex-grow-1">
                             <h6 class="text-muted text-uppercase small fw-semibold mb-1" style="letter-spacing: 0.5px; font-size: 0.7rem;">Approved</h6>
-                            <h3 class="fw-bold mb-0" style="color: #1e3a8a; font-size: 1.75rem;">{{ $stats['approved'] }}</h3>
+                            <h3 class="fw-bold mb-0" style="color: #c2410c; font-size: 1.75rem;">{{ $stats['approved'] }}</h3>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card border-0 shadow-lg h-100 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+            <div class="card border-0 shadow-lg h-100 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center gap-3">
-                        <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-3 shadow-md flex-shrink-0" style="background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);">
+                        <div class="rounded-xl p-3 shadow-md flex-shrink-0" style="background: linear-gradient(135deg, #ec682a 0%, #c2410c 100%);">
                             <i class="fas fa-times-circle fa-lg text-white"></i>
                         </div>
                         <div class="flex-grow-1">
                             <h6 class="text-muted text-uppercase small fw-semibold mb-1" style="letter-spacing: 0.5px; font-size: 0.7rem;">Rejected</h6>
-                            <h3 class="fw-bold mb-0" style="color: #1e3a8a; font-size: 1.75rem;">{{ $stats['rejected'] }}</h3>
+                            <h3 class="fw-bold mb-0" style="color: #c2410c; font-size: 1.75rem;">{{ $stats['rejected'] }}</h3>
                         </div>
                     </div>
                 </div>
@@ -74,9 +74,9 @@
     </div>
 
     <!-- Subscriptions Table -->
-    <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+    <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
         <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-3">
-            <h5 class="mb-0 fw-bold" style="color: #1e3a8a;">All Subscriptions</h5>
+            <h5 class="mb-0 fw-bold" style="color: #c2410c;">All Subscriptions</h5>
         </div>
         <div class="card-body p-4">
             <div class="table-responsive">

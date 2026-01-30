@@ -12,7 +12,7 @@
     <div class="row">
         <div class="col-lg-8">
             <!-- Session Details -->
-            <div class="card border-0 shadow-lg overflow-hidden mb-4" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+            <div class="card border-0 shadow-lg overflow-hidden mb-4" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                 <div class="card-body p-4">
                     <h3 class="fw-bold mb-3">{{ $session->title }}</h3>
                     @if($session->description)
@@ -33,7 +33,7 @@
 
             <!-- Media Files -->
             @if($session->media && $session->media->count() > 0)
-            <div class="card border-0 shadow-lg overflow-hidden mb-4" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+            <div class="card border-0 shadow-lg overflow-hidden mb-4" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                 <div class="card-header bg-white border-bottom">
                     <h5 class="mb-0 fw-bold"><i class="fas fa-file me-2 text-primary"></i>Session Media</h5>
                 </div>
@@ -72,7 +72,7 @@
             </div>
             @else
             <!-- No Media Message -->
-            <div class="card border-0 shadow-lg overflow-hidden mb-4" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+            <div class="card border-0 shadow-lg overflow-hidden mb-4" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                 <div class="card-body p-4 text-center">
                     <i class="fas fa-file text-muted mb-3" style="font-size: 3rem;"></i>
                     <h6 class="text-muted">No media files available for this session</h6>
@@ -83,9 +83,9 @@
 
         <div class="col-lg-4">
             <!-- Session Info Card -->
-            <div class="card border-0 shadow-lg mb-4 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+            <div class="card border-0 shadow-lg mb-4 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                 <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-3">
-                    <h6 class="mb-0 fw-bold" style="color: #1e3a8a;">Session Information</h6>
+                    <h6 class="mb-0 fw-bold" style="color: #c2410c;">Session Information</h6>
                 </div>
                 <div class="card-body">
                     <ul class="list-unstyled mb-0">
@@ -129,7 +129,7 @@
     .media-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 8px 16px rgba(0,0,0,0.15) !important;
-        border-color: #3b82f6 !important;
+        border-color: #ec682a !important;
     }
 </style>
 @endpush

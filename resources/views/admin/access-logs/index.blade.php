@@ -12,18 +12,18 @@
     <!-- Page Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="fw-bold mb-1" style="color: #1e3a8a;"><i class="fas fa-history me-2" style="color: #3b82f6;"></i>Session Access Logs</h2>
+            <h2 class="fw-bold mb-1" style="color: #c2410c;"><i class="fas fa-history me-2" style="color: #ec682a;"></i>Session Access Logs</h2>
             <p class="text-muted mb-0">Monitor user session access and watch time</p>
         </div>
     </div>
 
     <!-- Stats -->
-    <div class="card border-0 shadow-lg overflow-hidden mb-4" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+    <div class="card border-0 shadow-lg overflow-hidden mb-4" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
         <div class="card-body p-4">
             <div class="row">
                 <div class="col-md-6">
                     <h6 class="text-muted text-uppercase small fw-semibold mb-2" style="letter-spacing: 0.5px;">Total Watch Time</h6>
-                    <h3 class="mb-0 fw-bold" style="color: #1e3a8a;">
+                    <h3 class="mb-0 fw-bold" style="color: #c2410c;">
                         @php
                             $hours = floor($totalWatchTime / 3600);
                             $minutes = floor(($totalWatchTime % 3600) / 60);
@@ -33,14 +33,14 @@
                 </div>
                 <div class="col-md-6">
                     <h6 class="text-muted text-uppercase small fw-semibold mb-2" style="letter-spacing: 0.5px;">Total Log Entries</h6>
-                    <h3 class="mb-0 fw-bold" style="color: #1e3a8a;">{{ $logs->total() }}</h3>
+                    <h3 class="mb-0 fw-bold" style="color: #c2410c;">{{ $logs->total() }}</h3>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Filters -->
-    <div class="card border-0 shadow-lg overflow-hidden mb-4" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+    <div class="card border-0 shadow-lg overflow-hidden mb-4" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
         <div class="card-body p-4">
             <form method="GET" action="{{ route('admin.access-logs') }}" class="row g-3">
                 <div class="col-md-3">
@@ -69,9 +69,9 @@
     </div>
 
     <!-- Logs Table -->
-    <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+    <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
         <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-3">
-            <h5 class="mb-0 fw-bold" style="color: #1e3a8a;">Access Logs</h5>
+            <h5 class="mb-0 fw-bold" style="color: #c2410c;">Access Logs</h5>
         </div>
         <div class="card-body p-4">
             <div class="table-responsive">

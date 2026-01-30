@@ -11,7 +11,7 @@
     <!-- Page Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="fw-bold mb-1" style="color: #1e3a8a;"><i class="fas fa-play-circle me-2" style="color: #3b82f6;"></i>Sessions</h2>
+            <h2 class="fw-bold mb-1" style="color: #c2410c;"><i class="fas fa-play-circle me-2" style="color: #ec682a;"></i>Sessions</h2>
             <p class="text-muted mb-0">
                 @if(auth()->user()->isAdmin())
                     Manage all platform sessions and access logs
@@ -81,7 +81,7 @@
     @endif
 
     @if($groupedSessions->isEmpty())
-        <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+        <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
             <div class="card-body text-center py-5 p-4">
                 <i class="fas fa-video text-muted mb-3" style="font-size: 3rem;"></i>
                 <h5 class="text-muted">No sessions available</h5>

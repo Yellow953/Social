@@ -10,7 +10,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-3 mb-4">
-            <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+            <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                 <div class="list-group list-group-flush">
                     <a href="#general" class="list-group-item list-group-item-action active" data-bs-toggle="tab">
                         <i class="fas fa-cog me-2"></i>General
@@ -32,9 +32,9 @@
             <div class="tab-content">
                 <!-- General Settings -->
                 <div class="tab-pane fade show active" id="general">
-                    <div class="card border-0 shadow-lg mb-4 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+                    <div class="card border-0 shadow-lg mb-4 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                         <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-3">
-                            <h5 class="mb-0 fw-bold" style="color: #1e3a8a;">General Settings</h5>
+                            <h5 class="mb-0 fw-bold" style="color: #c2410c;">General Settings</h5>
                         </div>
                         <div class="card-body">
                             <div class="mb-4">
@@ -70,9 +70,9 @@
 
                 <!-- Notifications Settings -->
                 <div class="tab-pane fade" id="notifications">
-                    <div class="card border-0 shadow-lg mb-4 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+                    <div class="card border-0 shadow-lg mb-4 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                         <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-3">
-                            <h5 class="mb-0 fw-bold" style="color: #1e3a8a;">Notification Preferences</h5>
+                            <h5 class="mb-0 fw-bold" style="color: #c2410c;">Notification Preferences</h5>
                         </div>
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
@@ -117,9 +117,9 @@
 
                 <!-- Privacy Settings -->
                 <div class="tab-pane fade" id="privacy">
-                    <div class="card border-0 shadow-lg mb-4 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+                    <div class="card border-0 shadow-lg mb-4 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                         <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-3">
-                            <h5 class="mb-0 fw-bold" style="color: #1e3a8a;">Privacy Settings</h5>
+                            <h5 class="mb-0 fw-bold" style="color: #c2410c;">Privacy Settings</h5>
                         </div>
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
@@ -155,9 +155,9 @@
 
                 <!-- Security Settings -->
                 <div class="tab-pane fade" id="security">
-                    <div class="card border-0 shadow-lg mb-4 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+                    <div class="card border-0 shadow-lg mb-4 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                         <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-3">
-                            <h5 class="mb-0 fw-bold" style="color: #1e3a8a;">Security Settings</h5>
+                            <h5 class="mb-0 fw-bold" style="color: #c2410c;">Security Settings</h5>
                         </div>
                         <div class="card-body">
                             <div class="alert alert-info">

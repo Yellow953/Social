@@ -20,7 +20,7 @@
             </div>
 
             <!-- Media Viewer Card -->
-            <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+            <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                 <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
                     <div>
                         <h5 class="mb-0 fw-bold">

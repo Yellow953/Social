@@ -9,7 +9,7 @@
 @section('content')
 <div class="d-flex flex-column gap-4">
     <!-- Welcome Section -->
-    <div class="card border-0 shadow-sm text-white overflow-hidden" style="background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #1e3a8a 100%); position: relative;">
+    <div class="card border-0 shadow-sm text-white overflow-hidden" style="background: linear-gradient(135deg, #c2410c 0%, #ec682a 50%, #c2410c 100%); position: relative;">
         <div class="card-body p-4">
             <div class="row align-items-center">
                 <div class="col-md-8">
@@ -18,7 +18,7 @@
                 </div>
                 <div class="col-md-4 text-end d-none d-md-block">
                     <div class="position-relative" style="width: 120px; height: 120px; margin-left: auto;">
-                        <div class="bg-gradient-to-br from-[#ec682a] to-[#d45a20] rounded-circle d-flex align-items-center justify-content-center shadow-lg" 
+                        <div class="bg-gradient-to-br from-[#ec682a] to-[#d45a20] rounded-circle d-flex align-items-center justify-content-center shadow-lg"
                              style="width: 120px; height: 120px; border: 3px solid rgba(255,255,255,0.3);">
                             <span class="text-white fw-bold" style="font-size: 3rem;">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
                         </div>
@@ -31,15 +31,15 @@
     <!-- Statistics Section -->
     <div class="row g-4">
         <div class="col-md-4">
-            <div class="card border-0 shadow-lg h-100 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+            <div class="card border-0 shadow-lg h-100 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center gap-3">
-                        <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-3 shadow-md flex-shrink-0" style="background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);">
+                        <div class="bg-gradient-to-br from-[#ec682a] to-[#c2410c] rounded-xl p-3 shadow-md flex-shrink-0" style="background: linear-gradient(135deg, #ec682a 0%, #c2410c 100%);">
                             <i class="fas fa-users fa-lg text-white"></i>
                         </div>
                         <div class="flex-grow-1">
                             <h6 class="text-muted text-uppercase small fw-semibold mb-1" style="letter-spacing: 0.5px; font-size: 0.7rem;">Total Users</h6>
-                            <h3 class="fw-bold mb-0" style="color: #1e3a8a; font-size: 1.75rem;">{{ number_format($totalUsers) }}</h3>
+                            <h3 class="fw-bold mb-0" style="color: #c2410c; font-size: 1.75rem;">{{ number_format($totalUsers) }}</h3>
                         </div>
                     </div>
                 </div>
@@ -47,15 +47,15 @@
         </div>
 
         <div class="col-md-4">
-            <div class="card border-0 shadow-lg h-100 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+            <div class="card border-0 shadow-lg h-100 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center gap-3">
-                        <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-3 shadow-md flex-shrink-0" style="background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);">
+                        <div class="rounded-xl p-3 shadow-md flex-shrink-0" style="background: linear-gradient(135deg, #ec682a 0%, #c2410c 100%);">
                             <i class="fas fa-book fa-lg text-white"></i>
                         </div>
                         <div class="flex-grow-1">
                             <h6 class="text-muted text-uppercase small fw-semibold mb-1" style="letter-spacing: 0.5px; font-size: 0.7rem;">Total Courses</h6>
-                            <h3 class="fw-bold mb-0" style="color: #1e3a8a; font-size: 1.75rem;">{{ number_format($totalCourses) }}</h3>
+                            <h3 class="fw-bold mb-0" style="color: #c2410c; font-size: 1.75rem;">{{ number_format($totalCourses) }}</h3>
                         </div>
                     </div>
                 </div>
@@ -63,15 +63,15 @@
         </div>
 
         <div class="col-md-4">
-            <div class="card border-0 shadow-lg h-100 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+            <div class="card border-0 shadow-lg h-100 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center gap-3">
-                        <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-3 shadow-md flex-shrink-0" style="background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);">
+                        <div class="rounded-xl p-3 shadow-md flex-shrink-0" style="background: linear-gradient(135deg, #ec682a 0%, #c2410c 100%);">
                             <i class="fas fa-play-circle fa-lg text-white"></i>
                         </div>
                         <div class="flex-grow-1">
                             <h6 class="text-muted text-uppercase small fw-semibold mb-1" style="letter-spacing: 0.5px; font-size: 0.7rem;">Total Sessions</h6>
-                            <h3 class="fw-bold mb-0" style="color: #1e3a8a; font-size: 1.75rem;">{{ number_format($totalSessions) }}</h3>
+                            <h3 class="fw-bold mb-0" style="color: #c2410c; font-size: 1.75rem;">{{ number_format($totalSessions) }}</h3>
                         </div>
                     </div>
                 </div>
@@ -80,9 +80,9 @@
     </div>
 
     <!-- User Growth Chart -->
-    <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+    <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
         <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-3">
-            <h5 class="mb-0 fw-bold" style="color: #1e3a8a;">User Growth (Last 30 Days)</h5>
+            <h5 class="mb-0 fw-bold" style="color: #c2410c;">User Growth (Last 30 Days)</h5>
             <span class="text-muted small">New registrations</span>
         </div>
         <div class="card-body p-4">
@@ -91,9 +91,9 @@
     </div>
 
     <!-- Quick Actions -->
-    <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+    <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
         <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-3">
-            <h5 class="mb-0 fw-bold" style="color: #1e3a8a;">Quick Actions</h5>
+            <h5 class="mb-0 fw-bold" style="color: #c2410c;">Quick Actions</h5>
             <span class="text-muted small">Frequently used features</span>
         </div>
         <div class="card-body p-4">
@@ -103,7 +103,7 @@
                         <div class="card border-0 shadow-md h-100 action-card" style="background: white; transition: all 0.3s ease;">
                             <div class="card-body p-4">
                                 <div class="d-flex align-items-center">
-                                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-3 shadow-md me-3 flex-shrink-0" style="background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);">
+                                    <div class="bg-gradient-to-br from-[#ec682a] to-[#c2410c] rounded-xl p-3 shadow-md me-3 flex-shrink-0" style="background: linear-gradient(135deg, #ec682a 0%, #c2410c 100%);">
                                         <i class="fas fa-users fa-lg text-white"></i>
                                     </div>
                                     <div class="flex-grow-1">
@@ -122,7 +122,7 @@
                         <div class="card border-0 shadow-md h-100 action-card" style="background: white; transition: all 0.3s ease;">
                             <div class="card-body p-4">
                                 <div class="d-flex align-items-center">
-                                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-3 shadow-md me-3 flex-shrink-0" style="background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);">
+                                    <div class="rounded-xl p-3 shadow-md me-3 flex-shrink-0" style="background: linear-gradient(135deg, #ec682a 0%, #c2410c 100%);">
                                         <i class="fas fa-book fa-lg text-white"></i>
                                     </div>
                                     <div class="flex-grow-1">
@@ -141,7 +141,7 @@
                         <div class="card border-0 shadow-md h-100 action-card" style="background: white; transition: all 0.3s ease;">
                             <div class="card-body p-4">
                                 <div class="d-flex align-items-center">
-                                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-3 shadow-md me-3 flex-shrink-0" style="background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);">
+                                    <div class="rounded-xl p-3 shadow-md me-3 flex-shrink-0" style="background: linear-gradient(135deg, #ec682a 0%, #c2410c 100%);">
                                         <i class="fas fa-chart-line fa-lg text-white"></i>
                                     </div>
                                     <div class="flex-grow-1">
@@ -159,9 +159,9 @@
     </div>
 
     <!-- Recent Activity -->
-    <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+    <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
         <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-3">
-            <h5 class="mb-0 fw-bold" style="color: #1e3a8a;">Recent Activity</h5>
+            <h5 class="mb-0 fw-bold" style="color: #c2410c;">Recent Activity</h5>
             <a href="{{ route('admin.access-logs') }}" class="text-decoration-none small fw-semibold" style="color: #3b82f6;">View all <i class="fas fa-arrow-right"></i></a>
         </div>
         <div class="card-body p-4">

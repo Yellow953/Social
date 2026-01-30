@@ -12,9 +12,9 @@
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+            <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                 <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-3">
-                    <h5 class="mb-0 fw-bold" style="color: #1e3a8a;"><i class="fas fa-plus me-2" style="color: #3b82f6;"></i>Create New User</h5>
+                    <h5 class="mb-0 fw-bold" style="color: #c2410c;"><i class="fas fa-plus me-2" style="color: #ec682a;"></i>Create New User</h5>
                 </div>
                 <div class="card-body p-4">
                     <form method="POST" action="{{ route('admin.users.store') }}">

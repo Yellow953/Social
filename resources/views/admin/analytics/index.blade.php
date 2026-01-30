@@ -11,7 +11,7 @@
     <!-- Page Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="fw-bold mb-1" style="color: #1e3a8a;"><i class="fas fa-chart-line me-2" style="color: #3b82f6;"></i>Analytics</h2>
+            <h2 class="fw-bold mb-1" style="color: #c2410c;"><i class="fas fa-chart-line me-2" style="color: #ec682a;"></i>Analytics</h2>
             <p class="text-muted mb-0">Platform statistics and insights</p>
         </div>
         <div class="btn-group">
@@ -24,15 +24,15 @@
     <!-- Key Metrics -->
     <div class="row g-4 mb-4">
         <div class="col-md-3">
-            <div class="card border-0 shadow-lg h-100 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+            <div class="card border-0 shadow-lg h-100 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center gap-3">
-                        <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-3 shadow-md flex-shrink-0" style="background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);">
+                        <div class="bg-gradient-to-br from-[#ec682a] to-[#c2410c] rounded-xl p-3 shadow-md flex-shrink-0" style="background: linear-gradient(135deg, #ec682a 0%, #c2410c 100%);">
                             <i class="fas fa-users fa-lg text-white"></i>
                         </div>
                         <div class="flex-grow-1">
                             <h6 class="text-muted text-uppercase small fw-semibold mb-1" style="letter-spacing: 0.5px; font-size: 0.7rem;">Total Users</h6>
-                            <h3 class="fw-bold mb-0" style="color: #1e3a8a; font-size: 1.75rem;">{{ number_format($totalUsers) }}</h3>
+                            <h3 class="fw-bold mb-0" style="color: #c2410c; font-size: 1.75rem;">{{ number_format($totalUsers) }}</h3>
                         </div>
                     </div>
                 </div>
@@ -42,7 +42,7 @@
             <div class="card border-0 shadow-lg h-100 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center gap-3">
-                        <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-3 shadow-md flex-shrink-0" style="background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);">
+                        <div class="rounded-xl p-3 shadow-md flex-shrink-0" style="background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);">
                             <i class="fas fa-book fa-lg text-white"></i>
                         </div>
                         <div class="flex-grow-1">
@@ -54,15 +54,15 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card border-0 shadow-lg h-100 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+            <div class="card border-0 shadow-lg h-100 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center gap-3">
-                        <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-3 shadow-md flex-shrink-0" style="background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);">
+                        <div class="bg-gradient-to-br from-[#ec682a] to-[#c2410c] rounded-xl p-3 shadow-md flex-shrink-0" style="background: linear-gradient(135deg, #ec682a 0%, #c2410c 100%);">
                             <i class="fas fa-play-circle fa-lg text-white"></i>
                         </div>
                         <div class="flex-grow-1">
                             <h6 class="text-muted text-uppercase small fw-semibold mb-1" style="letter-spacing: 0.5px; font-size: 0.7rem;">Sessions Completed</h6>
-                            <h3 class="fw-bold mb-0" style="color: #1e3a8a; font-size: 1.75rem;">{{ number_format($sessionsCompleted) }}</h3>
+                            <h3 class="fw-bold mb-0" style="color: #c2410c; font-size: 1.75rem;">{{ number_format($sessionsCompleted) }}</h3>
                         </div>
                     </div>
                 </div>
@@ -72,7 +72,7 @@
             <div class="card border-0 shadow-lg h-100 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center gap-3">
-                        <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-3 shadow-md flex-shrink-0" style="background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);">
+                        <div class="rounded-xl p-3 shadow-md flex-shrink-0" style="background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);">
                             <i class="fas fa-clock fa-lg text-white"></i>
                         </div>
                         <div class="flex-grow-1">
@@ -88,9 +88,9 @@
     <!-- Charts Row -->
     <div class="row g-4 mb-4">
         <div class="col-lg-8">
-            <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+            <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                 <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-3">
-                    <h5 class="mb-0 fw-bold" style="color: #1e3a8a;">User Growth</h5>
+                    <h5 class="mb-0 fw-bold" style="color: #c2410c;">User Growth</h5>
                 </div>
                 <div class="card-body p-4">
                     <canvas id="userGrowthChart" height="100"></canvas>
@@ -98,9 +98,9 @@
             </div>
         </div>
         <div class="col-lg-4">
-            <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+            <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                 <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-3">
-                    <h5 class="mb-0 fw-bold" style="color: #1e3a8a;">User Distribution</h5>
+                    <h5 class="mb-0 fw-bold" style="color: #c2410c;">User Distribution</h5>
                 </div>
                 <div class="card-body p-4">
                     <canvas id="userDistributionChart"></canvas>
@@ -112,9 +112,9 @@
     <!-- Activity Stats -->
     <div class="row g-4">
         <div class="col-lg-6">
-            <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+            <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                 <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-3">
-                    <h5 class="mb-0 fw-bold" style="color: #1e3a8a;">Top Courses</h5>
+                    <h5 class="mb-0 fw-bold" style="color: #c2410c;">Top Courses</h5>
                 </div>
                 <div class="card-body p-4">
                     <div class="list-group list-group-flush">
@@ -147,9 +147,9 @@
             </div>
         </div>
         <div class="col-lg-6">
-            <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+            <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                 <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-3">
-                    <h5 class="mb-0 fw-bold" style="color: #1e3a8a;">Recent Activity</h5>
+                    <h5 class="mb-0 fw-bold" style="color: #c2410c;">Recent Activity</h5>
                 </div>
                 <div class="card-body p-4">
                     <div class="list-group list-group-flush">

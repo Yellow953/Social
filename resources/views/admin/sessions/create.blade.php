@@ -12,9 +12,9 @@
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-md-10">
-            <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+            <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                 <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-3">
-                    <h5 class="mb-0 fw-bold" style="color: #1e3a8a;"><i class="fas fa-plus me-2" style="color: #3b82f6;"></i>Create New Session</h5>
+                    <h5 class="mb-0 fw-bold" style="color: #c2410c;"><i class="fas fa-plus me-2" style="color: #ec682a;"></i>Create New Session</h5>
                 </div>
                 <div class="card-body p-4">
                     <form method="POST" action="{{ route('admin.sessions.store') }}" enctype="multipart/form-data">
@@ -126,7 +126,7 @@
                                 <label class="form-label fw-bold mb-3">Session Media Files</label>
                                 <div id="media-dropzone" class="dropzone-modern">
                                     <div class="dz-message">
-                                        <i class="fas fa-cloud-upload-alt fa-3x mb-3" style="color: #3b82f6;"></i>
+                                        <i class="fas fa-cloud-upload-alt fa-3x mb-3" style="color: #ec682a;"></i>
                                         <h5 class="mb-2">Drop files here or click to upload</h5>
                                         <p class="text-muted mb-0">Supported: PDF, Video (MP4, WebM, OGG, MOV, AVI), Images (JPG, PNG, GIF, WEBP)</p>
                                     </div>
@@ -159,7 +159,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dropzone@6.0.0-beta.2/dist/dropzone.css" />
 <style>
     .dropzone-modern {
-        border: 2px dashed #3b82f6 !important;
+        border: 2px dashed #ec682a !important;
         border-radius: 12px;
         background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
         padding: 40px 20px;
@@ -172,7 +172,7 @@
     }
 
     .dropzone-modern:hover {
-        border-color: #2563eb !important;
+        border-color: #d45a20 !important;
         background: linear-gradient(135deg, #f1f5f9 0%, #ffffff 100%);
     }
 
@@ -210,7 +210,7 @@
 
     .dropzone-modern .dz-preview .dz-filename {
         font-weight: 600;
-        color: #1e3a8a;
+        color: #c2410c;
     }
 
     .dropzone-modern .dz-preview .dz-size {
@@ -226,7 +226,7 @@
     }
 
     .dropzone-modern .dz-preview .dz-progress .dz-upload {
-        background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+        background: linear-gradient(90deg, #ec682a 0%, #c2410c 100%);
         border-radius: 4px;
     }
 

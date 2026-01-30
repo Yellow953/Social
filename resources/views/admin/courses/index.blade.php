@@ -12,7 +12,7 @@
     <!-- Page Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="fw-bold mb-1" style="color: #1e3a8a;"><i class="fas fa-book-open me-2" style="color: #3b82f6;"></i>Courses Management</h2>
+            <h2 class="fw-bold mb-1" style="color: #c2410c;"><i class="fas fa-book-open me-2" style="color: #ec682a;"></i>Courses Management</h2>
             <p class="text-muted mb-0">Manage all courses in the platform</p>
         </div>
         <a href="{{ route('admin.courses.create') }}" class="btn btn-primary">
@@ -35,9 +35,9 @@
     @endif
 
     <!-- Courses Table -->
-    <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+    <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
         <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-3">
-            <h5 class="mb-0 fw-bold" style="color: #1e3a8a;">All Courses</h5>
+            <h5 class="mb-0 fw-bold" style="color: #c2410c;">All Courses</h5>
         </div>
         <div class="card-body p-4">
             <div class="table-responsive">

@@ -12,7 +12,7 @@
         <div class="col-xl-10">
             <div class="d-flex flex-column flex-md-row align-items-center justify-content-between gap-3 mb-4">
                 <div>
-                    <h2 class="fw-bold mb-1" style="color: #1e3a8a;">University Grade Calculator</h2>
+                    <h2 class="fw-bold mb-1" style="color: #c2410c;">University Grade Calculator</h2>
                     <p class="text-muted small mb-0">Midterm, final &amp; TP — weighted average</p>
                 </div>
                 <div class="d-flex align-items-center gap-2">
@@ -29,10 +29,10 @@
             <div class="row g-4">
                 <!-- Input panel -->
                 <div class="col-lg-6">
-                    <div class="card border-0 shadow-lg h-100 calculator-card" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+                    <div class="card border-0 shadow-lg h-100 calculator-card" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                         <div class="card-header bg-transparent border-0 pb-0 pt-4 px-4">
-                            <h5 class="mb-0 fw-bold" style="color: #1e3a8a;">
-                                <i class="fas fa-edit me-2" style="color: #3b82f6;"></i>Input Scores
+                            <h5 class="mb-0 fw-bold" style="color: #c2410c;">
+                                <i class="fas fa-edit me-2" style="color: #ec682a;"></i>Input Scores
                             </h5>
                         </div>
                         <div class="card-body p-4">
@@ -50,10 +50,10 @@
                                             <tr class="exam-row">
                                                 <td class="py-3">
                                                     <div class="d-flex align-items-center">
-                                                        <div class="exam-icon me-2" style="width: 32px; height: 32px; background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                                        <div class="exam-icon me-2" style="width: 32px; height: 32px; background: linear-gradient(135deg, #ec682a 0%, #c2410c 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
                                                             <i class="fas fa-file-alt text-white small"></i>
                                                         </div>
-                                                        <span class="fw-semibold" style="color: #1e3a8a;">Midterm</span>
+                                                        <span class="fw-semibold" style="color: #c2410c;">Midterm</span>
                                                     </div>
                                                 </td>
                                                 <td class="py-3 text-end">
@@ -72,10 +72,10 @@
                                             <tr class="exam-row">
                                                 <td class="py-3">
                                                     <div class="d-flex align-items-center">
-                                                        <div class="exam-icon me-2" style="width: 32px; height: 32px; background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                                        <div class="exam-icon me-2" style="width: 32px; height: 32px; background: linear-gradient(135deg, #ec682a 0%, #c2410c 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
                                                             <i class="fas fa-flask text-white small"></i>
                                                         </div>
-                                                        <span class="fw-semibold" style="color: #1e3a8a;">TP</span>
+                                                        <span class="fw-semibold" style="color: #c2410c;">TP</span>
                                                     </div>
                                                 </td>
                                                 <td class="py-3 text-end">
@@ -94,10 +94,10 @@
                                             <tr class="exam-row">
                                                 <td class="py-3">
                                                     <div class="d-flex align-items-center">
-                                                        <div class="exam-icon me-2" style="width: 32px; height: 32px; background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                                        <div class="exam-icon me-2" style="width: 32px; height: 32px; background: linear-gradient(135deg, #ec682a 0%, #c2410c 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
                                                             <i class="fas fa-graduation-cap text-white small"></i>
                                                         </div>
-                                                        <span class="fw-semibold" style="color: #1e3a8a;">Final</span>
+                                                        <span class="fw-semibold" style="color: #c2410c;">Final</span>
                                                     </div>
                                                 </td>
                                                 <td class="py-3 text-end">
@@ -119,12 +119,12 @@
                                 <div class="d-flex align-items-center justify-content-between mt-4 pt-3" style="border-top: 2px solid #e5e7eb;">
                                     <div>
                                         <small class="text-muted d-block">Weights total</small>
-                                        <strong id="totalPercent" style="color: #1e3a8a; font-size: 1.1rem;">100</strong><small class="text-muted">%</small>
+                                        <strong id="totalPercent" style="color: #c2410c; font-size: 1.1rem;">100</strong><small class="text-muted">%</small>
                                     </div>
                                     <span id="percentWarning" class="text-danger small d-none">
                                         <i class="fas fa-exclamation-triangle me-1"></i>Must equal 100%
                                     </span>
-                                    <button type="button" class="btn px-4 py-2 fw-semibold" id="btnCalculate" onclick="calculateGrade()" style="background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%); color: white; border-radius: 8px; border: none;">
+                                    <button type="button" class="btn px-4 py-2 fw-semibold" id="btnCalculate" onclick="calculateGrade()" style="background: linear-gradient(135deg, #ec682a 0%, #c2410c 100%); color: white; border-radius: 8px; border: none;">
                                         <i class="fas fa-calculator me-2"></i>Calculate
                                     </button>
                                 </div>
@@ -137,7 +137,7 @@
                 <div class="col-lg-6">
                     <div class="card border-0 shadow-lg h-100 result-card" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                         <div class="card-header bg-transparent border-0 pb-0 pt-4 px-4">
-                            <h5 class="mb-0 fw-bold" style="color: #1e3a8a;">
+                            <h5 class="mb-0 fw-bold" style="color: #c2410c;">
                                 <i class="fas fa-chart-line me-2" style="color: #ec682a;"></i>Result
                             </h5>
                         </div>
@@ -154,21 +154,21 @@
                                 <div class="text-center mb-4 pb-3" style="border-bottom: 2px solid #e5e7eb;">
                                     <p class="text-muted small mb-2 fw-semibold text-uppercase" style="letter-spacing: 1px;">Final Grade</p>
                                     <div class="d-flex align-items-baseline justify-content-center gap-2">
-                                        <span class="display-3 fw-bold" id="finalGrade" style="color: #1e3a8a; line-height: 1;">0.00</span>
+                                        <span class="display-3 fw-bold" id="finalGrade" style="color: #c2410c; line-height: 1;">0.00</span>
                                         <span class="fs-3 text-muted fw-normal" id="gradeOutOf">/ 20</span>
                                     </div>
                                     <div class="d-flex justify-content-center gap-4 mt-3 flex-wrap">
                                         <div>
                                             <span class="text-muted small">USJ Rank (Letter)</span>
-                                            <span class="d-block fw-bold fs-4" id="gpaLetter" style="color: #1e3a8a;">—</span>
+                                            <span class="d-block fw-bold fs-4" id="gpaLetter" style="color: #c2410c;">—</span>
                                         </div>
                                         <div>
                                             <span class="text-muted small">Rank Value / GPA</span>
-                                            <span class="d-block fw-bold fs-4" id="gpaNumeric" style="color: #1e3a8a;">—</span>
+                                            <span class="d-block fw-bold fs-4" id="gpaNumeric" style="color: #c2410c;">—</span>
                                         </div>
                                         <div>
                                             <span class="text-muted small">Definition</span>
-                                            <span class="d-block fw-bold small" id="gpaDefinition" style="color: #1e3a8a;">—</span>
+                                            <span class="d-block fw-bold small" id="gpaDefinition" style="color: #c2410c;">—</span>
                                         </div>
                                     </div>
                                 </div>
@@ -177,19 +177,19 @@
                                     <div class="breakdown-item mb-2 pb-2" style="border-bottom: 1px solid #f3f4f6;">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <span class="small fw-medium">Midterm</span>
-                                            <span class="fw-bold" id="midtermContribution" style="color: #3b82f6;">0</span>
+                                            <span class="fw-bold" id="midtermContribution" style="color: #ec682a;">0</span>
                                         </div>
                                     </div>
                                     <div class="breakdown-item mb-2 pb-2" style="border-bottom: 1px solid #f3f4f6;">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <span class="small fw-medium">TP</span>
-                                            <span class="fw-bold" id="tpContribution" style="color: #3b82f6;">0</span>
+                                            <span class="fw-bold" id="tpContribution" style="color: #ec682a;">0</span>
                                         </div>
                                     </div>
                                     <div class="breakdown-item mb-3">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <span class="small fw-medium">Final</span>
-                                            <span class="fw-bold" id="finalContribution" style="color: #3b82f6;">0</span>
+                                            <span class="fw-bold" id="finalContribution" style="color: #ec682a;">0</span>
                                         </div>
                                     </div>
                                 </div>
@@ -233,7 +233,7 @@
     }
     
     .form-control:focus {
-        border-color: #3b82f6 !important;
+        border-color: #ec682a !important;
         box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.15) !important;
     }
     

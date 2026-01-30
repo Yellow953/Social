@@ -12,7 +12,7 @@
     <!-- Page Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="fw-bold mb-1" style="color: #1e3a8a;"><i class="fas fa-users me-2" style="color: #3b82f6;"></i>Users Management</h2>
+            <h2 class="fw-bold mb-1" style="color: #c2410c;"><i class="fas fa-users me-2" style="color: #ec682a;"></i>Users Management</h2>
             <p class="text-muted mb-0">Manage all platform users</p>
         </div>
         <a href="{{ route('admin.users.create') }}" class="btn btn-primary">
@@ -35,9 +35,9 @@
     @endif
 
     <!-- Users Table -->
-    <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #3b82f6 !important;">
+    <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
         <div class="card-header bg-white border-bottom d-flex flex-wrap align-items-center justify-content-between gap-2 py-3">
-            <h5 class="mb-0 fw-bold" style="color: #1e3a8a;">All Users</h5>
+            <h5 class="mb-0 fw-bold" style="color: #c2410c;">All Users</h5>
             <div class="d-flex align-items-center">
                 <label class="me-2 mb-0 small text-muted">Search:</label>
                 <input type="search" id="usersTableSearch" class="form-control form-control-sm" placeholder="Search users..." style="width: 220px;">
@@ -67,7 +67,7 @@
                                         <span class="text-white fw-bold" style="font-size: 0.9rem;">{{ strtoupper(substr($user->name, 0, 1)) }}</span>
                                     </div>
                                     <div>
-                                        <h6 class="mb-0 fw-bold" style="color: #1e3a8a;">{{ $user->name }}</h6>
+                                        <h6 class="mb-0 fw-bold" style="color: #c2410c;">{{ $user->name }}</h6>
                                         <small class="text-muted">ID: {{ $user->id }}</small>
                                     </div>
                                 </div>
@@ -117,8 +117,8 @@
                             <td class="text-end">
                                 <div class="d-flex gap-2 justify-content-end">
                                     @if(!$user->activeSubscription() && $user->role !== 'admin')
-                                        <button type="button" 
-                                                class="btn btn-sm btn-success quick-subscription-btn shadow-sm" 
+                                        <button type="button"
+                                                class="btn btn-sm btn-success quick-subscription-btn shadow-sm"
                                                 data-user-id="{{ $user->id }}"
                                                 data-user-name="{{ $user->name }}"
                                                 title="Create 1 Year Subscription"
@@ -157,29 +157,29 @@
         border-collapse: separate;
         border-spacing: 0;
     }
-    
+
     #usersTable tbody tr {
         transition: all 0.2s ease;
         border-bottom: 1px solid #e5e7eb;
     }
-    
+
     #usersTable tbody tr.table-row-hover:hover {
         background-color: #f8fafc !important;
         transform: scale(1.01);
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     }
-    
+
     #usersTable tbody td {
         padding: 1rem 0.75rem;
         vertical-align: middle;
         border: none;
     }
-    
+
     #usersTable thead th {
         padding: 1rem 0.75rem;
         border: none;
     }
-    
+
     #usersTable thead th {
         background: #f8f9fa !important;
         color: #212529 !important;
@@ -193,43 +193,43 @@
         padding: 0.5rem 1rem;
         transition: all 0.3s ease;
     }
-    
+
     .dataTables_wrapper .dataTables_filter input:focus {
-        border-color: #3b82f6;
+        border-color: #ec682a;
         outline: none;
         box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
     }
-    
+
     .dataTables_wrapper .dataTables_length select {
         border: 2px solid #e5e7eb;
         border-radius: 0.5rem;
         padding: 0.5rem;
         transition: all 0.3s ease;
     }
-    
+
     .dataTables_wrapper .dataTables_length select:focus {
-        border-color: #3b82f6;
+        border-color: #ec682a;
         outline: none;
         box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
     }
-    
+
     .dataTables_wrapper .dataTables_paginate .paginate_button {
         border-radius: 0.5rem;
         margin: 0 2px;
         padding: 0.5rem 0.75rem;
     }
-    
+
     .dataTables_wrapper .dataTables_paginate .paginate_button.current {
-        background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%) !important;
+        background: linear-gradient(135deg, #ec682a 0%, #c2410c 100%) !important;
         color: white !important;
         border: none;
     }
-    
+
     .dataTables_wrapper .dataTables_info {
         color: #6b7280;
         padding-top: 1rem;
     }
-    
+
     /* Quick Subscription Button */
     .quick-subscription-btn {
         background: linear-gradient(135deg, #10b981 0%, #059669 100%);
@@ -237,14 +237,14 @@
         color: white;
         transition: all 0.3s ease;
     }
-    
+
     .quick-subscription-btn:hover {
         background: linear-gradient(135deg, #059669 0%, #047857 100%);
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         color: white;
     }
-    
+
     .quick-subscription-btn:disabled {
         opacity: 0.6;
         cursor: not-allowed;
@@ -288,7 +288,7 @@
         $('#usersTableSearch').on('keyup', function() {
             table.search(this.value).draw();
         });
-        
+
         function doQuickSubscription(btn, userId) {
             btn.prop('disabled', true);
             btn.html('<i class="fas fa-spinner fa-spin"></i>');
@@ -316,7 +316,7 @@
                 }
             });
         }
-        
+
         function attachQuickSubscriptionHandlers() {
             $('.quick-subscription-btn').off('click').on('click', function() {
                 var btn = $(this);
@@ -339,7 +339,7 @@
                 }
             });
         }
-        
+
         // Initial attachment
         attachQuickSubscriptionHandlers();
     });
