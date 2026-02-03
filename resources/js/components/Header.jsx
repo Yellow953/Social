@@ -33,7 +33,7 @@ export default function Header({ activeTab }) {
                             alt="ESIB Social"
                             className="w-12 h-12 object-contain group-hover:scale-110 transition-transform"
                         />
-                        <span className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-[#1e3a8a] to-[#3b82f6] bg-clip-text text-transparent">
+                        <span className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-[#1a2744] to-[#243b55] bg-clip-text text-transparent">
                             ESIB SOCIAL
                         </span>
                     </Link>

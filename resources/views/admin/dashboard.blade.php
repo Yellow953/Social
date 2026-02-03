@@ -9,7 +9,7 @@
 @section('content')
 <div class="d-flex flex-column gap-4">
     <!-- Welcome Section -->
-    <div class="card border-0 shadow-sm text-white overflow-hidden" style="background: linear-gradient(180deg, #1a1a1a 0%, #2d2d2d 100%); position: relative;">
+    <div class="card border-0 shadow-sm text-white overflow-hidden" style="background: #1a2744; position: relative;">
         <div class="card-body p-4">
             <div class="row align-items-center">
                 <div class="col-md-8">
@@ -18,8 +18,7 @@
                 </div>
                 <div class="col-md-4 text-end d-none d-md-block">
                     <div class="position-relative" style="width: 120px; height: 120px; margin-left: auto;">
-                        <div class="bg-gradient-to-br from-[#1e3a8a] to-[#3b82f6] rounded-circle d-flex align-items-center justify-content-center shadow-lg"
-                             style="width: 120px; height: 120px;">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center shadow-lg" style="width: 120px; height: 120px; background: linear-gradient(135deg, #ec682a 0%, #c2410c 100%);">
                             <span class="text-white fw-bold" style="font-size: 3rem;">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
                         </div>
                     </div>
@@ -182,8 +181,7 @@
                                 <tr>
                                     <td>
                                         <div class="d-flex align-items-center">
-                                            <div class="bg-gradient-to-br from-[#1e3a8a] to-[#3b82f6] rounded-circle d-flex align-items-center justify-content-center me-2"
-                                                 style="width: 32px; height: 32px;">
+                                            <div class="rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px; background: linear-gradient(135deg, #ec682a 0%, #c2410c 100%);">
                                                 <span class="text-white small fw-bold">{{ substr($activity->user->name, 0, 1) }}</span>
                                             </div>
                                             <div>

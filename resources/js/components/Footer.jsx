@@ -25,7 +25,7 @@ export default function Footer() {
 
     return (
         <motion.footer
-            className="bg-gradient-to-br from-[#1e3a8a] via-[#3b82f6] to-[#1e3a8a] py-10 sm:py-12 md:py-16 px-4 border-t-4 border-[#ec682a] overflow-visible"
+            className="bg-gradient-to-br from-[#1a2744] via-[#243b55] to-[#1a2744] py-10 sm:py-12 md:py-16 px-4 border-t-4 border-[#ec682a] overflow-visible"
             style={{
                 borderTopLeftRadius: "3rem",
                 borderTopRightRadius: "3rem",
@@ -73,7 +73,7 @@ export default function Footer() {
                             <li>
                                 <Link
                                     href="/"
-                                    className="text-white/80 hover:text-white transition-colors text-xs sm:text-sm no-underline"
+                                    className="!text-white hover:opacity-90 transition-colors text-xs sm:text-sm no-underline"
                                 >
                                     Home
                                 </Link>
@@ -81,7 +81,7 @@ export default function Footer() {
                             <li>
                                 <Link
                                     href="/about"
-                                    className="text-white/80 hover:text-white transition-colors text-xs sm:text-sm no-underline"
+                                    className="!text-white hover:opacity-90 transition-colors text-xs sm:text-sm no-underline"
                                 >
                                     About
                                 </Link>
@@ -89,7 +89,7 @@ export default function Footer() {
                             <li>
                                 <Link
                                     href="/academique"
-                                    className="text-white/80 hover:text-white transition-colors text-xs sm:text-sm no-underline"
+                                    className="!text-white hover:opacity-90 transition-colors text-xs sm:text-sm no-underline"
                                 >
                                     Académique
                                 </Link>
@@ -97,7 +97,7 @@ export default function Footer() {
                             <li>
                                 <Link
                                     href="/calculatrice"
-                                    className="text-white/80 hover:text-white transition-colors text-xs sm:text-sm no-underline"
+                                    className="!text-white hover:opacity-90 transition-colors text-xs sm:text-sm no-underline"
                                 >
                                     Calculatrice
                                 </Link>
@@ -114,7 +114,7 @@ export default function Footer() {
                             <li>
                                 <a
                                     href="/login"
-                                    className="text-white/80 hover:text-white transition-colors text-xs sm:text-sm no-underline"
+                                    className="!text-white hover:opacity-90 transition-colors text-xs sm:text-sm no-underline"
                                 >
                                     Login
                                 </a>
@@ -122,7 +122,7 @@ export default function Footer() {
                             <li>
                                 <a
                                     href="/register"
-                                    className="text-white/80 hover:text-white transition-colors text-xs sm:text-sm no-underline"
+                                    className="!text-white hover:opacity-90 transition-colors text-xs sm:text-sm no-underline"
                                 >
                                     Sign Up
                                 </a>
@@ -130,7 +130,7 @@ export default function Footer() {
                             <li>
                                 <a
                                     href="/calculator"
-                                    className="text-white/80 hover:text-white transition-colors text-xs sm:text-sm no-underline"
+                                    className="!text-white hover:opacity-90 transition-colors text-xs sm:text-sm no-underline"
                                 >
                                     Calculator
                                 </a>
@@ -138,7 +138,7 @@ export default function Footer() {
                             <li>
                                 <a
                                     href="/subscriptions"
-                                    className="text-white/80 hover:text-white transition-colors text-xs sm:text-sm no-underline"
+                                    className="!text-white hover:opacity-90 transition-colors text-xs sm:text-sm no-underline"
                                 >
                                     SOCIALPLUS
                                 </a>
@@ -202,19 +202,19 @@ export default function Footer() {
                         <div className="flex flex-wrap justify-center sm:justify-end gap-4 sm:gap-6 text-xs sm:text-sm">
                             <a
                                 href="/privacy"
-                                className="text-white/70 hover:text-white transition-colors no-underline"
+                                className="!text-white hover:opacity-90 transition-colors no-underline"
                             >
                                 Privacy Policy
                             </a>
                             <a
                                 href="/terms"
-                                className="text-white/70 hover:text-white transition-colors no-underline"
+                                className="!text-white hover:opacity-90 transition-colors no-underline"
                             >
                                 Terms of Service
                             </a>
                             <a
                                 href="/cookie-policy"
-                                className="text-white/70 hover:text-white transition-colors no-underline"
+                                className="!text-white hover:opacity-90 transition-colors no-underline"
                             >
                                 Cookie Policy
                             </a>

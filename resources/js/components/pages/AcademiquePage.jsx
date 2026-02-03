@@ -71,7 +71,7 @@ export default function AcademiquePage() {
 
     return (
         <motion.section
-            className="min-h-screen px-4 py-12 sm:py-16 md:py-20 pt-24 sm:pt-28 md:pt-32 bg-gradient-to-br from-blue-50 via-white to-orange-50"
+            className="min-h-screen px-4 py-12 sm:py-16 md:py-20 pt-24 sm:pt-28 md:pt-32 bg-gradient-to-br from-[#eef1f7] via-white to-orange-50"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6 }}
@@ -176,7 +176,7 @@ export default function AcademiquePage() {
                         >
                             {/* Header Card */}
                             <motion.div
-                                className="bg-gradient-to-r from-[#1e3a8a] to-[#3b82f6] rounded-2xl p-6 sm:p-8 text-white shadow-2xl"
+                                className="bg-gradient-to-r from-[#1a2744] to-[#243b55] rounded-2xl p-6 sm:p-8 text-white shadow-2xl"
                                 initial={{ opacity: 0, y: -20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.5 }}
@@ -212,7 +212,7 @@ export default function AcademiquePage() {
                                             }}
                                         >
                                             <div className="flex items-start justify-between mb-4">
-                                                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+                                                <div className="w-12 h-12 bg-gradient-to-br from-[#1a2744] to-[#243b55] rounded-xl flex items-center justify-center">
                                                     <i className="fas fa-book text-white"></i>
                                                 </div>
                                                 <span className="text-xs font-semibold text-[#ec682a] bg-orange-50 px-3 py-1 rounded-full">
@@ -235,7 +235,7 @@ export default function AcademiquePage() {
 
                             {/* Materials Section */}
                             <motion.div
-                                className="bg-gradient-to-br from-white to-blue-50 rounded-2xl shadow-xl p-6 sm:p-8 border-2 border-orange-200"
+                                className="bg-gradient-to-br from-white to-[#eef1f7] rounded-2xl shadow-xl p-6 sm:p-8 border-2 border-orange-200"
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.5, delay: 0.3 }}

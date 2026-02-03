@@ -1,13 +1,13 @@
 <!-- Header -->
 <header class="bg-white shadow-sm sticky-top" style="z-index: 100;">
-    <div class="d-flex align-items-center justify-content-between px-4 py-3">
-        <div class="d-flex align-items-center">
-            <button class="btn btn-sm text-[#5c5c5c] d-md-none me-3" id="mobile-sidebar-toggle">
+    <div class="d-flex align-items-center justify-content-between px-3 px-md-4 py-2 py-md-3">
+        <div class="d-flex align-items-center min-w-0 flex-grow-1">
+            <button class="btn btn-sm text-[#5c5c5c] d-md-none me-2 flex-shrink-0" id="mobile-sidebar-toggle" type="button" aria-label="Open menu">
                 <i class="fas fa-bars"></i>
             </button>
             <!-- Breadcrumb -->
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb mb-0">
+            <nav aria-label="breadcrumb" class="min-w-0">
+                <ol class="breadcrumb mb-0 flex-nowrap text-truncate">
                     @if(auth()->user()->isAdmin())
                         <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}" class="text-decoration-none text-[#5c5c5c]">Admin Dashboard</a></li>
                     @else
@@ -19,7 +19,7 @@
                 </ol>
             </nav>
         </div>
-        <div class="d-flex align-items-center gap-3">
+        <div class="d-flex align-items-center gap-2 gap-md-3 flex-shrink-0">
             <!-- Notifications -->
             <a href="{{ route('notifications.index') }}" class="btn btn-sm position-relative text-[#5c5c5c] text-decoration-none">
                 <i class="fas fa-bell"></i>
@@ -32,7 +32,7 @@
             <!-- User Menu -->
             <div class="dropdown">
                 <button class="btn btn-sm d-flex align-items-center text-[#5c5c5c] dropdown-toggle" type="button" id="userMenu" data-bs-toggle="dropdown">
-                    <div class="bg-gradient-to-br from-[#1e3a8a] to-[#3b82f6] rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px; background: linear-gradient(135deg, #ec682a 0%, #c2410c 100%);">
                         <span class="text-white fw-bold small">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
                     </div>
                     <span class="d-none d-md-inline">{{ auth()->user()->name }}</span>

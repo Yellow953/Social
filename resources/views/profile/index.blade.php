@@ -20,7 +20,7 @@
             <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                 <div class="card-body text-center p-4">
                     <div class="mb-3">
-                        <div class="bg-gradient-to-br from-[#1e3a8a] to-[#3b82f6] rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 120px; height: 120px;">
+                        <div class="rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 120px; height: 120px; background: linear-gradient(135deg, #ec682a 0%, #c2410c 100%);">
                             <span class="text-white fw-bold" style="font-size: 3rem;">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
                         </div>
                     </div>
@@ -49,7 +49,7 @@
         <!-- Profile Content -->
         <div class="col-lg-8">
             <!-- Personal Information -->
-            <div class="card border-0 shadow-lg mb-4 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
+            <!-- <div class="card border-0 shadow-lg mb-4 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                 <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-3">
                     <h5 class="mb-0 fw-bold" style="color: #c2410c;"><i class="fas fa-user me-2" style="color: #ec682a;"></i>Personal Information</h5>
                 </div>
@@ -77,7 +77,7 @@
                         </div>
                     </form>
                 </div>
-            </div>
+            </div> -->
 
             <!-- Change Password -->
             <div class="card border-0 shadow-sm mb-4" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">

@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 export default function CalculatricePage() {
     return (
         <motion.section
-            className="min-h-screen px-4 py-12 sm:py-16 md:py-20 pt-24 sm:pt-28 md:pt-32 bg-gradient-to-br from-blue-50 via-white to-orange-50"
+            className="min-h-screen px-4 py-12 sm:py-16 md:py-20 pt-24 sm:pt-28 md:pt-32 bg-gradient-to-br from-[#eef1f7] via-white to-orange-50"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6 }}
@@ -85,7 +85,7 @@ export default function CalculatricePage() {
                                 transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
                                 whileHover={{ scale: 1.05 }}
                             >
-                                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mx-auto mb-3">
+                                <div className="w-12 h-12 bg-gradient-to-br from-[#1a2744] to-[#243b55] rounded-lg flex items-center justify-center mx-auto mb-3">
                                     <i
                                         className={`${feature.icon} text-white`}
                                     ></i>
@@ -104,7 +104,7 @@ export default function CalculatricePage() {
                     <div className="text-center">
                         <motion.a
                             href="/calculator"
-                            className="inline-flex items-center space-x-2 px-8 py-4 bg-gradient-to-r from-[#1e3a8a] to-[#3b82f6] text-white font-bold rounded-xl hover:shadow-xl transition-all no-underline"
+                            className="inline-flex items-center space-x-2 px-8 py-4 bg-gradient-to-r from-[#1a2744] to-[#243b55] text-white font-bold rounded-xl hover:shadow-xl transition-all no-underline"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                         >

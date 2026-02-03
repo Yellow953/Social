@@ -54,7 +54,7 @@ export default function AboutPage() {
 
     return (
         <motion.section
-            className="min-h-screen px-4 py-12 sm:py-16 md:py-20 pt-24 sm:pt-28 md:pt-32 bg-gradient-to-br from-blue-50 via-white to-orange-50"
+            className="min-h-screen px-4 py-12 sm:py-16 md:py-20 pt-24 sm:pt-28 md:pt-32 bg-gradient-to-br from-[#eef1f7] via-white to-orange-50"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6 }}
@@ -103,11 +103,11 @@ export default function AboutPage() {
                         return (
                         <motion.div
                             key={index}
-                            className={`bg-white rounded-2xl p-6 sm:p-8 shadow-lg border-2 border-gray-100 transition-all text-center ${isOrange ? "hover:border-[#ec682a]" : "hover:border-blue-500"}`}
+                            className={`bg-white rounded-2xl p-6 sm:p-8 shadow-lg border-2 border-gray-100 transition-all text-center ${isOrange ? "hover:border-[#ec682a]" : "hover:border-[#1a2744]"}`}
                             variants={itemVariants}
                             whileHover={{ scale: 1.05, y: -5 }}
                         >
-                            <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-xl flex items-center justify-center mx-auto mb-3 sm:mb-4 ${isOrange ? "bg-gradient-to-br from-[#ec682a] to-[#c2410c]" : "bg-gradient-to-br from-blue-500 to-blue-600"}`}>
+                            <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-xl flex items-center justify-center mx-auto mb-3 sm:mb-4 ${isOrange ? "bg-gradient-to-br from-[#ec682a] to-[#c2410c]" : "bg-gradient-to-br from-[#1a2744] to-[#243b55]"}`}>
                                 <i
                                     className={`${stat.icon} text-white text-lg sm:text-2xl`}
                                 ></i>
@@ -131,11 +131,11 @@ export default function AboutPage() {
                     animate="visible"
                 >
                     <motion.div
-                        className="bg-gradient-to-br from-white to-blue-50 rounded-3xl shadow-2xl p-8 sm:p-10 border-2 border-blue-200 relative overflow-hidden"
+                        className="bg-gradient-to-br from-white to-[#eef1f7] rounded-3xl shadow-2xl p-8 sm:p-10 border-2 border-[#1a2744]/20 relative overflow-hidden"
                         variants={itemVariants}
                         whileHover={{ scale: 1.02, y: -5 }}
                     >
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-400/20 to-transparent rounded-bl-full"></div>
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#1a2744]/20 to-transparent rounded-bl-full"></div>
                         <div className="relative z-10">
                             <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-[#ec682a] to-[#d45a20] rounded-2xl flex items-center justify-center mb-6 shadow-lg">
                                 <i className="fas fa-bullseye text-white text-2xl sm:text-3xl"></i>
@@ -193,7 +193,7 @@ export default function AboutPage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.6 }}
                 >
-                    <div className="bg-gradient-to-r from-[#1e3a8a] to-[#3b82f6] rounded-2xl p-8 sm:p-12 shadow-2xl">
+                    <div className="bg-gradient-to-r from-[#1a2744] to-[#243b55] rounded-2xl p-8 sm:p-12 shadow-2xl">
                         <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4 sm:mb-6">
                             Ready to Start Your Learning Journey?
                         </h3>
@@ -204,7 +204,7 @@ export default function AboutPage() {
                         <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
                             <motion.a
                                 href="/register"
-                                className="px-4 py-2 bg-white text-[#1e3a8a] font-bold rounded-xl hover:shadow-xl transition-all no-underline text-lg"
+                                className="px-4 py-2 bg-white text-[#1a2744] font-bold rounded-xl hover:shadow-xl transition-all no-underline text-lg"
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                             >

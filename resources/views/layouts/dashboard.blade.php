@@ -23,18 +23,21 @@
     <!-- Page-specific styles -->
     @stack('styles')
 </head>
-<body class="bg-gray-50">
-    <div class="d-flex">
+<body class="bg-gray-50 overflow-x-hidden">
+    <div class="d-flex min-vh-100">
         <!-- Sidebar -->
         @include('partials.dashboard.sidebar')
 
+        <!-- Mobile sidebar overlay -->
+        <div class="sidebar-overlay d-md-none" id="sidebar-overlay" aria-hidden="true"></div>
+
         <!-- Main Content -->
-        <div class="main-content flex-grow-1" id="main-content">
+        <div class="main-content flex-grow-1 d-flex flex-column min-vw-0" id="main-content">
             <!-- Header -->
             @include('partials.dashboard.header')
 
             <!-- Page Content -->
-            <main class="p-4">
+            <main class="p-3 p-md-4 flex-grow-1">
                 @yield('content')
             </main>
         </div>

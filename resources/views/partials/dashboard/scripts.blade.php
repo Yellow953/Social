@@ -90,17 +90,35 @@
         });
     }
 
-    if (mobileSidebarToggle) {
-        mobileSidebarToggle.addEventListener('click', function() {
+    const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+    function toggleMobileSidebar() {
+        if (window.innerWidth <= 767.98) {
             sidebar.classList.toggle('show');
+            if (sidebarOverlay) sidebarOverlay.classList.toggle('show', sidebar.classList.contains('show'));
+            document.body.classList.toggle('overflow-hidden', sidebar.classList.contains('show'));
+        }
+    }
+
+    if (mobileSidebarToggle) {
+        mobileSidebarToggle.addEventListener('click', toggleMobileSidebar);
+    }
+
+    if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', function() {
+            sidebar.classList.remove('show');
+            sidebarOverlay.classList.remove('show');
+            document.body.classList.remove('overflow-hidden');
         });
     }
 
     // Close sidebar on mobile when clicking outside
     document.addEventListener('click', function(event) {
-        if (window.innerWidth <= 768) {
-            if (!sidebar.contains(event.target) && !mobileSidebarToggle.contains(event.target) && sidebar.classList.contains('show')) {
+        if (window.innerWidth <= 767.98) {
+            if (!sidebar.contains(event.target) && mobileSidebarToggle && !mobileSidebarToggle.contains(event.target) && sidebar.classList.contains('show')) {
                 sidebar.classList.remove('show');
+                if (sidebarOverlay) sidebarOverlay.classList.remove('show');
+                document.body.classList.remove('overflow-hidden');
             }
         }
     });

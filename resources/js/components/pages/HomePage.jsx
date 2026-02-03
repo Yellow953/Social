@@ -74,7 +74,7 @@ export default function HomePage() {
                 className="relative py-12 sm:py-16 md:py-24 px-4 overflow-hidden"
                 style={{
                     background:
-                        "linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #60a5fa 100%)",
+                        "linear-gradient(135deg, #1a2744 0%, #243b55 50%, #2a3f5c 100%)",
                     paddingTop: "7rem",
                 }}
                 initial={{ opacity: 0 }}
@@ -376,7 +376,7 @@ export default function HomePage() {
 
             {/* Features Section */}
             <motion.section
-                className="py-12 sm:py-16 md:py-24 px-4 bg-gradient-to-br from-gray-50 via-white to-blue-50"
+                className="py-12 sm:py-16 md:py-24 px-4 bg-gradient-to-br from-gray-50 via-white to-[#eef1f7]"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true, margin: "-100px" }}
@@ -443,11 +443,11 @@ export default function HomePage() {
                             return (
                             <motion.div
                                 key={index}
-                                className={`group bg-white rounded-2xl p-6 sm:p-8 border-2 border-gray-200 transition-all shadow-md hover:shadow-2xl transform hover:-translate-y-2 ${isOrange ? "hover:border-[#ec682a]" : "hover:border-blue-500"}`}
+                                className={`group bg-white rounded-2xl p-6 sm:p-8 border-2 border-gray-200 transition-all shadow-md hover:shadow-2xl transform hover:-translate-y-2 ${isOrange ? "hover:border-[#ec682a]" : "hover:border-[#1a2744]"}`}
                                 variants={itemVariants}
                                 whileHover={{ scale: 1.02 }}
                             >
-                                <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-xl flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform ${isOrange ? "bg-gradient-to-br from-[#ec682a] to-[#c2410c]" : "bg-gradient-to-br from-blue-500 to-blue-600"}`}>
+                                <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-xl flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform ${isOrange ? "bg-gradient-to-br from-[#ec682a] to-[#c2410c]" : "bg-gradient-to-br from-[#1a2744] to-[#243b55]"}`}>
                                     <i
                                         className={`${feature.icon} text-white text-xl sm:text-2xl`}
                                     ></i>
@@ -505,7 +505,7 @@ export default function HomePage() {
                 className="py-12 sm:py-16 md:py-24 px-4 relative overflow-hidden"
                 style={{
                     background:
-                        "linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)",
+                        "linear-gradient(135deg, #1a2744 0%, #243b55 100%)",
                 }}
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
@@ -654,7 +654,7 @@ export default function HomePage() {
 
             {/* Social Media & Contact Section */}
             <motion.section
-                className="py-12 sm:py-16 md:py-20 px-4 bg-gradient-to-br from-blue-50 via-white to-orange-50"
+                className="py-12 sm:py-16 md:py-20 px-4 bg-gradient-to-br from-[#eef1f7] via-white to-orange-50"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true, margin: "-100px" }}
@@ -695,7 +695,7 @@ export default function HomePage() {
                                 href: "https://facebook.com",
                                 icon: "fab fa-facebook",
                                 label: "Facebook",
-                                color: "bg-blue-600",
+                                color: "bg-[#1a2744]",
                             },
                             {
                                 href: "https://twitter.com",
@@ -707,7 +707,7 @@ export default function HomePage() {
                                 href: "https://linkedin.com",
                                 icon: "fab fa-linkedin",
                                 label: "LinkedIn",
-                                color: "bg-blue-700",
+                                color: "bg-[#243b55]",
                             },
                         ].map((social, index) => (
                             <motion.a
@@ -715,15 +715,15 @@ export default function HomePage() {
                                 href={social.href}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className={`flex items-center space-x-2 sm:space-x-3 px-4 sm:px-6 py-3 sm:py-4 ${social.color.includes("from") ? `bg-gradient-to-r ${social.color}` : social.color} text-white rounded-xl hover:shadow-xl transition-all no-underline font-medium transform hover:scale-105 text-sm sm:text-base`}
+                                className={`flex items-center space-x-2 sm:space-x-3 px-4 sm:px-6 py-3 sm:py-4 ${social.color.includes("from") ? `bg-gradient-to-r ${social.color}` : social.color} !text-white rounded-xl hover:shadow-xl transition-all no-underline font-medium transform hover:scale-105 text-sm sm:text-base`}
                                 variants={itemVariants}
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.95 }}
                             >
                                 <i
-                                    className={`${social.icon} text-lg sm:text-2xl`}
+                                    className={`${social.icon} text-lg sm:text-2xl !text-white`}
                                 ></i>
-                                <span>{social.label}</span>
+                                <span className="!text-white">{social.label}</span>
                             </motion.a>
                         ))}
                     </motion.div>
