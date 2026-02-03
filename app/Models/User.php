@@ -97,11 +97,11 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the user's session access logs
+     * Get the user's material access logs
      */
-    public function sessionAccessLogs()
+    public function materialAccessLogs()
     {
-        return $this->hasMany(SessionAccessLog::class);
+        return $this->hasMany(MaterialAccessLog::class);
     }
 
     /**

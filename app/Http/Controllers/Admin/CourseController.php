@@ -12,7 +12,7 @@ class CourseController extends Controller
 {
     public function index()
     {
-        $courses = Course::withCount('videoSessions')
+        $courses = Course::withCount('materials')
             ->orderBy('name')
             ->paginate(20);
 
@@ -30,6 +30,8 @@ class CourseController extends Controller
             'name' => 'required|string|max:255',
             'code' => 'required|string|max:50|unique:courses,code',
             'description' => 'nullable|string',
+            'major' => 'nullable|string|max:255',
+            'year' => 'nullable|string|max:50',
         ]);
 
         $course = Course::create($validated);
@@ -55,6 +57,8 @@ class CourseController extends Controller
             'name' => 'required|string|max:255',
             'code' => 'required|string|max:50|unique:courses,code,' . $course->id,
             'description' => 'nullable|string',
+            'major' => 'nullable|string|max:255',
+            'year' => 'nullable|string|max:50',
         ]);
 
         $course->update($validated);
@@ -71,10 +75,10 @@ class CourseController extends Controller
 
     public function destroy(Course $course)
     {
-        // Check if course has sessions
-        if ($course->videoSessions()->count() > 0) {
+        // Check if course has materials
+        if ($course->materials()->count() > 0) {
             return redirect()->route('admin.courses.index')
-                ->with('error', 'Cannot delete course with existing sessions. Please delete or reassign sessions first.');
+                ->with('error', 'Cannot delete course with existing materials. Please delete or reassign materials first.');
         }
 
         $course->delete();

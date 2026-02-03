@@ -37,7 +37,7 @@ class SubscriptionController extends Controller
             'user_id' => $subscription->user_id,
             'type' => 'subscription',
             'title' => 'Subscription Approved',
-            'message' => "Your {$subscription->subscription_type} subscription has been approved! You now have access to all locked sessions.",
+            'message' => "Your {$subscription->subscription_type} subscription has been approved! You now have access to all locked materials.",
             'data' => [
                 'subscription_id' => $subscription->id,
                 'subscription_type' => $subscription->subscription_type,

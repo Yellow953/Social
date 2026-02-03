@@ -9,7 +9,7 @@
 @hasSection('meta_description')
     <meta name="description" content="@yield('meta_description')">
 @else
-    <meta name="description" content="ESIB SOCIAL - Your comprehensive learning platform for social sciences. Access courses, sessions, and materials organized by subject.">
+    <meta name="description" content="ESIB SOCIAL - Your comprehensive learning platform for social sciences. Access courses, materials, and materials organized by subject.">
 @endif
 
 @hasSection('canonical')

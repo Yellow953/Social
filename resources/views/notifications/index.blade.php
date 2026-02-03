@@ -41,7 +41,7 @@
         </li>
         <li class="nav-item">
             <a class="nav-link {{ request('type') === 'session' ? 'active' : '' }}" href="{{ route('notifications.index', ['type' => 'session']) }}">
-                <i class="fas fa-play-circle me-1 text-warning"></i>Sessions
+                <i class="fas fa-play-circle me-1 text-warning"></i>Materials
             </a>
         </li>
     </ul>

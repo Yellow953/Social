@@ -46,7 +46,7 @@
                         </p>
                         <ul class="text-muted">
                             <li>Session access times and duration</li>
-                            <li>Which sessions and courses you access</li>
+                            <li>Which materials and courses you access</li>
                             <li>Device information and IP addresses</li>
                             <li>Screenshot detection events (if enabled)</li>
                         </ul>
@@ -58,7 +58,7 @@
                     <section class="mb-5">
                         <h3 class="fw-bold mb-3" style="color: #5c5c5c;">4. Watermarking</h3>
                         <p class="text-muted">
-                            For security purposes, locked sessions may display your username as a watermark.
+                            For security purposes, locked materials may display your username as a watermark.
                             This watermark is designed to be visible but not interfere with content readability.
                             This helps protect intellectual property and prevent unauthorized sharing.
                         </p>

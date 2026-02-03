@@ -6,13 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class SessionAccessLog extends Model
+class MaterialAccessLog extends Model
 {
     use HasFactory;
 
+    protected $table = 'material_access_logs';
+
     protected $fillable = [
         'user_id',
-        'video_session_id',
+        'material_id',
         'accessed_at',
         'duration_seconds',
         'ip_address',
@@ -25,7 +27,7 @@ class SessionAccessLog extends Model
     ];
 
     /**
-     * Get the user that accessed the session
+     * Get the user that accessed the material
      */
     public function user(): BelongsTo
     {
@@ -33,11 +35,11 @@ class SessionAccessLog extends Model
     }
 
     /**
-     * Get the video session that was accessed
+     * Get the material that was accessed
      */
-    public function videoSession(): BelongsTo
+    public function material(): BelongsTo
     {
-        return $this->belongsTo(VideoSession::class, 'video_session_id');
+        return $this->belongsTo(Material::class);
     }
 
     /**

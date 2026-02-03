@@ -62,9 +62,9 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('sessions') }}" class="nav-link d-flex align-items-center {{ request()->routeIs('sessions') ? 'nav-item-active' : 'text-dark' }}">
+                        <a href="{{ route('materials') }}" class="nav-link d-flex align-items-center {{ request()->routeIs('materials') ? 'nav-item-active' : 'text-dark' }}">
                             <i class="fas fa-play-circle me-3"></i>
-                            <span class="fw-semibold">Sessions</span>
+                            <span class="fw-semibold">Materials</span>
                         </a>
                     </li>
                     <li class="nav-item">

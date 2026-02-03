@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
-use App\Models\VideoSession;
-use App\Models\SessionAccessLog;
+use App\Models\Material;
+use App\Models\MaterialAccessLog;
 use App\Models\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -19,19 +19,19 @@ class DashboardController extends Controller
         $user = auth()->user();
 
         // Get unique courses the user has accessed
-        $activeCourses = SessionAccessLog::where('user_id', $user->id)
-            ->join('video_sessions', 'session_access_logs.video_session_id', '=', 'video_sessions.id')
+        $activeCourses = MaterialAccessLog::where('user_id', $user->id)
+            ->join('materials', 'material_access_logs.material_id', '=', 'materials.id')
             ->distinct()
-            ->count('video_sessions.course_id');
+            ->count('materials.course_id');
 
-        // Get unique sessions completed (sessions with watch time > 0)
-        $sessionsCompleted = SessionAccessLog::where('user_id', $user->id)
+        // Get unique materials completed (materials with watch time > 0)
+        $sessionsCompleted = MaterialAccessLog::where('user_id', $user->id)
             ->where('duration_seconds', '>', 0)
             ->distinct()
-            ->count('video_session_id');
+            ->count('material_id');
 
         // Get total study time in seconds
-        $totalStudyTimeSeconds = SessionAccessLog::where('user_id', $user->id)
+        $totalStudyTimeSeconds = MaterialAccessLog::where('user_id', $user->id)
             ->sum('duration_seconds');
 
         // Format study time
@@ -39,9 +39,8 @@ class DashboardController extends Controller
         $minutes = floor(($totalStudyTimeSeconds % 3600) / 60);
         $studyTimeFormatted = $hours > 0 ? sprintf('%dh %dm', $hours, $minutes) : sprintf('%dm', $minutes);
 
-        // Calculate progress (sessions completed / total available sessions)
-        $totalSessions = VideoSession::where(function($query) use ($user) {
-            // Include unlocked sessions or sessions user can access
+        // Calculate progress (materials completed / total available materials)
+        $totalSessions = Material::where(function($query) use ($user) {
             $query->where('is_locked', false);
             if ($user->hasActiveSubscription() || $user->isAdmin()) {
                 $query->orWhere('is_locked', true);
@@ -53,8 +52,8 @@ class DashboardController extends Controller
             : 0;
 
         // Get recent activity (last 10 access logs)
-        $recentActivity = SessionAccessLog::where('user_id', $user->id)
-            ->with(['videoSession.course'])
+        $recentActivity = MaterialAccessLog::where('user_id', $user->id)
+            ->with(['material.course'])
             ->orderBy('accessed_at', 'desc')
             ->limit(10)
             ->get()
@@ -62,21 +61,21 @@ class DashboardController extends Controller
                 return [
                     'type' => 'session',
                     'icon' => 'check',
-                    'title' => 'Completed Session',
-                    'description' => $log->videoSession ? $log->videoSession->title : 'Unknown Session',
-                    'course' => $log->videoSession && $log->videoSession->course ? $log->videoSession->course->name : null,
+                    'title' => 'Completed Material',
+                    'description' => $log->material ? $log->material->title : 'Unknown Material',
+                    'course' => $log->material && $log->material->course ? $log->material->course->name : null,
                     'time' => $log->accessed_at->diffForHumans(),
                     'accessed_at' => $log->accessed_at,
                 ];
             });
 
         // Get recent courses (courses the user has accessed)
-        $recentCourses = Course::whereHas('videoSessions', function($query) use ($user) {
+        $recentCourses = Course::whereHas('materials', function($query) use ($user) {
             $query->whereHas('accessLogs', function($q) use ($user) {
                 $q->where('user_id', $user->id);
             });
         })
-        ->with(['videoSessions' => function($query) {
+        ->with(['materials' => function($query) {
             $query->orderBy('created_at', 'desc')->limit(1);
         }])
         ->orderBy('created_at', 'desc')

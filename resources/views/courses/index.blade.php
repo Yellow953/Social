@@ -91,15 +91,15 @@
                     @endif
                     <div class="d-flex align-items-center justify-content-between mb-3">
                         <div>
-                            <small class="text-muted d-block">Sessions</small>
-                            <span class="fw-bold" style="color: #c2410c;">{{ $course->video_sessions_count }}</span>
+                            <small class="text-muted d-block">Materials</small>
+                            <span class="fw-bold" style="color: #c2410c;">{{ $course->materials_count }}</span>
                         </div>
-                        <span class="badge bg-info">{{ $course->video_sessions_count }} {{ Str::plural('Session', $course->video_sessions_count) }}</span>
+                        <span class="badge bg-info">{{ $course->materials_count }} {{ Str::plural('Material', $course->materials_count) }}</span>
                     </div>
                     <div class="d-flex gap-2">
                         @if(!auth()->user()->isAdmin())
-                            <a href="{{ route('sessions') }}?course={{ $course->id }}" class="btn btn-primary btn-sm flex-grow-1">
-                                <i class="fas fa-play me-1"></i>View Sessions
+                            <a href="{{ route('materials') }}?course={{ $course->id }}" class="btn btn-primary btn-sm flex-grow-1">
+                                <i class="fas fa-play me-1"></i>View Materials
                             </a>
                             <a href="{{ route('courses') }}?course={{ $course->id }}" class="btn btn-outline-secondary btn-sm" title="View Details">
                                 <i class="fas fa-info-circle"></i>

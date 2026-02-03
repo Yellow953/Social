@@ -47,7 +47,7 @@
                             <th class="border-0">Code</th>
                             <th class="border-0">Name</th>
                             <th class="border-0">Description</th>
-                            <th class="border-0">Sessions</th>
+                            <th class="border-0">Materials</th>
                             <th class="border-0">Created</th>
                             <th class="border-0 text-end">Actions</th>
                         </tr>
@@ -65,7 +65,7 @@
                                 @endif
                             </td>
                             <td>
-                                <span class="badge bg-info">{{ $course->video_sessions_count }}</span>
+                                <span class="badge bg-info">{{ $course->materials_count }}</span>
                             </td>
                             <td>{{ $course->created_at->format('M d, Y') }}</td>
                             <td class="text-end">

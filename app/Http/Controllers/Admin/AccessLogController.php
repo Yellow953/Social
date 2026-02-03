@@ -3,23 +3,26 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\SessionAccessLog;
+use App\Models\MaterialAccessLog;
 use Illuminate\Http\Request;
 
 class AccessLogController extends Controller
 {
     public function index(Request $request)
     {
-        $query = SessionAccessLog::with(['user', 'videoSession.course']);
+        $query = MaterialAccessLog::with(['user', 'material.course']);
 
         // Filter by user if provided
         if ($request->has('user_id') && $request->user_id) {
             $query->where('user_id', $request->user_id);
         }
 
-        // Filter by session if provided
+        // Filter by material if provided
+        if ($request->has('material_id') && $request->material_id) {
+            $query->where('material_id', $request->material_id);
+        }
         if ($request->has('session_id') && $request->session_id) {
-            $query->where('video_session_id', $request->session_id);
+            $query->where('material_id', $request->session_id);
         }
 
         // Filter by date range
@@ -33,7 +36,7 @@ class AccessLogController extends Controller
         $logs = $query->latest('accessed_at')->paginate(30);
 
         // Calculate total watch time
-        $totalWatchTime = SessionAccessLog::sum('duration_seconds');
+        $totalWatchTime = MaterialAccessLog::sum('duration_seconds');
 
         return view('admin.access-logs.index', compact('logs', 'totalWatchTime'));
     }

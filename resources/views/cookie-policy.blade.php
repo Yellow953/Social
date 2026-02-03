@@ -1,7 +1,7 @@
 @extends('layouts.policy')
 
 @section('title', 'Cookie Policy | ESIB SOCIAL')
-@section('meta_description', 'How ESIB SOCIAL uses cookies and similar technologies for sessions, preferences, and analytics.')
+@section('meta_description', 'How ESIB SOCIAL uses cookies and similar technologies for materials, preferences, and analytics.')
 @section('og_title', 'Cookie Policy | ESIB SOCIAL')
 
 @section('policy')

@@ -52,7 +52,7 @@
                         </div>
 
                         <!-- Description -->
-                        <div class="mb-4">
+                        <div class="mb-3">
                             <label for="description" class="form-label fw-bold">Description</label>
                             <textarea class="form-control @error('description') is-invalid @enderror"
                                       id="description"
@@ -62,6 +62,40 @@
                             @error('description')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
+                        </div>
+
+                        <div class="row">
+                            <!-- Major -->
+                            <div class="col-md-6 mb-3">
+                                <label for="major" class="form-label fw-bold">Major / Speciality</label>
+                                <input type="text"
+                                       class="form-control @error('major') is-invalid @enderror"
+                                       id="major"
+                                       name="major"
+                                       value="{{ old('major') }}"
+                                       placeholder="e.g., Génie Civil">
+                                @error('major')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <!-- Year -->
+                            <div class="col-md-6 mb-3">
+                                <label for="year" class="form-label fw-bold">Year</label>
+                                <select class="form-control @error('year') is-invalid @enderror"
+                                        id="year"
+                                        name="year">
+                                    <option value="">Select year (optional)</option>
+                                    <option value="Sup" {{ old('year') == 'Sup' ? 'selected' : '' }}>Sup</option>
+                                    <option value="Spé" {{ old('year') == 'Spé' ? 'selected' : '' }}>Spé</option>
+                                    <option value="1e" {{ old('year') == '1e' ? 'selected' : '' }}>1e</option>
+                                    <option value="2e" {{ old('year') == '2e' ? 'selected' : '' }}>2e</option>
+                                    <option value="3e" {{ old('year') == '3e' ? 'selected' : '' }}>3e</option>
+                                </select>
+                                @error('year')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
 
                         <!-- Actions -->

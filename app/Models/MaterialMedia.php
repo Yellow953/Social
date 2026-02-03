@@ -6,12 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class SessionMedia extends Model
+class MaterialMedia extends Model
 {
     use HasFactory;
 
+    protected $table = 'material_media';
+
     protected $fillable = [
-        'video_session_id',
+        'material_id',
         'type',
         'file_path',
         'original_filename',
@@ -26,11 +28,11 @@ class SessionMedia extends Model
     ];
 
     /**
-     * Get the video session that owns this media
+     * Get the material that owns this media
      */
-    public function videoSession(): BelongsTo
+    public function material(): BelongsTo
     {
-        return $this->belongsTo(VideoSession::class, 'video_session_id');
+        return $this->belongsTo(Material::class);
     }
 
     /**

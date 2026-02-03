@@ -3,8 +3,8 @@
 @section('title', $media->original_filename . ' | ESIB SOCIAL')
 
 @section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('sessions') }}">Sessions</a></li>
-    <li class="breadcrumb-item"><a href="{{ route('sessions.show', $session) }}">{{ Str::limit($session->title, 30) }}</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('materials') }}">Materials</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('materials.show', $material) }}">{{ Str::limit($material->title, 30) }}</a></li>
     <li class="breadcrumb-item active" aria-current="page">{{ Str::limit($media->original_filename, 30) }}</li>
 @endsection
 
@@ -14,8 +14,8 @@
         <div class="col-12">
             <!-- Back Button -->
             <div class="mb-3">
-                <a href="{{ route('sessions.show', $session) }}" class="btn btn-outline-secondary">
-                    <i class="fas fa-arrow-left me-2"></i>Back to Session
+                <a href="{{ route('materials.show', $material) }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Material
                 </a>
             </div>
 

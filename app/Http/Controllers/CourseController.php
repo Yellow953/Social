@@ -9,8 +9,8 @@ class CourseController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Course::withCount('videoSessions')
-            ->with(['videoSessions' => function($q) {
+        $query = Course::withCount('materials')
+            ->with(['materials' => function($q) {
                 $q->select('id', 'course_id', 'title');
             }]);
 

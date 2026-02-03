@@ -27,7 +27,7 @@
                         <div class="mb-4">
                             <label class="form-label fw-bold">Subscription Type</label>
                             <input type="text" class="form-control" value="SOCIALPLUS" disabled>
-                            <small class="text-muted">This subscription allows you to access all locked sessions on the platform.</small>
+                            <small class="text-muted">This subscription allows you to access all locked materials on the platform.</small>
                         </div>
 
                         <div class="mb-4">

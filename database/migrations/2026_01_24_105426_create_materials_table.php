@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('video_sessions', function (Blueprint $table) {
+        Schema::create('materials', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->text('description')->nullable();
             $table->foreignId('course_id')->constrained()->onDelete('cascade');
-            $table->string('year'); // Study year (1, 2, 3, etc.)
+            $table->string('type'); // 'cours', 'tp', 'video_recording'
             $table->boolean('is_locked')->default(true);
-            $table->integer('order')->default(0);
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('video_sessions');
+        Schema::dropIfExists('materials');
     }
 };

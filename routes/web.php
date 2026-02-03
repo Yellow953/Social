@@ -8,7 +8,7 @@ use App\Http\Controllers\Auth\VerifyOtpController;
 use App\Http\Controllers\Auth\VerifyTwoFactorController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CourseController;
-use App\Http\Controllers\SessionController;
+use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\CalculatorController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
@@ -68,9 +68,9 @@ Route::middleware(['auth', 'single.device'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/courses', [CourseController::class, 'index'])->name('courses');
     Route::middleware('subscription')->group(function () {
-        Route::get('/sessions', [SessionController::class, 'index'])->name('sessions');
-        Route::get('/sessions/{session}', [SessionController::class, 'show'])->name('sessions.show');
-        Route::post('/sessions/{session}/watch-time', [SessionController::class, 'updateWatchTime'])->name('sessions.watch-time');
+        Route::get('/materials', [MaterialController::class, 'index'])->name('materials');
+        Route::get('/materials/{material}', [MaterialController::class, 'show'])->name('materials.show');
+        Route::post('/materials/{material}/watch-time', [MaterialController::class, 'updateWatchTime'])->name('materials.watch-time');
         Route::get('/media/{media}', [\App\Http\Controllers\MediaController::class, 'detail'])->name('media.detail');
         Route::get('/media/{media}/view', [\App\Http\Controllers\MediaController::class, 'view'])->name('media.view');
         Route::get('/media/{media}/stream', [\App\Http\Controllers\MediaController::class, 'stream'])->name('media.stream');
@@ -103,6 +103,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Courses CRUD
     Route::resource('courses', \App\Http\Controllers\Admin\CourseController::class);
 
-    // Sessions CRUD
-    Route::resource('sessions', \App\Http\Controllers\Admin\SessionController::class);
+    // Materials CRUD (admin)
+    Route::resource('materials', \App\Http\Controllers\Admin\MaterialController::class)->parameters(['session' => 'material']);
 });

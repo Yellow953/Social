@@ -191,10 +191,10 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <span class="fw-medium">{{ $activity->videoSession?->title ?? 'N/A' }}</span>
+                                        <span class="fw-medium">{{ $activity->material?->title ?? 'N/A' }}</span>
                                     </td>
                                     <td>
-                                        <span class="badge bg-secondary">{{ $activity->videoSession?->course?->name ?? 'N/A' }}</span>
+                                        <span class="badge bg-secondary">{{ $activity->material?->course?->name ?? 'N/A' }}</span>
                                     </td>
                                     <td>
                                         <span class="text-muted">{{ $activity->formatted_duration }}</span>

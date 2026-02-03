@@ -12,8 +12,8 @@
     <!-- Page Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="fw-bold mb-1" style="color: #c2410c;"><i class="fas fa-history me-2" style="color: #ec682a;"></i>Session Access Logs</h2>
-            <p class="text-muted mb-0">Monitor user session access and watch time</p>
+            <h2 class="fw-bold mb-1" style="color: #c2410c;"><i class="fas fa-history me-2" style="color: #ec682a;"></i>Material Access Logs</h2>
+            <p class="text-muted mb-0">Monitor user material access and watch time</p>
         </div>
     </div>
 
@@ -48,8 +48,8 @@
                     <input type="text" class="form-control" name="user_id" value="{{ request('user_id') }}" placeholder="User ID">
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label">Session</label>
-                    <input type="text" class="form-control" name="session_id" value="{{ request('session_id') }}" placeholder="Session ID">
+                    <label class="form-label">Material</label>
+                    <input type="text" class="form-control" name="material_id" value="{{ request('material_id') }}" placeholder="Material ID">
                 </div>
                 <div class="col-md-2">
                     <label class="form-label">Date From</label>
@@ -79,7 +79,7 @@
                     <thead class="bg-light">
                         <tr>
                             <th class="border-0">User</th>
-                            <th class="border-0">Session</th>
+                            <th class="border-0">Material</th>
                             <th class="border-0">Course</th>
                             <th class="border-0">Accessed At</th>
                             <th class="border-0">Watch Time</th>
@@ -98,12 +98,12 @@
                             </td>
                             <td>
                                 <div>
-                                    <strong>{{ $log->videoSession->title }}</strong>
+                                    <strong>{{ $log->material->title }}</strong>
                                     <br>
-                                    <small class="text-muted">Year {{ $log->videoSession->year }}</small>
+                                    <small class="text-muted">{{ $log->material->type }}</small>
                                 </div>
                             </td>
-                            <td>{{ $log->videoSession->course->name }}</td>
+                            <td>{{ $log->material->course->name }}</td>
                             <td>{{ $log->accessed_at->format('M d, Y H:i') }}</td>
                             <td>
                                 @if($log->duration_seconds > 0)

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\SessionAccessLog;
+use App\Models\MaterialAccessLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -12,15 +12,15 @@ class ProfileController extends Controller
     {
         $user = auth()->user();
 
-        $coursesCount = SessionAccessLog::where('user_id', $user->id)
-            ->join('video_sessions', 'session_access_logs.video_session_id', '=', 'video_sessions.id')
+        $coursesCount = MaterialAccessLog::where('user_id', $user->id)
+            ->join('materials', 'material_access_logs.material_id', '=', 'materials.id')
             ->distinct()
-            ->count('video_sessions.course_id');
+            ->count('materials.course_id');
 
-        $sessionsCount = SessionAccessLog::where('user_id', $user->id)
+        $sessionsCount = MaterialAccessLog::where('user_id', $user->id)
             ->where('duration_seconds', '>', 0)
             ->distinct()
-            ->count('video_session_id');
+            ->count('material_id');
 
         return view('profile.index', [
             'coursesCount' => $coursesCount,

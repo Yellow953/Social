@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\SessionMedia;
-use App\Models\VideoSession;
+use App\Models\MaterialMedia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -14,29 +13,27 @@ class MediaController extends Controller
     /**
      * Show media detail page
      */
-    public function detail(SessionMedia $media)
+    public function detail(MaterialMedia $media)
     {
         $user = Auth::user();
-        $session = $media->videoSession;
+        $material = $media->material;
 
-        // Check if user can access this session
-        if (!$session->canBeAccessedBy($user)) {
+        if (!$material->canBeAccessedBy($user)) {
             abort(403, 'You need an active SOCIALPLUS subscription to access this media.');
         }
 
-        return view('media.detail', compact('media', 'session'));
+        return view('media.detail', compact('media', 'material'));
     }
 
     /**
      * View media with watermark (for images)
      */
-    public function view(SessionMedia $media)
+    public function view(MaterialMedia $media)
     {
         $user = Auth::user();
-        $session = $media->videoSession;
+        $material = $media->material;
 
-        // Check if user can access this session
-        if (!$session->canBeAccessedBy($user)) {
+        if (!$material->canBeAccessedBy($user)) {
             abort(403, 'You need an active SOCIALPLUS subscription to access this media.');
         }
 
@@ -62,7 +59,7 @@ class MediaController extends Controller
     /**
      * View image with watermark
      */
-    private function viewImage(SessionMedia $media, string $filePath, $user)
+    private function viewImage(MaterialMedia $media, string $filePath, $user)
     {
         // Create watermarked image
         $image = imagecreatefromstring(file_get_contents($filePath));
@@ -134,7 +131,7 @@ class MediaController extends Controller
      * View PDF - only allow when requested by our viewer (XHR with header).
      * Direct browser/iframe access returns 403 to prevent download/save.
      */
-    private function viewPdf(SessionMedia $media, string $filePath, $user)
+    private function viewPdf(MaterialMedia $media, string $filePath, $user)
     {
         // Only serve PDF to our PDF.js viewer (sends this header), not to direct navigation/iframe
         if (!request()->header('X-PDF-Viewer-Request')) {
@@ -153,7 +150,7 @@ class MediaController extends Controller
     /**
      * View video (we'll use video player with watermark overlay in frontend)
      */
-    private function viewVideo(SessionMedia $media, string $filePath, $user)
+    private function viewVideo(MaterialMedia $media, string $filePath, $user)
     {
         // For videos, we'll serve them through a player that prevents downloads
         // The watermark will be added via canvas overlay in frontend
@@ -172,13 +169,12 @@ class MediaController extends Controller
     /**
      * Stream video with range support
      */
-    public function stream(SessionMedia $media)
+    public function stream(MaterialMedia $media)
     {
         $user = Auth::user();
-        $session = $media->videoSession;
+        $material = $media->material;
 
-        // Check if user can access this session
-        if (!$session->canBeAccessedBy($user)) {
+        if (!$material->canBeAccessedBy($user)) {
             abort(403, 'You need an active SOCIALPLUS subscription to access this media.');
         }
 

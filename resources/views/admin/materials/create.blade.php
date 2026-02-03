@@ -1,10 +1,10 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Create Session | ESIB SOCIAL Admin')
+@section('title', 'Create Material | ESIB SOCIAL Admin')
 
 @section('breadcrumb')
     <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Admin</a></li>
-    <li class="breadcrumb-item"><a href="{{ route('admin.sessions.index') }}">Sessions</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('admin.materials.index') }}">Materials</a></li>
     <li class="breadcrumb-item active" aria-current="page">Create</li>
 @endsection
 
@@ -14,16 +14,16 @@
         <div class="col-md-10">
             <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                 <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-3">
-                    <h5 class="mb-0 fw-bold" style="color: #c2410c;"><i class="fas fa-plus me-2" style="color: #ec682a;"></i>Create New Session</h5>
+                    <h5 class="mb-0 fw-bold" style="color: #c2410c;"><i class="fas fa-plus me-2" style="color: #ec682a;"></i>Create New Material</h5>
                 </div>
                 <div class="card-body p-4">
-                    <form method="POST" action="{{ route('admin.sessions.store') }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('admin.materials.store') }}" enctype="multipart/form-data">
                         @csrf
 
                         <div class="row">
                             <!-- Title -->
                             <div class="col-md-12 mb-3">
-                                <label for="title" class="form-label fw-bold">Session Title <span class="text-danger">*</span></label>
+                                <label for="title" class="form-label fw-bold">Material Title <span class="text-danger">*</span></label>
                                 <input type="text"
                                        class="form-control @error('title') is-invalid @enderror"
                                        id="title"
@@ -43,7 +43,7 @@
                                           id="description"
                                           name="description"
                                           rows="3"
-                                          placeholder="Session description...">{{ old('description') }}</textarea>
+                                          placeholder="Material description...">{{ old('description') }}</textarea>
                                 @error('description')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -68,39 +68,21 @@
                                 @enderror
                             </div>
 
-                            <!-- Year -->
-                            <div class="col-md-3 mb-3">
-                                <label for="year" class="form-label fw-bold">Study Year <span class="text-danger">*</span></label>
-                                <select class="form-control @error('year') is-invalid @enderror"
-                                        id="year"
-                                        name="year"
+                            <!-- Type -->
+                            <div class="col-md-6 mb-3">
+                                <label for="type" class="form-label fw-bold">Type <span class="text-danger">*</span></label>
+                                <select class="form-control @error('type') is-invalid @enderror"
+                                        id="type"
+                                        name="type"
                                         required>
-                                    <option value="">Select year</option>
-                                    <option value="Sup" {{ old('year') == 'Sup' ? 'selected' : '' }}>Sup</option>
-                                    <option value="Spé" {{ old('year') == 'Spé' ? 'selected' : '' }}>Spé</option>
-                                    <option value="1e" {{ old('year') == '1e' ? 'selected' : '' }}>1e</option>
-                                    <option value="2e" {{ old('year') == '2e' ? 'selected' : '' }}>2e</option>
-                                    <option value="3e" {{ old('year') == '3e' ? 'selected' : '' }}>3e</option>
+                                    <option value="">Select type</option>
+                                    <option value="cours" {{ old('type') == 'cours' ? 'selected' : '' }}>Cours</option>
+                                    <option value="tp" {{ old('type') == 'tp' ? 'selected' : '' }}>TP</option>
+                                    <option value="video_recording" {{ old('type') == 'video_recording' ? 'selected' : '' }}>Video recording</option>
                                 </select>
-                                @error('year')
+                                @error('type')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                            </div>
-
-                            <!-- Order -->
-                            <div class="col-md-3 mb-3">
-                                <label for="order" class="form-label fw-bold">Order</label>
-                                <input type="number"
-                                       class="form-control @error('order') is-invalid @enderror"
-                                       id="order"
-                                       name="order"
-                                       value="{{ old('order', 0) }}"
-                                       min="0"
-                                       placeholder="0">
-                                @error('order')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                                <small class="text-muted">Display order within course/year</small>
                             </div>
 
                             <!-- Is Locked -->
@@ -113,7 +95,7 @@
                                            value="1"
                                            {{ old('is_locked', true) ? 'checked' : '' }}>
                                     <label class="form-check-label" for="is_locked">
-                                        <strong>Locked Session</strong> (Requires subscription to access)
+                                        <strong>Locked Material</strong> (Requires subscription to access)
                                     </label>
                                     @error('is_locked')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -123,7 +105,7 @@
 
                             <!-- Media Files -->
                             <div class="col-md-12 mb-4">
-                                <label class="form-label fw-bold mb-3">Session Media Files</label>
+                                <label class="form-label fw-bold mb-3">Material Media Files</label>
                                 <div id="media-dropzone" class="dropzone-modern">
                                     <div class="dz-message">
                                         <i class="fas fa-cloud-upload-alt fa-3x mb-3" style="color: #ec682a;"></i>
@@ -142,9 +124,9 @@
                         <!-- Actions -->
                         <div class="d-flex gap-2">
                             <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-save me-2"></i>Create Session
+                                <i class="fas fa-save me-2"></i>Create Material
                             </button>
-                            <a href="{{ route('admin.sessions.index') }}" class="btn btn-outline-secondary">
+                            <a href="{{ route('admin.materials.index') }}" class="btn btn-outline-secondary">
                                 Cancel
                             </a>
                         </div>
@@ -316,7 +298,7 @@ document.addEventListener('DOMContentLoaded', function() {
         `,
         init: function() {
             const dropzone = this;
-            const form = document.querySelector('form[action="{{ route('admin.sessions.store') }}"]');
+            const form = document.querySelector('form[action="{{ route('admin.materials.store') }}"]');
             const previewContainer = document.getElementById('media-preview');
 
             // Move previews to custom container

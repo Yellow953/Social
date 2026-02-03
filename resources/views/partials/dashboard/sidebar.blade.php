@@ -33,9 +33,9 @@
                     <i class="fas fa-book-open fa-lg me-3"></i>
                     <span class="nav-text" id="nav-admin-courses">Courses</span>
                 </a>
-                <a href="{{ route('admin.sessions.index') }}" data-tooltip="Sessions" class="sidebar-item d-flex align-items-center px-3 py-3 mb-2 rounded text-decoration-none {{ request()->is('admin/sessions*') ? 'active' : '' }}">
+                <a href="{{ route('admin.materials.index') }}" data-tooltip="Materials" class="sidebar-item d-flex align-items-center px-3 py-3 mb-2 rounded text-decoration-none {{ request()->is('admin/materials*') ? 'active' : '' }}">
                     <i class="fas fa-play-circle fa-lg me-3"></i>
-                    <span class="nav-text" id="nav-admin-sessions">Sessions</span>
+                    <span class="nav-text" id="nav-admin-materials">Materials</span>
                 </a>
                 <a href="{{ route('admin.analytics') }}" data-tooltip="Analytics" class="sidebar-item d-flex align-items-center px-3 py-3 mb-2 rounded text-decoration-none {{ request()->is('admin/analytics*') ? 'active' : '' }}">
                     <i class="fas fa-chart-line fa-lg me-3"></i>
@@ -67,9 +67,9 @@
                     <i class="fas fa-book-open fa-lg me-3"></i>
                     <span class="nav-text" id="nav-courses">Courses</span>
                 </a>
-                <a href="{{ route('sessions') }}" data-tooltip="Sessions" class="sidebar-item d-flex align-items-center px-3 py-3 mb-2 rounded text-decoration-none {{ request()->is('sessions*') ? 'active' : '' }}">
+                <a href="{{ route('materials') }}" data-tooltip="Materials" class="sidebar-item d-flex align-items-center px-3 py-3 mb-2 rounded text-decoration-none {{ request()->is('materials*') ? 'active' : '' }}">
                     <i class="fas fa-play-circle fa-lg me-3"></i>
-                    <span class="nav-text" id="nav-sessions">Sessions</span>
+                    <span class="nav-text" id="nav-materials">Materials</span>
                 </a>
                 <a href="{{ route('calculator') }}" data-tooltip="Calculator" class="sidebar-item d-flex align-items-center px-3 py-3 mb-2 rounded text-decoration-none {{ request()->is('calculator*') ? 'active' : '' }}">
                     <i class="fas fa-calculator fa-lg me-3"></i>

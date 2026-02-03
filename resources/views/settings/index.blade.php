@@ -104,8 +104,8 @@
                             </div>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
-                                    <h6 class="mb-1 fw-bold">Session Reminders</h6>
-                                    <p class="text-muted small mb-0">Remind me about upcoming sessions</p>
+                                    <h6 class="mb-1 fw-bold">Material Reminders</h6>
+                                    <p class="text-muted small mb-0">Remind me about upcoming materials</p>
                                 </div>
                                 <div class="form-check form-switch">
                                     <input class="form-check-input" type="checkbox">

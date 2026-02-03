@@ -9,7 +9,7 @@
         <link rel="icon" type="image/png" href="{{ asset('assets/images/logo.png') }}" sizes="32x32">
         <link rel="icon" type="image/png" href="{{ asset('assets/images/logo.png') }}" sizes="16x16">
         <link rel="apple-touch-icon" href="{{ asset('assets/images/logo.png') }}">
-        <meta name="description" content="ESIB SOCIAL - Your comprehensive learning platform for social sciences. Access courses, sessions, and materials organized by subject.">
+        <meta name="description" content="ESIB SOCIAL - Your comprehensive learning platform for social sciences. Access courses, materials, and materials organized by subject.">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">

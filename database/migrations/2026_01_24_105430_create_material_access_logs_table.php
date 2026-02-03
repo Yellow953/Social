@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('session_access_logs', function (Blueprint $table) {
+        Schema::create('material_access_logs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('video_session_id')->constrained('video_sessions')->onDelete('cascade');
+            $table->foreignId('material_id')->constrained('materials')->onDelete('cascade');
             $table->timestamp('accessed_at');
-            $table->integer('duration_seconds')->default(0); // How long they watched
+            $table->integer('duration_seconds')->default(0);
             $table->string('ip_address')->nullable();
             $table->text('user_agent')->nullable();
             $table->timestamps();
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('session_access_logs');
+        Schema::dropIfExists('material_access_logs');
     }
 };

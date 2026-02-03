@@ -3,31 +3,30 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\VideoSession;
+use App\Models\Material;
 use App\Models\Course;
-use App\Models\SessionMedia;
+use App\Models\MaterialMedia;
 use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class SessionController extends Controller
+class MaterialController extends Controller
 {
     public function index()
     {
-        $sessions = VideoSession::with('course')
+        $materials = Material::with('course')
             ->orderBy('course_id')
-            ->orderBy('year')
-            ->orderBy('order')
+            ->orderBy('created_at')
             ->paginate(20);
 
-        return view('admin.sessions.index', compact('sessions'));
+        return view('admin.materials.index', compact('materials'));
     }
 
     public function create()
     {
         $courses = Course::orderBy('name')->get();
-        return view('admin.sessions.create', compact('courses'));
+        return view('admin.materials.create', compact('courses'));
     }
 
     public function store(Request $request)
@@ -36,103 +35,88 @@ class SessionController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'course_id' => 'required|exists:courses,id',
-            'year' => 'required|string|in:Sup,Spé,1e,2e,3e',
+            'type' => 'required|string|in:cours,tp,video_recording',
             'is_locked' => 'boolean',
-            'order' => 'nullable|integer|min:0',
             'media' => 'nullable|array',
-            'media.*' => 'file|mimes:pdf,mp4,webm,ogg,mov,avi,jpg,jpeg,png,gif,webp|max:512000', // 500MB max
+            'media.*' => 'file|mimes:pdf,mp4,webm,ogg,mov,avi,jpg,jpeg,png,gif,webp|max:512000',
         ]);
 
         $validated['is_locked'] = $request->has('is_locked');
 
-        $session = VideoSession::create($validated);
+        $material = Material::create($validated);
 
-        // Handle media uploads
         if ($request->hasFile('media')) {
-            $this->handleMediaUploads($request, $session);
+            $this->handleMediaUploads($request, $material);
         }
 
-        // Notify users about new session
-        $this->notifyUsersAboutSession($session, 'created');
+        $this->notifyUsersAboutMaterial($material, 'created');
 
-        return redirect()->route('admin.sessions.index')
-            ->with('success', 'Session created successfully.');
+        return redirect()->route('admin.materials.index')
+            ->with('success', 'Material created successfully.');
     }
 
-    public function edit(VideoSession $session)
+    public function edit(Material $material)
     {
         $courses = Course::orderBy('name')->get();
-        $session->load('media');
-        return view('admin.sessions.edit', compact('session', 'courses'));
+        $material->load('media');
+        return view('admin.materials.edit', compact('material', 'courses'));
     }
 
-    public function update(Request $request, VideoSession $session)
+    public function update(Request $request, Material $material)
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'course_id' => 'required|exists:courses,id',
-            'year' => 'required|string|in:Sup,Spé,1e,2e,3e',
+            'type' => 'required|string|in:cours,tp,video_recording',
             'is_locked' => 'boolean',
-            'order' => 'nullable|integer|min:0',
         ]);
 
         $validated['is_locked'] = $request->has('is_locked');
 
-        $session->update($validated);
+        $material->update($validated);
 
-        // Handle media uploads
         if ($request->hasFile('media')) {
-            $this->handleMediaUploads($request, $session);
+            $this->handleMediaUploads($request, $material);
         }
 
-        // Handle media deletion
         if ($request->has('delete_media')) {
             $this->handleMediaDeletion($request->delete_media);
         }
 
-        return redirect()->route('admin.sessions.index')
-            ->with('success', 'Session updated successfully.');
+        return redirect()->route('admin.materials.index')
+            ->with('success', 'Material updated successfully.');
     }
 
-    public function destroy(VideoSession $session)
+    public function destroy(Material $material)
     {
-        // Delete associated media files
-        foreach ($session->media as $media) {
+        foreach ($material->media as $media) {
             Storage::disk('local')->delete($media->file_path);
         }
 
-        $session->delete();
+        $material->delete();
 
-        return redirect()->route('admin.sessions.index')
-            ->with('success', 'Session deleted successfully.');
+        return redirect()->route('admin.materials.index')
+            ->with('success', 'Material deleted successfully.');
     }
 
-    /**
-     * Handle media file uploads
-     */
-    private function handleMediaUploads(Request $request, VideoSession $session)
+    private function handleMediaUploads(Request $request, Material $material)
     {
         if (!$request->hasFile('media')) {
             return;
         }
 
         $files = $request->file('media');
-        
-        // Ensure files is an array
         if (!is_array($files)) {
             $files = [$files];
         }
 
         foreach ($files as $file) {
-            // Skip invalid files
             if (!$file || !$file->isValid()) {
                 continue;
             }
 
             $extension = strtolower($file->getClientOriginalExtension());
-            
-            // Determine type from extension
             $type = null;
             if ($extension === 'pdf') {
                 $type = 'pdf';
@@ -142,21 +126,16 @@ class SessionController extends Controller
                 $type = 'image';
             }
 
-            // Skip if type couldn't be determined
             if (!$type) {
                 continue;
             }
 
             try {
-                // Store file in private storage
-                $path = $file->store('sessions/media', 'local');
-                
-                // Get the highest order number for this session
-                $maxOrder = $session->media()->max('order') ?? 0;
+                $path = $file->store('materials/media', 'local');
+                $maxOrder = $material->media()->max('order') ?? 0;
 
-                // Create media record
-                SessionMedia::create([
-                    'video_session_id' => $session->id,
+                MaterialMedia::create([
+                    'material_id' => $material->id,
                     'type' => $type,
                     'file_path' => $path,
                     'original_filename' => $file->getClientOriginalName(),
@@ -170,18 +149,15 @@ class SessionController extends Controller
         }
     }
 
-    /**
-     * Notify users about session changes
-     */
-    private function notifyUsersAboutSession(VideoSession $session, string $action = 'created')
+    private function notifyUsersAboutMaterial(Material $material, string $action = 'created')
     {
         $users = User::where('role', 'user')->get();
-        
-        $title = $action === 'created' ? 'New Session Available' : 'Session Updated';
-        $message = $action === 'created' 
-            ? "A new session \"{$session->title}\" has been added to the course \"{$session->course->name}\"."
-            : "The session \"{$session->title}\" in course \"{$session->course->name}\" has been updated.";
-        
+
+        $title = $action === 'created' ? 'New Material Available' : 'Material Updated';
+        $message = $action === 'created'
+            ? "New material \"{$material->title}\" has been added to the course \"{$material->course->name}\"."
+            : "The material \"{$material->title}\" in course \"{$material->course->name}\" has been updated.";
+
         foreach ($users as $user) {
             Notification::create([
                 'user_id' => $user->id,
@@ -189,23 +165,20 @@ class SessionController extends Controller
                 'title' => $title,
                 'message' => $message,
                 'data' => [
-                    'session_id' => $session->id,
-                    'session_title' => $session->title,
-                    'course_id' => $session->course_id,
-                    'course_name' => $session->course->name,
+                    'material_id' => $material->id,
+                    'material_title' => $material->title,
+                    'course_id' => $material->course_id,
+                    'course_name' => $material->course->name,
                 ],
                 'read' => false,
             ]);
         }
     }
 
-    /**
-     * Handle media deletion
-     */
     private function handleMediaDeletion(array $mediaIds)
     {
         foreach ($mediaIds as $mediaId) {
-            $media = SessionMedia::find($mediaId);
+            $media = MaterialMedia::find($mediaId);
             if ($media) {
                 Storage::disk('local')->delete($media->file_path);
                 $media->delete();

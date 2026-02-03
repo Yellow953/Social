@@ -1,10 +1,10 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Edit Session | ESIB SOCIAL Admin')
+@section('title', 'Edit Material | ESIB SOCIAL Admin')
 
 @section('breadcrumb')
     <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Admin</a></li>
-    <li class="breadcrumb-item"><a href="{{ route('admin.sessions.index') }}">Sessions</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('admin.materials.index') }}">Materials</a></li>
     <li class="breadcrumb-item active" aria-current="page">Edit</li>
 @endsection
 
@@ -14,22 +14,22 @@
         <div class="col-md-10">
             <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                 <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-3">
-                    <h5 class="mb-0 fw-bold" style="color: #c2410c;"><i class="fas fa-edit me-2" style="color: #ec682a;"></i>Edit Session</h5>
+                    <h5 class="mb-0 fw-bold" style="color: #c2410c;"><i class="fas fa-edit me-2" style="color: #ec682a;"></i>Edit Material</h5>
                 </div>
                 <div class="card-body p-4">
-                    <form method="POST" action="{{ route('admin.sessions.update', $session) }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('admin.materials.update', $material) }}" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 
                         <div class="row">
                             <!-- Title -->
                             <div class="col-md-12 mb-3">
-                                <label for="title" class="form-label fw-bold">Session Title <span class="text-danger">*</span></label>
+                                <label for="title" class="form-label fw-bold">Material Title <span class="text-danger">*</span></label>
                                 <input type="text"
                                        class="form-control @error('title') is-invalid @enderror"
                                        id="title"
                                        name="title"
-                                       value="{{ old('title', $session->title) }}"
+                                       value="{{ old('title', $material->title) }}"
                                        placeholder="e.g., Introduction to Social Sciences"
                                        required>
                                 @error('title')
@@ -44,7 +44,7 @@
                                           id="description"
                                           name="description"
                                           rows="3"
-                                          placeholder="Session description...">{{ old('description', $session->description) }}</textarea>
+                                          placeholder="Material description...">{{ old('description', $material->description) }}</textarea>
                                 @error('description')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -59,7 +59,7 @@
                                         required>
                                     <option value="">Select a course</option>
                                     @foreach($courses as $course)
-                                        <option value="{{ $course->id }}" {{ old('course_id', $session->course_id) == $course->id ? 'selected' : '' }}>
+                                        <option value="{{ $course->id }}" {{ old('course_id', $material->course_id) == $course->id ? 'selected' : '' }}>
                                             {{ $course->name }} ({{ $course->code }})
                                         </option>
                                     @endforeach
@@ -69,39 +69,21 @@
                                 @enderror
                             </div>
 
-                            <!-- Year -->
-                            <div class="col-md-3 mb-3">
-                                <label for="year" class="form-label fw-bold">Study Year <span class="text-danger">*</span></label>
-                                <select class="form-control @error('year') is-invalid @enderror"
-                                        id="year"
-                                        name="year"
+                            <!-- Type -->
+                            <div class="col-md-6 mb-3">
+                                <label for="type" class="form-label fw-bold">Type <span class="text-danger">*</span></label>
+                                <select class="form-control @error('type') is-invalid @enderror"
+                                        id="type"
+                                        name="type"
                                         required>
-                                    <option value="">Select year</option>
-                                    <option value="Sup" {{ old('year', $session->year) == 'Sup' ? 'selected' : '' }}>Sup</option>
-                                    <option value="Spé" {{ old('year', $session->year) == 'Spé' ? 'selected' : '' }}>Spé</option>
-                                    <option value="1e" {{ old('year', $session->year) == '1e' ? 'selected' : '' }}>1e</option>
-                                    <option value="2e" {{ old('year', $session->year) == '2e' ? 'selected' : '' }}>2e</option>
-                                    <option value="3e" {{ old('year', $session->year) == '3e' ? 'selected' : '' }}>3e</option>
+                                    <option value="">Select type</option>
+                                    <option value="cours" {{ old('type', $material->type) == 'cours' ? 'selected' : '' }}>Cours</option>
+                                    <option value="tp" {{ old('type', $material->type) == 'tp' ? 'selected' : '' }}>TP</option>
+                                    <option value="video_recording" {{ old('type', $material->type) == 'video_recording' ? 'selected' : '' }}>Video recording</option>
                                 </select>
-                                @error('year')
+                                @error('type')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                            </div>
-
-                            <!-- Order -->
-                            <div class="col-md-3 mb-3">
-                                <label for="order" class="form-label fw-bold">Order</label>
-                                <input type="number"
-                                       class="form-control @error('order') is-invalid @enderror"
-                                       id="order"
-                                       name="order"
-                                       value="{{ old('order', $session->order) }}"
-                                       min="0"
-                                       placeholder="0">
-                                @error('order')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                                <small class="text-muted">Display order within course/year</small>
                             </div>
 
                             <!-- Is Locked -->
@@ -112,9 +94,9 @@
                                            id="is_locked"
                                            name="is_locked"
                                            value="1"
-                                           {{ old('is_locked', $session->is_locked) ? 'checked' : '' }}>
+                                           {{ old('is_locked', $material->is_locked) ? 'checked' : '' }}>
                                     <label class="form-check-label" for="is_locked">
-                                        <strong>Locked Session</strong> (Requires subscription to access)
+                                        <strong>Locked Material</strong> (Requires subscription to access)
                                     </label>
                                     @error('is_locked')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -123,11 +105,11 @@
                             </div>
 
                             <!-- Existing Media -->
-                            @if($session->media->count() > 0)
+                            @if($material->media->count() > 0)
                             <div class="col-md-12 mb-4">
                                 <label class="form-label fw-bold mb-3">Existing Media Files</label>
                                 <div class="row g-3" id="existing-media-list">
-                                    @foreach($session->media as $media)
+                                    @foreach($material->media as $media)
                                     <div class="col-md-4">
                                         <div class="card border shadow-sm">
                                             <div class="card-body p-3">
@@ -172,9 +154,9 @@
                         <!-- Actions -->
                         <div class="d-flex gap-2">
                             <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-save me-2"></i>Update Session
+                                <i class="fas fa-save me-2"></i>Update Material
                             </button>
-                            <a href="{{ route('admin.sessions.index') }}" class="btn btn-outline-secondary">
+                            <a href="{{ route('admin.materials.index') }}" class="btn btn-outline-secondary">
                                 Cancel
                             </a>
                         </div>
@@ -287,7 +269,7 @@
 
     // Initialize Dropzone
     const mediaDropzone = new Dropzone("#media-dropzone", {
-        url: "{{ route('admin.sessions.update', $session) }}",
+        url: "{{ route('admin.materials.update', $material) }}",
         paramName: "media",
         maxFilesize: 500, // 500 MB
         acceptedFiles: ".pdf,.mp4,.webm,.ogg,.mov,.avi,.jpg,.jpeg,.png,.gif,.webp",

@@ -22,15 +22,12 @@ class CheckSubscription
             return $next($request);
         }
 
-        // Check if accessing a locked session
-        if ($request->route('session') || $request->route('videoSession')) {
-            $session = $request->route('session') ?? $request->route('videoSession');
-
-            if ($session && $session->is_locked) {
-                if (!$user || !$user->hasActiveSubscription()) {
-                    return redirect()->route('sessions')
-                        ->with('error', 'You need an active SOCIALPLUS subscription to access this session. Please subscribe and wait for admin approval.');
-                }
+        // Check if accessing a locked material (route param may be 'session' or 'material')
+        $material = $request->route('session') ?? $request->route('material');
+        if ($material && $material->is_locked) {
+            if (!$user || !$user->hasActiveSubscription()) {
+                return redirect()->route('materials')
+                    ->with('error', 'You need an active SOCIALPLUS subscription to access this material. Please subscribe and wait for admin approval.');
             }
         }
 

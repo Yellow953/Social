@@ -42,7 +42,7 @@
                         </p>
                         <ul class="text-muted">
                             <li>Free accounts have limited access to content</li>
-                            <li>Premium SOCIALPLUS subscription provides access to all locked sessions and premium features</li>
+                            <li>Premium SOCIALPLUS subscription provides access to all locked materials and premium features</li>
                             <li>Subscriptions require a valid username and password</li>
                             <li>You are responsible for maintaining the confidentiality of your account credentials</li>
                         </ul>
@@ -67,7 +67,7 @@
                         <ul class="text-muted">
                             <li>Not to take screenshots or record any content without authorization</li>
                             <li>Not to share, distribute, or reproduce any content from the platform</li>
-                            <li>That your username may be watermarked on locked sessions for security purposes</li>
+                            <li>That your username may be watermarked on locked materials for security purposes</li>
                             <li>To respect the intellectual property rights of all content creators</li>
                         </ul>
                     </section>

@@ -41,7 +41,7 @@ const Welcome = () => {
                                 <span className="d-block" style={{color: '#ec682a'}}>Social Sciences</span>
                             </h1>
                             <p className="lead text-muted mb-4">
-                                Access courses, sessions, and materials organized by subject.
+                                Access courses, and materials organized by subject.
                                 Everything you need for your academic success in one place.
                             </p>
                             <div className="d-flex gap-3 flex-wrap">
@@ -127,7 +127,7 @@ const Welcome = () => {
                                 </div>
                                 <h5 className="fw-bold mb-2">Synchronized Content</h5>
                                 <p className="text-muted mb-0">
-                                    All your courses, sessions, and materials synchronized
+                                    All your courses and materials synchronized
                                     across devices. Access anywhere, anytime.
                                 </p>
                             </div>

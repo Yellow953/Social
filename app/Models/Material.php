@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class VideoSession extends Model
+class Material extends Model
 {
     use HasFactory;
 
@@ -15,19 +15,16 @@ class VideoSession extends Model
         'title',
         'description',
         'course_id',
-        'year',
+        'type', // 'cours', 'tp', 'video_recording'
         'is_locked',
-        'order',
     ];
 
     protected $casts = [
         'is_locked' => 'boolean',
-        'year' => 'integer',
-        'order' => 'integer',
     ];
 
     /**
-     * Get the course that owns this session
+     * Get the course that owns this material
      */
     public function course(): BelongsTo
     {
@@ -35,23 +32,23 @@ class VideoSession extends Model
     }
 
     /**
-     * Get the access logs for this session
+     * Get the access logs for this material
      */
     public function accessLogs(): HasMany
     {
-        return $this->hasMany(SessionAccessLog::class);
+        return $this->hasMany(MaterialAccessLog::class);
     }
 
     /**
-     * Get the media files for this session
+     * Get the media files for this material
      */
     public function media(): HasMany
     {
-        return $this->hasMany(SessionMedia::class, 'video_session_id')->orderBy('order');
+        return $this->hasMany(MaterialMedia::class)->orderBy('order');
     }
 
     /**
-     * Check if user can access this session
+     * Check if user can access this material
      */
     public function canBeAccessedBy($user): bool
     {

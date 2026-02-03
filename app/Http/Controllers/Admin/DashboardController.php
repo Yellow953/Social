@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Course;
-use App\Models\VideoSession;
-use App\Models\SessionAccessLog;
+use App\Models\Material;
+use App\Models\MaterialAccessLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -20,7 +20,7 @@ class DashboardController extends Controller
         // Get statistics
         $totalUsers = User::where('role', 'user')->count();
         $totalCourses = Course::count();
-        $totalSessions = VideoSession::count();
+        $totalSessions = Material::count();
 
         // Get user growth data for the last 30 days
         $userGrowth = User::where('role', 'user')
@@ -34,7 +34,7 @@ class DashboardController extends Controller
             ->get();
 
         // Get recent activity (last 20 access logs)
-        $recentActivity = SessionAccessLog::with(['user', 'videoSession.course'])
+        $recentActivity = MaterialAccessLog::with(['user', 'material.course'])
             ->orderBy('accessed_at', 'desc')
             ->limit(20)
             ->get();

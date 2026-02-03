@@ -115,14 +115,14 @@
                             </a>
                         </div>
                         <div class="col-6 col-md-6">
-                            <a href="{{ route('sessions') }}" class="text-decoration-none action-card-link">
+                            <a href="{{ route('materials') }}" class="text-decoration-none action-card-link">
                                 <div class="card border-0 shadow-md h-100 action-card" style="background: white; transition: all 0.3s ease;">
                                     <div class="card-body text-center p-3 p-md-4">
                                         <div class="rounded-xl p-2 p-md-3 shadow-md d-inline-flex mb-2 mb-md-3" style="background: linear-gradient(135deg, #ec682a 0%, #c2410c 100%);">
                                             <i class="fas fa-play-circle fa-2x text-white"></i>
                                         </div>
-                                        <h6 class="fw-bold mb-0 mb-md-1 small">View Sessions</h6>
-                                        <p class="text-muted small mb-0 d-none d-md-block">Access your sessions</p>
+                                        <h6 class="fw-bold mb-0 mb-md-1 small">View Materials</h6>
+                                        <p class="text-muted small mb-0 d-none d-md-block">Access your materials</p>
                                     </div>
                                 </div>
                             </a>

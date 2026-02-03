@@ -14,13 +14,15 @@ class Course extends Model
         'name',
         'code',
         'description',
+        'major',
+        'year',
     ];
 
     /**
-     * Get the video sessions for this course
+     * Get the materials for this course
      */
-    public function videoSessions(): HasMany
+    public function materials(): HasMany
     {
-        return $this->hasMany(VideoSession::class);
+        return $this->hasMany(Material::class);
     }
 }

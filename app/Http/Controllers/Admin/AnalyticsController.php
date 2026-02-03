@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Course;
-use App\Models\VideoSession;
-use App\Models\SessionAccessLog;
+use App\Models\Material;
+use App\Models\MaterialAccessLog;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -30,16 +30,16 @@ class AnalyticsController extends Controller
         // Key Metrics
         $totalUsers = User::where('role', 'user')->count();
         $totalCourses = Course::count();
-        $totalSessions = VideoSession::count();
+        $totalSessions = Material::count();
         
-        // Sessions completed (unique user-session combinations with watch time > 0)
-        $sessionsCompleted = SessionAccessLog::where('duration_seconds', '>', 0)
-            ->select('user_id', 'video_session_id')
+        // Materials completed (unique user-material combinations with watch time > 0)
+        $sessionsCompleted = MaterialAccessLog::where('duration_seconds', '>', 0)
+            ->select('user_id', 'material_id')
             ->distinct()
             ->count();
         
         // Total study time across all users
-        $totalStudyTimeSeconds = SessionAccessLog::sum('duration_seconds');
+        $totalStudyTimeSeconds = MaterialAccessLog::sum('duration_seconds');
         $totalStudyTimeHours = floor($totalStudyTimeSeconds / 3600);
         
         // User Growth Chart Data
@@ -68,7 +68,7 @@ class AnalyticsController extends Controller
         
         // User Distribution
         $activeUsers = User::where('role', 'user')
-            ->whereHas('sessionAccessLogs', function($query) use ($startDate) {
+            ->whereHas('materialAccessLogs', function($query) use ($startDate) {
                 $query->where('accessed_at', '>=', $startDate);
             })
             ->count();
@@ -80,14 +80,14 @@ class AnalyticsController extends Controller
         $inactiveUsers = $totalUsers - $activeUsers;
         
         // Top Courses (by access count)
-        $topCourses = Course::with(['videoSessions' => function($query) use ($startDate) {
+        $topCourses = Course::with(['materials' => function($query) use ($startDate) {
                 $query->withCount(['accessLogs' => function($q) use ($startDate) {
                     $q->where('accessed_at', '>=', $startDate);
                 }]);
             }])
             ->get()
             ->map(function($course) {
-                $course->total_accesses = $course->videoSessions->sum('access_logs_count');
+                $course->total_accesses = $course->materials->sum('access_logs_count');
                 return $course;
             })
             ->sortByDesc('total_accesses')
@@ -95,7 +95,7 @@ class AnalyticsController extends Controller
             ->values();
         
         // Recent Activity
-        $recentActivity = SessionAccessLog::with(['user', 'videoSession.course'])
+        $recentActivity = MaterialAccessLog::with(['user', 'material.course'])
             ->where('accessed_at', '>=', $startDate)
             ->orderBy('accessed_at', 'desc')
             ->limit(10)
@@ -104,9 +104,9 @@ class AnalyticsController extends Controller
                 return [
                     'type' => 'session_access',
                     'icon' => 'play-circle',
-                    'title' => 'Session Accessed',
-                    'description' => $log->user->name . ' accessed ' . $log->videoSession->title,
-                    'course' => $log->videoSession->course->name,
+                    'title' => 'Material Accessed',
+                    'description' => $log->user->name . ' accessed ' . $log->material->title,
+                    'course' => $log->material->course->name,
                     'time' => $log->accessed_at,
                     'timestamp' => $log->accessed_at->timestamp,
                 ];
