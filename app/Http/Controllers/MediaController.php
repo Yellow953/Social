@@ -57,69 +57,13 @@ class MediaController extends Controller
     }
 
     /**
-     * View image with watermark
+     * View image (no server-side watermark; transparent logo overlay is in the frontend only)
      */
     private function viewImage(MaterialMedia $media, string $filePath, $user)
     {
-        // Create watermarked image
-        $image = imagecreatefromstring(file_get_contents($filePath));
-        
-        if (!$image) {
-            abort(500, 'Failed to load image.');
-        }
-
-        $width = imagesx($image);
-        $height = imagesy($image);
-
-        // Load watermark logo
-        $logoPath = public_path('assets/images/logo-transparent.png');
-        if (file_exists($logoPath)) {
-            $logo = imagecreatefrompng($logoPath);
-            if ($logo) {
-                $logoWidth = imagesx($logo);
-                $logoHeight = imagesy($logo);
-                
-                // Resize logo to be 15% of image width
-                $newLogoWidth = (int)($width * 0.15);
-                $newLogoHeight = (int)($logoHeight * ($newLogoWidth / $logoWidth));
-                
-                $resizedLogo = imagecreatetruecolor($newLogoWidth, $newLogoHeight);
-                imagealphablending($resizedLogo, false);
-                imagesavealpha($resizedLogo, true);
-                imagecopyresampled($resizedLogo, $logo, 0, 0, 0, 0, $newLogoWidth, $newLogoHeight, $logoWidth, $logoHeight);
-                
-                // Add username text
-                $username = strtoupper($user->name);
-                $fontSize = 5; // Built-in font size (1-5, 5 is largest)
-                $textColor = imagecolorallocatealpha($image, 92, 92, 92, 40); // Gray with transparency (#5c5c5c)
-                
-                // Calculate text position (center-bottom)
-                // Estimate text width: approximately 6 pixels per character for font 5
-                $textWidth = strlen($username) * 6;
-                $textX = ($width - $textWidth) / 2;
-                $textY = $height - 40;
-                
-                // Use built-in font (more reliable across systems)
-                imagestring($image, $fontSize, (int)$textX, (int)$textY, $username, $textColor);
-                
-                // Place logo in center
-                $logoX = ($width - $newLogoWidth) / 2;
-                $logoY = ($height - $newLogoHeight) / 2;
-                imagecopymerge($image, $resizedLogo, (int)$logoX, (int)$logoY, 0, 0, $newLogoWidth, $newLogoHeight, 70);
-                
-                imagedestroy($resizedLogo);
-                imagedestroy($logo);
-            }
-        }
-
-        // Output image
-        ob_start();
-        imagepng($image);
-        $imageData = ob_get_clean();
-        imagedestroy($image);
-
-        return Response::make($imageData, 200, [
-            'Content-Type' => 'image/png',
+        $mime = $media->mime_type ?? 'image/jpeg';
+        return Response::file($filePath, [
+            'Content-Type' => $mime,
             'Content-Disposition' => 'inline; filename="' . $media->original_filename . '"',
             'Cache-Control' => 'no-cache, no-store, must-revalidate',
             'Pragma' => 'no-cache',

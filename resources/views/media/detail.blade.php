@@ -3,7 +3,7 @@
 @section('title', $media->original_filename . ' | ESIB SOCIAL')
 
 @section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('materials') }}">Materials</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('academique') }}">Académique</a></li>
     <li class="breadcrumb-item"><a href="{{ route('materials.show', $material) }}">{{ Str::limit($material->title, 30) }}</a></li>
     <li class="breadcrumb-item active" aria-current="page">{{ Str::limit($media->original_filename, 30) }}</li>
 @endsection
@@ -33,13 +33,12 @@
                 <div class="card-body p-0">
                     <div class="media-container" data-media-type="{{ $media->type }}" data-media-id="{{ $media->id }}">
                         @if($media->type === 'pdf')
-                            <div id="pdf-viewer-container-{{ $media->id }}" class="pdf-viewer-container" style="position: relative; width: 100%; min-height: 80vh; border: 1px solid #ddd; background: #f5f5f5; overflow: auto;">
-                                <div id="pdf-watermark-{{ $media->id }}" class="pdf-watermark-overlay" style="position: fixed; pointer-events: none; z-index: 50; display: flex; align-items: center; justify-content: center; flex-direction: column;">
-                                    <img src="{{ asset('assets/images/logo-transparent.png') }}" 
-                                         alt="Watermark" 
-                                         style="width: 200px; opacity: 0.35; pointer-events: none;">
-                                    <div style="margin-top: auto; padding-bottom: 40px; color: rgba(92, 92, 92, 0.6); font-size: 24px; font-weight: bold; pointer-events: none;">
-                                        {{ strtoupper(auth()->user()->name) }}
+                            <div id="pdf-viewer-container-{{ $media->id }}" class="pdf-viewer-container" data-pdf-logo-url="{{ asset('assets/images/logo-transparent.png') }}" style="position: relative; width: 100%; min-height: 80vh; border: 1px solid #ddd; background: #f5f5f5; overflow: auto;">
+                                <div id="pdf-watermark-{{ $media->id }}" class="pdf-watermark-overlay media-watermark-pdf-wrap">
+                                    <div class="media-username-pattern media-username-pattern-pdf">
+                                        @for($i = 0; $i < 80; $i++)
+                                            <span class="media-username-pattern-item">{{ strtoupper(auth()->user()->name) }}</span>
+                                        @endfor
                                     </div>
                                 </div>
                                 <div id="pdf-pages-{{ $media->id }}" class="pdf-pages" style="padding: 20px; position: relative; z-index: 1;"></div>
@@ -61,31 +60,34 @@
                                 <div class="watermark-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; display: flex; align-items: center; justify-content: center;">
                                     <img src="{{ asset('assets/images/logo-transparent.png') }}" 
                                          alt="Watermark" 
-                                         style="width: 200px; opacity: 0.3; pointer-events: none;">
+                                         class="media-watermark-logo">
                                 </div>
-                                <div style="position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); color: rgba(92, 92, 92, 0.5); font-size: 24px; font-weight: bold; pointer-events: none; z-index: 11;">
-                                    {{ strtoupper(auth()->user()->name) }}
+                                <div class="media-username-pattern media-username-pattern-image">
+                                    @for($i = 0; $i < 16; $i++)
+                                        <span class="media-username-pattern-item">{{ strtoupper(auth()->user()->name) }}</span>
+                                    @endfor
                                 </div>
                             </div>
                         @elseif($media->type === 'video')
-                            <div class="video-viewer-container" style="position: relative; width: 100%; background: #000;">
-                                <div class="ratio ratio-16x9">
+                            <div class="video-viewer-container">
+                                <div class="video-wrapper">
                                     <video id="media-video-{{ $media->id }}" 
-                                           class="w-100" 
+                                           class="media-video-player"
                                            controls
                                            controlsList="nodownload"
-                                           oncontextmenu="return false;"
-                                           style="position: relative;">
+                                           oncontextmenu="return false;">
                                         <source src="{{ route('media.stream', $media) }}" type="{{ $media->mime_type ?? 'video/mp4' }}">
                                         Your browser does not support the video tag.
                                     </video>
-                                    <div class="watermark-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; display: flex; align-items: center; justify-content: center;">
+                                    <div class="watermark-overlay video-watermark-overlay">
                                         <img src="{{ asset('assets/images/logo-transparent.png') }}" 
                                              alt="Watermark" 
-                                             style="width: 200px; opacity: 0.4; pointer-events: none;">
+                                             class="media-watermark-logo">
                                     </div>
-                                    <div style="position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); color: rgba(255, 255, 255, 0.7); font-size: 20px; font-weight: bold; pointer-events: none; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); z-index: 11;">
-                                        {{ strtoupper(auth()->user()->name) }}
+                                    <div class="media-username-pattern media-username-pattern-video">
+                                        @for($i = 0; $i < 16; $i++)
+                                            <span class="media-username-pattern-item">{{ strtoupper(auth()->user()->name) }}</span>
+                                        @endfor
                                     </div>
                                 </div>
                             </div>
@@ -132,8 +134,131 @@
         pointer-events: none !important;
     }
 
+    /* Bigger transparent logo on top (no server burn) */
+    .media-watermark-logo {
+        width: 320px;
+        max-width: 50vw;
+        opacity: 0.4;
+        pointer-events: none;
+    }
+
+    /* Repeating username watermark: multiple times, oblique, across the screen */
+    .media-username-pattern {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 11;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: repeat(8, 1fr);
+        gap: 0;
+        align-items: center;
+        justify-items: center;
+        overflow: hidden;
+    }
+    /* PDF: watermark scrolls with document, covers all pages */
+    .media-watermark-pdf-wrap {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        pointer-events: none;
+        z-index: 50;
+    }
+    .media-watermark-pdf-wrap .media-username-pattern-pdf {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: repeat(40, 1fr);
+        min-height: 100%;
+    }
+    /* Logo once per PDF page (added by JS in each page wrapper) */
+    .pdf-page-wrapper {
+        position: relative;
+    }
+    .pdf-page-logo-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+        z-index: 2;
+    }
+    .pdf-page-logo-overlay .media-watermark-logo {
+        max-width: 45%;
+        width: 280px;
+        opacity: 0.4;
+    }
+    .media-username-pattern-item {
+        font-style: oblique;
+        font-weight: bold;
+        font-size: 1rem;
+        white-space: nowrap;
+        opacity: 0.18;
+        transform: rotate(-28deg);
+        color: #5c5c5c;
+    }
+    .media-username-pattern-pdf .media-username-pattern-item {
+        opacity: 0.22;
+        font-size: 1.05rem;
+    }
+    .media-username-pattern-image .media-username-pattern-item {
+        color: #5c5c5c;
+        opacity: 0.2;
+    }
+    .media-username-pattern-video .media-username-pattern-item {
+        color: rgba(255, 255, 255, 0.85);
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        opacity: 0.22;
+    }
+
     .pdf-viewer-container {
         position: relative;
+    }
+
+    /* Video: no fixed ratio — size to video’s aspect ratio, no extra empty space */
+    .video-viewer-container {
+        position: relative;
+        width: 100%;
+        background: #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .video-viewer-container .video-wrapper {
+        position: relative;
+        width: fit-content;
+        max-width: 100%;
+        max-height: 85vh;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .video-viewer-container .media-video-player {
+        display: block;
+        max-width: 100%;
+        max-height: 85vh;
+        width: auto;
+        height: auto;
+        vertical-align: middle;
+    }
+    .video-viewer-container .video-watermark-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .video-viewer-container .media-username-pattern-video {
+        position: absolute;
+        inset: 0;
     }
 </style>
 @endpush
@@ -150,18 +275,10 @@
         var viewerEl = document.getElementById('pdf-viewer-container-' + mediaId);
         var watermarkEl = document.getElementById('pdf-watermark-' + mediaId);
 
-        function positionPdfWatermark() {
-            if (!viewerEl || !watermarkEl) return;
-            var r = viewerEl.getBoundingClientRect();
-            watermarkEl.style.top = r.top + 'px';
-            watermarkEl.style.left = r.left + 'px';
-            watermarkEl.style.width = r.width + 'px';
-            watermarkEl.style.height = r.height + 'px';
+        function sizePdfWatermark() {
+            if (!viewerEl || !watermarkEl || !container) return;
+            watermarkEl.style.height = container.offsetHeight + 'px';
         }
-
-        window.addEventListener('scroll', positionPdfWatermark, true);
-        window.addEventListener('resize', positionPdfWatermark);
-        positionPdfWatermark();
 
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
@@ -175,14 +292,14 @@
             return pdfjsLib.getDocument({ data: arrayBuffer }).promise;
         }).then(function(pdf) {
             loadingEl.style.display = 'none';
-            positionPdfWatermark();
             var totalPages = pdf.numPages;
+            var logoUrl = viewerEl.getAttribute('data-pdf-logo-url') || '';
             function renderPage(num) {
                 return pdf.getPage(num).then(function(page) {
                     var scale = 1.5;
                     var viewport = page.getViewport({ scale: scale });
                     var wrapper = document.createElement('div');
-                    wrapper.className = 'mb-4';
+                    wrapper.className = 'pdf-page-wrapper mb-4';
                     wrapper.style.textAlign = 'center';
                     var canvas = document.createElement('canvas');
                     var ctx = canvas.getContext('2d');
@@ -191,6 +308,16 @@
                     canvas.style.maxWidth = '100%';
                     canvas.style.height = 'auto';
                     wrapper.appendChild(canvas);
+                    if (logoUrl) {
+                        var logoOverlay = document.createElement('div');
+                        logoOverlay.className = 'pdf-page-logo-overlay';
+                        var logoImg = document.createElement('img');
+                        logoImg.src = logoUrl;
+                        logoImg.alt = 'Watermark';
+                        logoImg.className = 'media-watermark-logo';
+                        logoOverlay.appendChild(logoImg);
+                        wrapper.appendChild(logoOverlay);
+                    }
                     container.appendChild(wrapper);
                     return page.render({ canvasContext: ctx, viewport: viewport }).promise;
                 });
@@ -201,7 +328,9 @@
                     chain = chain.then(function() { return renderPage(n); });
                 })(i);
             }
-            return chain;
+            return chain.then(function() {
+                sizePdfWatermark();
+            });
         }).catch(function(err) {
             loadingEl.innerHTML = '<p class="text-danger">Unable to load the document. You may need to refresh the page.</p>';
             console.error(err);

@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\VerifyTwoFactorController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\MaterialController;
+use App\Http\Controllers\AcademiqueController;
 use App\Http\Controllers\CalculatorController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
@@ -23,7 +24,16 @@ use Inertia\Inertia;
 
 // Public routes
 Route::get('/', function () {
-    return Inertia::render('Welcome', ['page' => 'home']);
+    $homepageSlides = \App\Models\HomepageSlide::orderBy('order')->orderBy('id')->get()
+        ->map(fn ($s) => [
+            'id' => $s->id,
+            'image_url' => asset('storage/' . $s->image_path),
+            'title' => $s->title,
+            'description' => $s->description,
+        ])
+        ->values()
+        ->toArray();
+    return Inertia::render('Welcome', ['page' => 'home', 'homepageSlides' => $homepageSlides]);
 });
 Route::get('/about', function () {
     return Inertia::render('Welcome', ['page' => 'about']);
@@ -66,10 +76,15 @@ Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name(
 // Protected routes (require authentication)
 Route::middleware(['auth', 'single.device'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/academic', [AcademiqueController::class, 'index'])->name('academique');
+    Route::get('/academic/years', [AcademiqueController::class, 'years'])->name('academique.years');
+    Route::get('/academic/courses', [AcademiqueController::class, 'courses'])->name('academique.courses');
+    Route::get('/academic/materials', [AcademiqueController::class, 'materials'])->name('academique.materials');
     Route::get('/courses', [CourseController::class, 'index'])->name('courses');
     Route::middleware('subscription')->group(function () {
         Route::get('/materials', [MaterialController::class, 'index'])->name('materials');
         Route::get('/materials/{material}', [MaterialController::class, 'show'])->name('materials.show');
+        Route::get('/materials/{material}/media', [MaterialController::class, 'media'])->name('materials.media');
         Route::post('/materials/{material}/watch-time', [MaterialController::class, 'updateWatchTime'])->name('materials.watch-time');
         Route::get('/media/{media}', [\App\Http\Controllers\MediaController::class, 'detail'])->name('media.detail');
         Route::get('/media/{media}/view', [\App\Http\Controllers\MediaController::class, 'view'])->name('media.view');
@@ -105,4 +120,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // Materials CRUD (admin)
     Route::resource('materials', \App\Http\Controllers\Admin\MaterialController::class)->parameters(['session' => 'material']);
+
+    // Content Management (homepage slideshow)
+    Route::resource('content-management', \App\Http\Controllers\Admin\ContentManagementController::class);
 });

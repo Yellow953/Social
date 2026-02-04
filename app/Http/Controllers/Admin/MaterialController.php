@@ -38,7 +38,7 @@ class MaterialController extends Controller
             'type' => 'required|string|in:cours,tp,video_recording',
             'is_locked' => 'boolean',
             'media' => 'nullable|array',
-            'media.*' => 'file|mimes:pdf,mp4,webm,ogg,mov,avi,jpg,jpeg,png,gif,webp|max:512000',
+            'media.*' => 'file|mimes:pdf,mp4,webm,ogg,mov,avi,mkv,m4v,jpg,jpeg,png,gif,webp|max:524288',
         ]);
 
         $validated['is_locked'] = $request->has('is_locked');
@@ -120,7 +120,7 @@ class MaterialController extends Controller
             $type = null;
             if ($extension === 'pdf') {
                 $type = 'pdf';
-            } elseif (in_array($extension, ['mp4', 'webm', 'ogg', 'mov', 'avi', 'mkv', 'flv'])) {
+            } elseif (in_array($extension, ['mp4', 'webm', 'ogg', 'mov', 'avi', 'mkv', 'm4v', 'flv'])) {
                 $type = 'video';
             } elseif (in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
                 $type = 'image';
@@ -131,7 +131,20 @@ class MaterialController extends Controller
             }
 
             try {
-                $path = $file->store('materials/media', 'local');
+                $path = null;
+                $storedSize = $file->getSize();
+                $mimeType = $file->getMimeType();
+
+                if ($type === 'image') {
+                    [$path, $storedSize] = $this->storeImageCompressed($file);
+                } else {
+                    $path = $file->store('materials/media', 'local');
+                }
+
+                if (!$path) {
+                    continue;
+                }
+
                 $maxOrder = $material->media()->max('order') ?? 0;
 
                 MaterialMedia::create([
@@ -139,8 +152,8 @@ class MaterialController extends Controller
                     'type' => $type,
                     'file_path' => $path,
                     'original_filename' => $file->getClientOriginalName(),
-                    'mime_type' => $file->getMimeType(),
-                    'file_size' => $file->getSize(),
+                    'mime_type' => $mimeType,
+                    'file_size' => $storedSize,
                     'order' => $maxOrder + 1,
                 ]);
             } catch (\Exception $e) {
@@ -173,6 +186,68 @@ class MaterialController extends Controller
                 'read' => false,
             ]);
         }
+    }
+
+    /**
+     * Store image with compression (max width 1920, JPEG quality 85 or PNG 8).
+     * PDF and video are stored as-is (no compression).
+     */
+    private function storeImageCompressed(\Illuminate\Http\UploadedFile $file): array
+    {
+        $path = null;
+        $extension = strtolower($file->getClientOriginalExtension());
+        $maxWidth = 1920;
+        $jpegQuality = 85;
+        $pngCompression = 8;
+
+        $contents = $file->get();
+        $image = @imagecreatefromstring($contents);
+        if (!$image && $extension === 'webp' && function_exists('imagecreatefromwebp')) {
+            $image = @imagecreatefromwebp($file->getRealPath());
+        }
+        if (!$image) {
+            $path = $file->store('materials/media', 'local');
+            return [$path, $file->getSize()];
+        }
+
+        $width = imagesx($image);
+        $height = imagesy($image);
+        $needsResize = $width > $maxWidth;
+        $newWidth = $needsResize ? $maxWidth : $width;
+        $newHeight = $needsResize ? (int) round($height * ($maxWidth / $width)) : $height;
+
+        $out = imagecreatetruecolor($newWidth, $newHeight);
+        if (!$out) {
+            imagedestroy($image);
+            $path = $file->store('materials/media', 'local');
+            return [$path, $file->getSize()];
+        }
+
+        imagealphablending($out, false);
+        imagesavealpha($out, true);
+        $transparent = imagecolorallocatealpha($out, 255, 255, 255, 127);
+        imagefilledrectangle($out, 0, 0, $newWidth, $newHeight, $transparent);
+
+        imagecopyresampled($out, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+        imagedestroy($image);
+
+        $dir = storage_path('app/materials/media');
+        if (!is_dir($dir)) {
+            \Illuminate\Support\Facades\File::makeDirectory($dir, 0755, true);
+        }
+        $filename = uniqid('img_', true) . '.' . ($extension === 'png' || $extension === 'gif' ? 'png' : 'jpg');
+        $fullPath = $dir . '/' . $filename;
+
+        if ($extension === 'png' || $extension === 'gif') {
+            imagepng($out, $fullPath, $pngCompression);
+        } else {
+            imagejpeg($out, $fullPath, $jpegQuality);
+        }
+        imagedestroy($out);
+
+        $path = 'materials/media/' . $filename;
+        $storedSize = (int) filesize($fullPath);
+        return [$path, $storedSize];
     }
 
     private function handleMediaDeletion(array $mediaIds)

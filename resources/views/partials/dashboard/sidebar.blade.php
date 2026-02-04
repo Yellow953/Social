@@ -49,6 +49,10 @@
                     <i class="fas fa-history fa-lg me-3"></i>
                     <span class="nav-text" id="nav-admin-access-logs">Access Logs</span>
                 </a>
+                <a href="{{ route('admin.content-management.index') }}" data-tooltip="Content Management" class="sidebar-item d-flex align-items-center px-3 py-3 mb-2 rounded text-decoration-none {{ request()->is('admin/content-management*') ? 'active' : '' }}">
+                    <i class="fas fa-images fa-lg me-3"></i>
+                    <span class="nav-text" id="nav-admin-content">Content Management</span>
+                </a>
                 <a href="{{ route('notifications.index') }}" data-tooltip="Notifications" class="sidebar-item d-flex align-items-center px-3 py-3 mb-2 rounded text-decoration-none {{ request()->is('notifications*') ? 'active' : '' }}">
                     <i class="fas fa-bell fa-lg me-3"></i>
                     <span class="nav-text" id="nav-notifications">Notifications</span>
@@ -63,17 +67,13 @@
                     <i class="fas fa-home fa-lg me-3"></i>
                     <span class="nav-text" id="nav-dashboard">Dashboard</span>
                 </a>
-                <a href="{{ route('courses') }}" data-tooltip="Courses" class="sidebar-item d-flex align-items-center px-3 py-3 mb-2 rounded text-decoration-none {{ request()->is('courses*') ? 'active' : '' }}">
-                    <i class="fas fa-book-open fa-lg me-3"></i>
-                    <span class="nav-text" id="nav-courses">Courses</span>
+                <a href="{{ route('academique') }}" data-tooltip="Académique" class="sidebar-item d-flex align-items-center px-3 py-3 mb-2 rounded text-decoration-none {{ request()->is('academic*') ? 'active' : '' }}">
+                    <i class="fas fa-graduation-cap fa-lg me-3"></i>
+                    <span class="nav-text" id="nav-academique">Académique</span>
                 </a>
-                <a href="{{ route('materials') }}" data-tooltip="Materials" class="sidebar-item d-flex align-items-center px-3 py-3 mb-2 rounded text-decoration-none {{ request()->is('materials*') ? 'active' : '' }}">
-                    <i class="fas fa-play-circle fa-lg me-3"></i>
-                    <span class="nav-text" id="nav-materials">Materials</span>
-                </a>
-                <a href="{{ route('calculator') }}" data-tooltip="Calculator" class="sidebar-item d-flex align-items-center px-3 py-3 mb-2 rounded text-decoration-none {{ request()->is('calculator*') ? 'active' : '' }}">
+                <a href="{{ route('calculator') }}" data-tooltip="Calculatrice" class="sidebar-item d-flex align-items-center px-3 py-3 mb-2 rounded text-decoration-none {{ request()->is('calculator*') ? 'active' : '' }}">
                     <i class="fas fa-calculator fa-lg me-3"></i>
-                    <span class="nav-text" id="nav-calculator">Calculator</span>
+                    <span class="nav-text" id="nav-calculator">Calculatrice</span>
                 </a>
                 <a href="{{ route('notifications.index') }}" data-tooltip="Notifications" class="sidebar-item d-flex align-items-center px-3 py-3 mb-2 rounded text-decoration-none {{ request()->is('notifications*') ? 'active' : '' }}">
                     <i class="fas fa-bell fa-lg me-3"></i>

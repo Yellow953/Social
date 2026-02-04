@@ -47,9 +47,30 @@ class MaterialController extends Controller
             'user_agent' => request()->userAgent(),
         ]);
 
-        $material->load('media');
-
         return view('materials.show', compact('material'));
+    }
+
+    /**
+     * Return media list for a material (for dynamic loading on show page).
+     */
+    public function media(Material $material)
+    {
+        $user = Auth::user();
+        if (!$material->canBeAccessedBy($user)) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $media = $material->media()->orderBy('order')->get()->map(function ($m) {
+            return [
+                'id' => $m->id,
+                'original_filename' => $m->original_filename,
+                'type' => $m->type,
+                'formatted_file_size' => $m->formatted_file_size,
+                'detail_url' => route('media.detail', $m),
+            ];
+        });
+
+        return response()->json(['media' => $media]);
     }
 
     public function updateWatchTime(Request $request, Material $material)

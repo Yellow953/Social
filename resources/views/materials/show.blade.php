@@ -3,7 +3,7 @@
 @section('title', $material->title . ' | ESIB SOCIAL')
 
 @section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('materials') }}">Materials</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('academique') }}">Académique</a></li>
     <li class="breadcrumb-item active" aria-current="page">{{ Str::limit($material->title, 30) }}</li>
 @endsection
 
@@ -31,54 +31,23 @@
                 </div>
             </div>
 
-            <!-- Media Files -->
-            @if($material->media && $material->media->count() > 0)
+            <!-- Media Files (loaded dynamically) -->
             <div class="card border-0 shadow-lg overflow-hidden mb-4" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                 <div class="card-header bg-white border-bottom">
                     <h5 class="mb-0 fw-bold"><i class="fas fa-file me-2 text-primary"></i>Material Media</h5>
                 </div>
                 <div class="card-body p-4">
-                    <div class="row g-3">
-                        @foreach($material->media as $media)
-                            <div class="col-md-4 col-sm-6">
-                                <a href="{{ route('media.detail', $media) }}" class="text-decoration-none">
-                                    <div class="card border shadow-sm h-100 media-card" style="transition: all 0.3s ease; cursor: pointer;">
-                                        <div class="card-body text-center p-4">
-                                            <div class="mb-3">
-                                                @if($media->type === 'pdf')
-                                                    <i class="fas fa-file-pdf fa-4x text-danger"></i>
-                                                @elseif($media->type === 'video')
-                                                    <i class="fas fa-file-video fa-4x text-primary"></i>
-                                                @else
-                                                    <i class="fas fa-file-image fa-4x text-success"></i>
-                                                @endif
-                                            </div>
-                                            <h6 class="mb-2 text-dark text-truncate" style="max-width: 100%;" title="{{ $media->original_filename }}">
-                                                {{ $media->original_filename }}
-                                            </h6>
-                                            <small class="text-muted">{{ $media->formatted_file_size }}</small>
-                                            <div class="mt-3">
-                                                <span class="badge bg-{{ $media->type === 'pdf' ? 'danger' : ($media->type === 'video' ? 'primary' : 'success') }}">
-                                                    {{ ucfirst($media->type) }}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        @endforeach
+                    <div id="media-loading" class="text-center py-5 text-muted">
+                        <div class="spinner-border mb-2" role="status"></div>
+                        <p class="mb-0">Loading media...</p>
+                    </div>
+                    <div id="media-list-wrap" class="row g-3 d-none"></div>
+                    <div id="media-empty" class="text-center py-4 text-muted d-none">
+                        <i class="fas fa-file mb-2" style="font-size: 2.5rem;"></i>
+                        <p class="mb-0">No media files available for this material</p>
                     </div>
                 </div>
             </div>
-            @else
-            <!-- No Media Message -->
-            <div class="card border-0 shadow-lg overflow-hidden mb-4" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
-                <div class="card-body p-4 text-center">
-                    <i class="fas fa-file text-muted mb-3" style="font-size: 3rem;"></i>
-                    <h6 class="text-muted">No media files available for this material</h6>
-                </div>
-            </div>
-            @endif
         </div>
 
         <div class="col-lg-4">
@@ -132,5 +101,67 @@
         border-color: #ec682a !important;
     }
 </style>
+@endpush
+
+@push('scripts')
+<script>
+(function() {
+    const mediaApiUrl = @json(route('materials.media', $material));
+    const loadingEl = document.getElementById('media-loading');
+    const listWrap = document.getElementById('media-list-wrap');
+    const emptyEl = document.getElementById('media-empty');
+
+    function escapeHtml(s) {
+        const div = document.createElement('div');
+        div.textContent = s;
+        return div.innerHTML;
+    }
+
+    function typeIcon(type) {
+        if (type === 'pdf') return '<i class="fas fa-file-pdf fa-4x text-danger"></i>';
+        if (type === 'video') return '<i class="fas fa-file-video fa-4x text-primary"></i>';
+        return '<i class="fas fa-file-image fa-4x text-success"></i>';
+    }
+
+    function typeBadgeClass(type) {
+        if (type === 'pdf') return 'danger';
+        if (type === 'video') return 'primary';
+        return 'success';
+    }
+
+    fetch(mediaApiUrl, {
+        headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+        credentials: 'same-origin'
+    })
+        .then(r => r.json())
+        .then(data => {
+            loadingEl.classList.add('d-none');
+            var media = data.media || [];
+            if (media.length === 0) {
+                emptyEl.classList.remove('d-none');
+                return;
+            }
+            listWrap.classList.remove('d-none');
+            media.forEach(function(m) {
+                var col = document.createElement('div');
+                col.className = 'col-md-4 col-sm-6';
+                col.innerHTML = '<a href="' + escapeHtml(m.detail_url) + '" class="text-decoration-none">' +
+                    '<div class="card border shadow-sm h-100 media-card" style="transition: all 0.3s ease; cursor: pointer;">' +
+                    '<div class="card-body text-center p-4">' +
+                    '<div class="mb-3">' + typeIcon(m.type) + '</div>' +
+                    '<h6 class="mb-2 text-dark text-truncate" style="max-width: 100%;" title="' + escapeHtml(m.original_filename) + '">' + escapeHtml(m.original_filename) + '</h6>' +
+                    '<small class="text-muted">' + escapeHtml(m.formatted_file_size || '') + '</small>' +
+                    '<div class="mt-3"><span class="badge bg-' + typeBadgeClass(m.type) + '">' + escapeHtml((m.type || '').charAt(0).toUpperCase() + (m.type || '').slice(1)) + '</span></div>' +
+                    '</div></div></a>';
+                listWrap.appendChild(col);
+            });
+        })
+        .catch(function() {
+            loadingEl.classList.add('d-none');
+            emptyEl.classList.remove('d-none');
+            emptyEl.querySelector('p').textContent = 'Unable to load media. Please refresh the page.';
+        });
+})();
+</script>
 @endpush
 @endsection

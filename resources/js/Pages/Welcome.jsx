@@ -41,6 +41,9 @@ export default function Welcome({ page = 'home' }) {
 
     const activeTab = getActiveTab();
 
+    const { props } = usePage();
+    const homepageSlides = props.homepageSlides ?? [];
+
     const renderPage = () => {
         switch (page) {
             case 'about':
@@ -50,7 +53,7 @@ export default function Welcome({ page = 'home' }) {
             case 'calculatrice':
                 return <CalculatricePage />;
             default:
-                return <HomePage />;
+                return <HomePage homepageSlides={homepageSlides} />;
         }
     };
 

@@ -115,6 +115,7 @@
                                 </div>
                                 <div id="media-preview" class="mt-3 row g-3"></div>
                                 <input type="hidden" name="media_files" id="media-files-input">
+                                <small class="text-muted d-block mt-1">Images are compressed (max width 1920px). PDF and video are stored as-is. For large videos, ensure <code>upload_max_filesize</code> and <code>post_max_size</code> in php.ini are sufficient (e.g. 512M).</small>
                                 @error('media')
                                     <div class="text-danger mt-2">{{ $message }}</div>
                                 @enderror
@@ -260,7 +261,7 @@ document.addEventListener('DOMContentLoaded', function() {
         url: "#", // We won't use this URL, files will be submitted with form
         paramName: "media",
         maxFilesize: 500, // 500 MB
-        acceptedFiles: ".pdf,.mp4,.webm,.ogg,.mov,.avi,.jpg,.jpeg,.png,.gif,.webp",
+        acceptedFiles: ".pdf,.mp4,.webm,.ogg,.mov,.avi,.mkv,.m4v,.jpg,.jpeg,.png,.gif,.webp",
         addRemoveLinks: true,
         clickable: true,
         dictDefaultMessage: "",
@@ -311,7 +312,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (ext === 'pdf') {
                     iconClass = 'fa-file-pdf';
                     iconColor = 'text-danger';
-                } else if (['mp4', 'webm', 'ogg', 'mov', 'avi'].includes(ext)) {
+                } else if (['mp4', 'webm', 'ogg', 'mov', 'avi', 'mkv', 'm4v'].includes(ext)) {
                     iconClass = 'fa-file-video';
                     iconColor = 'text-primary';
                 } else if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext)) {
@@ -366,9 +367,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         // Create a new FormData from the form
                         const formData = new FormData(form);
                         
-                        // Add all files
+                        // Add all files (use raw file for FormData; Dropzone file may be File or wrapper)
                         filesToSubmit.forEach((file) => {
-                            formData.append('media[]', file);
+                            const blob = file.file || file;
+                            const name = file.name || (blob && blob.name) || 'file';
+                            formData.append('media[]', blob, name);
                         });
 
                         // Prevent default submission

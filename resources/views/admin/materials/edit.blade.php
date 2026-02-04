@@ -272,7 +272,7 @@
         url: "{{ route('admin.materials.update', $material) }}",
         paramName: "media",
         maxFilesize: 500, // 500 MB
-        acceptedFiles: ".pdf,.mp4,.webm,.ogg,.mov,.avi,.jpg,.jpeg,.png,.gif,.webp",
+        acceptedFiles: ".pdf,.mp4,.webm,.ogg,.mov,.avi,.mkv,.m4v,.jpg,.jpeg,.png,.gif,.webp",
         addRemoveLinks: true,
         clickable: true, // Explicitly enable clicking
         dictDefaultMessage: "",
@@ -323,7 +323,8 @@
 
                     // Add all Dropzone files to FormData
                     files.forEach((file, index) => {
-                        formData.append('media[]', file);
+                        const blob = file.file || file;
+                        formData.append('media[]', blob, file.name || (blob && blob.name) || 'file');
                     });
 
                     // Get CSRF token

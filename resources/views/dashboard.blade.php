@@ -102,27 +102,14 @@
                 <div class="card-body p-3 p-md-4">
                     <div class="row g-2 g-md-3">
                         <div class="col-6 col-md-6">
-                            <a href="{{ route('courses') }}" class="text-decoration-none action-card-link">
+                            <a href="{{ route('academique') }}" class="text-decoration-none action-card-link">
                                 <div class="card border-0 shadow-md h-100 action-card" style="background: white; transition: all 0.3s ease;">
                                     <div class="card-body text-center p-3 p-md-4">
                                         <div class="rounded-xl p-2 p-md-3 shadow-md d-inline-flex mb-2 mb-md-3" style="background: linear-gradient(135deg, #ec682a 0%, #c2410c 100%);">
-                                            <i class="fas fa-book-open fa-2x text-white"></i>
+                                            <i class="fas fa-graduation-cap fa-2x text-white"></i>
                                         </div>
-                                        <h6 class="fw-bold mb-0 mb-md-1 small">Browse Courses</h6>
-                                        <p class="text-muted small mb-0 d-none d-md-block">Explore available courses</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-6 col-md-6">
-                            <a href="{{ route('materials') }}" class="text-decoration-none action-card-link">
-                                <div class="card border-0 shadow-md h-100 action-card" style="background: white; transition: all 0.3s ease;">
-                                    <div class="card-body text-center p-3 p-md-4">
-                                        <div class="rounded-xl p-2 p-md-3 shadow-md d-inline-flex mb-2 mb-md-3" style="background: linear-gradient(135deg, #ec682a 0%, #c2410c 100%);">
-                                            <i class="fas fa-play-circle fa-2x text-white"></i>
-                                        </div>
-                                        <h6 class="fw-bold mb-0 mb-md-1 small">View Materials</h6>
-                                        <p class="text-muted small mb-0 d-none d-md-block">Access your materials</p>
+                                        <h6 class="fw-bold mb-0 mb-md-1 small">Académique</h6>
+                                        <p class="text-muted small mb-0 d-none d-md-block">Année → Cours → Matériel</p>
                                     </div>
                                 </div>
                             </a>
@@ -134,8 +121,8 @@
                                         <div class="rounded-xl p-2 p-md-3 shadow-md d-inline-flex mb-2 mb-md-3" style="background: linear-gradient(135deg, #ec682a 0%, #c2410c 100%);">
                                             <i class="fas fa-calculator fa-2x text-white"></i>
                                         </div>
-                                        <h6 class="fw-bold mb-0 mb-md-1 small">Calculator</h6>
-                                        <p class="text-muted small mb-0 d-none d-md-block">Use built-in calculator</p>
+                                        <h6 class="fw-bold mb-0 mb-md-1 small">Calculatrice</h6>
+                                        <p class="text-muted small mb-0 d-none d-md-block">Outil de calcul des notes</p>
                                     </div>
                                 </div>
                             </a>
@@ -216,13 +203,13 @@
             <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                 <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-2 py-md-3 px-3 px-md-4 flex-wrap gap-2">
                     <h5 class="mb-0 fw-bold small" style="color: #c2410c;"><i class="fas fa-book-open me-2" style="color: #ec682a;"></i>Recent Courses</h5>
-                    <a href="{{ route('courses') }}" class="btn btn-sm text-decoration-none fw-semibold" style="color: #ec682a;">View All <i class="fas fa-arrow-right ms-1"></i></a>
+                    <a href="{{ route('academique') }}" class="btn btn-sm text-decoration-none fw-semibold" style="color: #ec682a;">View All <i class="fas fa-arrow-right ms-1"></i></a>
                 </div>
                 <div class="card-body p-3 p-md-4">
                     <div class="row g-2 g-md-3">
                         @foreach($recentCourses as $course)
                         <div class="col-12 col-md-6 col-lg-4">
-                            <a href="{{ route('courses') }}?course={{ $course->id }}" class="text-decoration-none">
+                            <a href="{{ route('academique') }}" class="text-decoration-none">
                                 <div class="card border-0 shadow-sm h-100 hover-shadow">
                                     <div class="card-body p-3 p-md-3">
                                         <div class="d-flex align-items-start mb-2">

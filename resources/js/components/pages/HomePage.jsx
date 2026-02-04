@@ -1,50 +1,58 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
-export default function HomePage() {
+const defaultContentBoxes = [
+    {
+        id: 1,
+        title: "Welcome to ESIB SOCIAL",
+        description:
+            "Your comprehensive learning platform for social sciences. Access courses, sessions, and materials organized by subject.",
+        icon: "fas fa-graduation-cap",
+    },
+    {
+        id: 2,
+        title: "Premium Content Access",
+        description:
+            "Subscribe to SOCIALPLUS to unlock all locked sessions and premium materials. Get approved by admin for full access.",
+        icon: "fas fa-star",
+    },
+    {
+        id: 3,
+        title: "Organized by Subject",
+        description:
+            "Courses organized by subject matter, not just by year. Easy to find what you need when you need it.",
+        icon: "fas fa-book-open",
+    },
+];
+
+export default function HomePage({ homepageSlides = [] }) {
+    const hasSlides = homepageSlides && homepageSlides.length > 0;
+    const carouselItems = hasSlides ? homepageSlides : defaultContentBoxes;
+    const carouselLength = carouselItems.length;
+
     const [carouselIndex, setCarouselIndex] = useState(0);
 
-    const contentBoxes = [
-        {
-            id: 1,
-            title: "Welcome to ESIB SOCIAL",
-            description:
-                "Your comprehensive learning platform for social sciences. Access courses, sessions, and materials organized by subject.",
-            icon: "fas fa-graduation-cap",
-        },
-        {
-            id: 2,
-            title: "Premium Content Access",
-            description:
-                "Subscribe to SOCIALPLUS to unlock all locked sessions and premium materials. Get approved by admin for full access.",
-            icon: "fas fa-star",
-        },
-        {
-            id: 3,
-            title: "Organized by Subject",
-            description:
-                "Courses organized by subject matter, not just by year. Easy to find what you need when you need it.",
-            icon: "fas fa-book-open",
-        },
-    ];
+    // Keep index in bounds when switching between slides/content or when slides change
+    useEffect(() => {
+        setCarouselIndex((prev) => (carouselLength ? Math.min(prev, carouselLength - 1) : 0));
+    }, [carouselLength]);
 
     const nextCarousel = () => {
-        setCarouselIndex((prev) => (prev + 1) % contentBoxes.length);
+        setCarouselIndex((prev) => (prev + 1) % carouselLength);
     };
 
     const prevCarousel = () => {
-        setCarouselIndex(
-            (prev) => (prev - 1 + contentBoxes.length) % contentBoxes.length,
-        );
+        setCarouselIndex((prev) => (prev - 1 + carouselLength) % carouselLength);
     };
 
     // Auto-play carousel
     useEffect(() => {
+        if (carouselLength <= 1) return;
         const interval = setInterval(() => {
-            setCarouselIndex((prev) => (prev + 1) % contentBoxes.length);
+            setCarouselIndex((prev) => (prev + 1) % carouselLength);
         }, 5000);
         return () => clearInterval(interval);
-    }, [contentBoxes.length]);
+    }, [carouselLength]);
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -315,31 +323,62 @@ export default function HomePage() {
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ duration: 0.5 }}
                             >
-                                {contentBoxes.map((box) => (
-                                    <div
-                                        key={box.id}
-                                        className="min-w-full bg-white rounded-xl p-6 sm:p-8 md:p-12 border-2 shadow-lg flex flex-col items-center text-center"
-                                        style={{ borderColor: "#ec682a" }}
-                                    >
-                                        <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-[#ec682a] to-[#d45a20] rounded-xl flex items-center justify-center mb-4 sm:mb-6">
-                                            <i
-                                                className={`${box.icon} text-white text-2xl sm:text-3xl`}
-                                            ></i>
+                                {carouselItems.map((item) =>
+                                    hasSlides ? (
+                                        <div
+                                            key={item.id}
+                                            className="min-w-full rounded-xl overflow-hidden shadow-lg relative bg-gray-900"
+                                            style={{ aspectRatio: "1200/500" }}
+                                        >
+                                            <img
+                                                src={item.image_url}
+                                                alt={item.title || "Slide"}
+                                                className="w-full h-full object-cover"
+                                            />
+                                            {(item.title || item.description) && (
+                                                <div
+                                                    className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 sm:p-8 md:p-12 bg-gradient-to-t from-black/70 via-black/30 to-transparent"
+                                                    style={{ color: "#fff" }}
+                                                >
+                                                    {item.title && (
+                                                        <h3 className="text-2xl sm:text-3xl font-bold mb-2 sm:mb-3 drop-shadow-md">
+                                                            {item.title}
+                                                        </h3>
+                                                    )}
+                                                    {item.description && (
+                                                        <p className="text-base sm:text-lg max-w-2xl drop-shadow-md opacity-95">
+                                                            {item.description}
+                                                        </p>
+                                                    )}
+                                                </div>
+                                            )}
                                         </div>
-                                        <h3 className="text-2xl sm:text-3xl font-bold text-[#5c5c5c] mb-3 sm:mb-4">
-                                            {box.title}
-                                        </h3>
-                                        <p className="text-gray-600 text-base sm:text-lg max-w-2xl">
-                                            {box.description}
-                                        </p>
-                                    </div>
-                                ))}
+                                    ) : (
+                                        <div
+                                            key={item.id}
+                                            className="min-w-full bg-white rounded-xl p-6 sm:p-8 md:p-12 border-2 shadow-lg flex flex-col items-center text-center"
+                                            style={{ borderColor: "#ec682a" }}
+                                        >
+                                            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-[#ec682a] to-[#d45a20] rounded-xl flex items-center justify-center mb-4 sm:mb-6">
+                                                <i
+                                                    className={`${item.icon} text-white text-2xl sm:text-3xl`}
+                                                ></i>
+                                            </div>
+                                            <h3 className="text-2xl sm:text-3xl font-bold text-[#5c5c5c] mb-3 sm:mb-4">
+                                                {item.title}
+                                            </h3>
+                                            <p className="text-gray-600 text-base sm:text-lg max-w-2xl">
+                                                {item.description}
+                                            </p>
+                                        </div>
+                                    )
+                                )}
                             </motion.div>
                         </div>
 
                         {/* Carousel Navigation */}
                         <div className="flex justify-center items-center mt-6 sm:mt-8 space-x-3">
-                            {contentBoxes.map((_, index) => (
+                            {carouselItems.map((_, index) => (
                                 <button
                                     key={index}
                                     onClick={() => setCarouselIndex(index)}
