@@ -12,7 +12,7 @@
                     @endif
                 </div>
             </a>
-            <button class="btn btn-sm d-none d-md-block sidebar-toggle-btn" id="sidebar-toggle" title="Toggle Sidebar">
+            <button class="btn btn-sm d-none d-lg-block sidebar-toggle-btn" id="sidebar-toggle" title="Toggle Sidebar">
                 <i class="fas fa-chevron-left" id="toggle-icon"></i>
             </button>
         </div>

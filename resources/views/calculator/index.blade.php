@@ -137,10 +137,10 @@
                                 </div>
                                 <div class="mt-3 pt-3" style="border-top: 2px solid #e5e7eb;">
                                     <div class="d-flex align-items-center gap-2 mb-3">
-                                        <label class="text-muted small mb-0 fw-semibold">Desired overall grade (0–100%)</label>
+                                        <label class="text-muted small mb-0 fw-semibold">Desired overall grade (/20)</label>
                                         <div class="input-group input-group-sm" style="max-width: 100px;">
-                                            <input type="number" class="form-control border" id="desiredGrade" min="0" max="100" step="0.1" value="50" style="border-radius: 6px;">
-                                            <span class="input-group-text border-start-0 small" style="background: #f8fafc; border-radius: 0 6px 6px 0 !important;">%</span>
+                                            <input type="number" class="form-control border" id="desiredGrade" min="0" max="20" step="0.01" value="10" style="border-radius: 6px;">
+                                            <span class="input-group-text border-start-0 small" style="background: #f8fafc; border-radius: 0 6px 6px 0 !important;">/20</span>
                                         </div>
                                     </div>
                                 </div>
@@ -185,7 +185,7 @@
                                         <span class="display-3 fw-bold" id="requiredFinal" style="color: #c2410c; line-height: 1;">0.00</span>
                                         <span class="fs-3 text-muted fw-normal" id="gradeOutOf">/ 20</span>
                                     </div>
-                                    <p class="text-muted small mt-2 mb-0">To get <strong id="desiredGradeDisplay">50</strong>% overall</p>
+                                    <p class="text-muted small mt-2 mb-0">To get <strong id="desiredGradeDisplay">10</strong>/20 overall</p>
                                 </div>
                                 <div class="pt-3">
                                     <p class="small text-muted mb-3 fw-semibold text-uppercase" style="letter-spacing: 0.5px;">Contributions so far</p>
@@ -255,22 +255,34 @@
                             </div>
                             <div class="card-body p-4">
                                 <form id="semesterGpaForm">
-                                    <div class="table-responsive">
-                                        <table class="table table-borderless align-middle mb-0">
-                                            <thead>
-                                                <tr class="border-bottom" style="border-color: #e5e7eb !important;">
-                                                    <th class="text-muted fw-semibold small text-uppercase pb-3" style="letter-spacing: 0.5px;">Course</th>
-                                                    <th class="text-muted fw-semibold small text-uppercase pb-3 text-end" style="letter-spacing: 0.5px;">Grade</th>
-                                                    <th class="text-muted fw-semibold small text-uppercase pb-3 text-end" style="letter-spacing: 0.5px;">Credits</th>
-                                                    <th class="text-muted fw-semibold small text-uppercase pb-3 text-end" style="letter-spacing: 0.5px; width: 48px;"></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="semesterCoursesBody">
-                                                <!-- Rows added by JS -->
-                                            </tbody>
-                                        </table>
+                                    <div id="semesterCoursesEmpty" class="text-center py-5 px-3 semester-empty-state">
+                                        <div class="semester-empty-icon mb-3">
+                                            <i class="fas fa-book-open" style="color: #ec682a;"></i>
+                                        </div>
+                                        <h6 class="fw-bold mb-2" style="color: #5c5c5c;">No courses yet</h6>
+                                        <p class="text-muted small mb-4 mx-auto" style="max-width: 260px;">Add your semester courses with grade and credits to calculate your weighted average.</p>
+                                        <button type="button" class="btn px-4 py-2 fw-semibold" onclick="addCourseRow()" style="background: linear-gradient(135deg, #ec682a 0%, #c2410c 100%); color: white; border-radius: 8px; border: none;">
+                                            <i class="fas fa-plus me-2"></i>Add first course
+                                        </button>
                                     </div>
-                                    <div class="d-flex align-items-center justify-content-between mt-4 pt-3" style="border-top: 2px solid #e5e7eb;">
+                                    <div id="semesterCoursesTableWrap" class="d-none">
+                                        <div class="table-responsive">
+                                            <table class="table table-borderless align-middle mb-0">
+                                                <thead>
+                                                    <tr class="border-bottom" style="border-color: #e5e7eb !important;">
+                                                        <th class="text-muted fw-semibold small text-uppercase pb-3" style="letter-spacing: 0.5px;">Course</th>
+                                                        <th class="text-muted fw-semibold small text-uppercase pb-3 text-end" style="letter-spacing: 0.5px;">Grade</th>
+                                                        <th class="text-muted fw-semibold small text-uppercase pb-3 text-end" style="letter-spacing: 0.5px;">Credits</th>
+                                                        <th class="text-muted fw-semibold small text-uppercase pb-3 text-end" style="letter-spacing: 0.5px; width: 48px;"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="semesterCoursesBody">
+                                                    <!-- Rows added by JS -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div id="semesterCoursesFooter" class="d-none d-flex align-items-center justify-content-between mt-4 pt-3" style="border-top: 2px solid #e5e7eb;">
                                         <div>
                                             <small class="text-muted d-block">Total credits</small>
                                             <strong id="semesterTotalCredits" style="color: #c2410c; font-size: 1.1rem;">0</strong>
@@ -291,13 +303,12 @@
                                 </h5>
                             </div>
                             <div class="card-body p-4 d-flex flex-column justify-content-center min-vh-md-0">
-                                <div id="semesterResultPlaceholder" class="text-center text-muted py-5">
-                                    <div class="mb-3 opacity-50">
-                                        <div style="width: 80px; height: 80px; margin: 0 auto; background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%); border-radius: 20px; display: flex; align-items: center; justify-content: center;">
-                                            <i class="fas fa-graduation-cap fa-2x text-muted"></i>
-                                        </div>
+                                <div id="semesterResultPlaceholder" class="text-center py-5 px-3 semester-result-empty">
+                                    <div class="semester-result-empty-icon mb-4">
+                                        <i class="fas fa-chart-pie" style="color: #ec682a;"></i>
                                     </div>
-                                    <p class="mb-0 small fw-medium">Add courses (grade + credits),<br>then click Calculate GPA.</p>
+                                    <h6 class="fw-bold mb-2" style="color: #5c5c5c;">Semester average</h6>
+                                    <p class="text-muted small mb-0 mx-auto" style="max-width: 240px;">Add courses with grades and credits, then click <strong>Calculate GPA</strong> to see your weighted average and letter grade.</p>
                                 </div>
                                 <div id="semesterResultSection" class="d-none">
                                     <div class="text-center mb-4 pb-3" style="border-bottom: 2px solid #e5e7eb;">
@@ -408,6 +419,26 @@
     .breakdown-item:hover {
         background-color: #f8fafc;
     }
+
+    /* Semester calculator empty states */
+    .semester-empty-state,
+    .semester-result-empty {
+        background: linear-gradient(180deg, rgba(236, 104, 42, 0.04) 0%, transparent 100%);
+        border-radius: 12px;
+        border: 2px dashed rgba(236, 104, 42, 0.25);
+    }
+    .semester-empty-icon,
+    .semester-result-empty-icon {
+        width: 72px;
+        height: 72px;
+        margin: 0 auto;
+        border-radius: 16px;
+        background: linear-gradient(135deg, rgba(236, 104, 42, 0.12) 0%, rgba(194, 65, 12, 0.06) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.75rem;
+    }
 </style>
 
 <script>
@@ -457,9 +488,10 @@
         var finalPercent = parseFloat(document.getElementById('finalPercent').value) || 0;
         var tpPercent = parseFloat(document.getElementById('tpPercent').value) || 0;
         var tcPercent = parseFloat(document.getElementById('tcPercent').value) || 0;
-        var desiredGrade = parseFloat(document.getElementById('desiredGrade').value);
-        if (isNaN(desiredGrade) || desiredGrade < 0 || desiredGrade > 100) desiredGrade = 50;
-        document.getElementById('desiredGrade').value = desiredGrade;
+        var desiredGradeOutOf20 = parseFloat(document.getElementById('desiredGrade').value);
+        if (isNaN(desiredGradeOutOf20) || desiredGradeOutOf20 < 0 || desiredGradeOutOf20 > 20) desiredGradeOutOf20 = 10;
+        document.getElementById('desiredGrade').value = desiredGradeOutOf20;
+        var desiredGrade = (desiredGradeOutOf20 / 20) * 100;
         var totalPercent = midtermPercent + finalPercent + tpPercent + tcPercent;
 
         if (Math.abs(totalPercent - 100) > 0.1) {
@@ -487,7 +519,7 @@
         var displayRequired = requiredFinalScore < 0 ? 0 : (requiredFinalScore > gradeScale ? gradeScale : requiredFinalScore);
         document.getElementById('requiredFinal').textContent = displayRequired.toFixed(2);
         document.getElementById('gradeOutOf').textContent = '/ ' + gradeScale;
-        document.getElementById('desiredGradeDisplay').textContent = desiredGrade.toFixed(1);
+        document.getElementById('desiredGradeDisplay').textContent = desiredGradeOutOf20.toFixed(2);
         document.getElementById('midtermContribution').textContent = midtermContribution.toFixed(2) + '%';
         document.getElementById('tpContribution').textContent = tpContribution.toFixed(2) + '%';
         document.getElementById('tcContribution').textContent = tcContribution.toFixed(2) + '%';
@@ -495,16 +527,16 @@
 
         var message = '', alertClass = '';
         if (requiredFinalScore > gradeScale) {
-            message = 'You need more than ' + gradeScale + ' on the final to get ' + desiredGrade + '% overall — not possible. Try a lower desired grade or improve Partiel/TP/TC.';
+            message = 'You need more than ' + gradeScale + ' on the final to get ' + desiredGradeOutOf20.toFixed(2) + '/20 overall — not possible. Try a lower desired grade or improve Partiel/TP/TC.';
             alertClass = 'alert-danger';
         } else if (requiredFinalScore < 0) {
-            message = 'You already have enough points to reach ' + desiredGrade + '% overall. No minimum final score needed.';
+            message = 'You already have enough points to reach ' + desiredGradeOutOf20.toFixed(2) + '/20 overall. No minimum final score needed.';
             alertClass = 'alert-success';
         } else if (requiredFinalScore <= gradeScale * 0.5) {
-            message = 'You need ' + requiredFinalScore.toFixed(1) + ' on the final to get ' + desiredGrade + '% overall.';
+            message = 'You need ' + requiredFinalScore.toFixed(1) + ' on the final to get ' + desiredGradeOutOf20.toFixed(2) + '/20 overall.';
             alertClass = 'alert-info';
         } else {
-            message = 'You need ' + requiredFinalScore.toFixed(1) + ' on the final to get ' + desiredGrade + '% overall.';
+            message = 'You need ' + requiredFinalScore.toFixed(1) + ' on the final to get ' + desiredGradeOutOf20.toFixed(2) + '/20 overall.';
             alertClass = 'alert-info';
         }
 
@@ -542,6 +574,22 @@
         document.getElementById('semesterResultPlaceholder').classList.remove('d-none');
     }
 
+    function toggleSemesterCoursesEmpty() {
+        var rows = document.querySelectorAll('.semester-course-row');
+        var emptyEl = document.getElementById('semesterCoursesEmpty');
+        var tableWrap = document.getElementById('semesterCoursesTableWrap');
+        var footer = document.getElementById('semesterCoursesFooter');
+        if (rows.length === 0) {
+            if (emptyEl) emptyEl.classList.remove('d-none');
+            if (tableWrap) tableWrap.classList.add('d-none');
+            if (footer) footer.classList.add('d-none');
+        } else {
+            if (emptyEl) emptyEl.classList.add('d-none');
+            if (tableWrap) tableWrap.classList.remove('d-none');
+            if (footer) footer.classList.remove('d-none');
+        }
+    }
+
     function addCourseRow() {
         var id = ++semesterCourseId;
         var maxText = '/' + semesterScale;
@@ -570,6 +618,7 @@
             '</td>';
         document.getElementById('semesterCoursesBody').appendChild(row);
         updateSemesterTotalCredits();
+        toggleSemesterCoursesEmpty();
     }
 
     function removeCourseRow(courseId) {
@@ -578,6 +627,7 @@
             row.remove();
             updateSemesterTotalCredits();
         }
+        toggleSemesterCoursesEmpty();
         document.getElementById('semesterResultSection').classList.add('d-none');
         document.getElementById('semesterResultPlaceholder').classList.remove('d-none');
     }
@@ -663,6 +713,6 @@
         if (e.key === 'Enter') { e.preventDefault(); calculateSemesterGpa(); }
     });
 
-    addCourseRow();
+    toggleSemesterCoursesEmpty();
 </script>
 @endsection

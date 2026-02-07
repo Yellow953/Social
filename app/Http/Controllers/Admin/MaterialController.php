@@ -37,11 +37,13 @@ class MaterialController extends Controller
             'course_id' => 'required|exists:courses,id',
             'type' => 'required|string|in:cours,tp,video_recording',
             'is_locked' => 'boolean',
+            'watermark_type' => 'nullable|string|in:none,full,logo_only,username_only',
             'media' => 'nullable|array',
             'media.*' => 'file|mimes:pdf,mp4,webm,ogg,mov,avi,mkv,m4v,jpg,jpeg,png,gif,webp|max:524288',
         ]);
 
         $validated['is_locked'] = $request->has('is_locked');
+        $validated['watermark_type'] = $validated['watermark_type'] ?? 'full';
 
         $material = Material::create($validated);
 
@@ -70,9 +72,13 @@ class MaterialController extends Controller
             'course_id' => 'required|exists:courses,id',
             'type' => 'required|string|in:cours,tp,video_recording',
             'is_locked' => 'boolean',
+            'watermark_type' => 'nullable|string|in:none,full,logo_only,username_only',
         ]);
 
         $validated['is_locked'] = $request->has('is_locked');
+        if (array_key_exists('watermark_type', $validated)) {
+            $validated['watermark_type'] = $validated['watermark_type'] ?? 'full';
+        }
 
         $material->update($validated);
 
@@ -231,7 +237,8 @@ class MaterialController extends Controller
         imagecopyresampled($out, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
         imagedestroy($image);
 
-        $dir = storage_path('app/materials/media');
+        // Use same disk as MediaController (local = storage/app/private)
+        $dir = Storage::disk('local')->path('materials/media');
         if (!is_dir($dir)) {
             \Illuminate\Support\Facades\File::makeDirectory($dir, 0755, true);
         }

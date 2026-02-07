@@ -9,46 +9,39 @@ use Illuminate\Http\Request;
 class AcademiqueController extends Controller
 {
     /**
-     * Show the academique page (Year → Course → Material).
+     * Show the academique page (Year → Major → Course → Material).
      */
     public function index()
     {
         return view('academique.index', [
             'materialsUrl' => url('/materials'),
+            'majors' => config('majors'),
         ]);
     }
 
     /**
-     * Return distinct years that have courses (for the 5-year selector).
+     * Return all standard years (always show all 5, even with no courses).
      */
     public function years(Request $request)
     {
-        $order = ['Sup' => 0, 'Spé' => 1, '1e' => 2, '2e' => 3, '3e' => 4];
-        $years = Course::whereNotNull('year')
-            ->where('year', '!=', '')
-            ->distinct()
-            ->pluck('year')
-            ->sortBy(fn ($y) => $order[$y] ?? 99)
-            ->values();
-
-        // If no courses have year set, return the 5 standard years
-        if ($years->isEmpty()) {
-            $years = collect(['Sup', 'Spé', '1e', '2e', '3e']);
-        }
-
-        return response()->json(['years' => $years->toArray()]);
+        $years = ['Sup', 'Spé', '1e', '2e', '3e'];
+        return response()->json(['years' => $years]);
     }
 
     /**
-     * Return courses for a given year.
+     * Return courses for a given year and major. Only courses matching both are returned.
      */
     public function courses(Request $request)
     {
-        $request->validate(['year' => 'required|string|max:50']);
+        $request->validate([
+            'year' => 'required|string|max:50',
+            'major' => 'required|string|max:255',
+        ]);
 
         $courses = Course::where('year', $request->year)
+            ->where('major', $request->major)
             ->orderBy('name')
-            ->get(['id', 'name', 'code', 'year']);
+            ->get(['id', 'name', 'code', 'year', 'major']);
 
         return response()->json(['courses' => $courses]);
     }

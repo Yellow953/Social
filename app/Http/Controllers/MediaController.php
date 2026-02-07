@@ -37,11 +37,7 @@ class MediaController extends Controller
             abort(403, 'You need an active SOCIALPLUS subscription to access this media.');
         }
 
-        $filePath = Storage::disk('local')->path($media->file_path);
-
-        if (!file_exists($filePath)) {
-            abort(404, 'Media file not found.');
-        }
+        $filePath = $this->resolveMediaFilePath($media->file_path);
 
         // For images, we'll serve them with watermark overlay via frontend
         // For PDFs and videos, we'll use viewers that prevent downloads
@@ -92,14 +88,30 @@ class MediaController extends Controller
     }
 
     /**
+     * Resolve full filesystem path for media file_path (local disk or legacy app path).
+     */
+    private function resolveMediaFilePath(string $filePath): string
+    {
+        $path = Storage::disk('local')->path($filePath);
+        if (file_exists($path)) {
+            return $path;
+        }
+        $legacyPath = storage_path('app/' . $filePath);
+        if (file_exists($legacyPath)) {
+            return $legacyPath;
+        }
+        abort(404, 'Media file not found.');
+    }
+
+    /**
      * View video (we'll use video player with watermark overlay in frontend)
      */
     private function viewVideo(MaterialMedia $media, string $filePath, $user)
     {
         // For videos, we'll serve them through a player that prevents downloads
         // The watermark will be added via canvas overlay in frontend
-        $file = Storage::disk('local')->get($media->file_path);
-        
+        $file = file_get_contents($filePath);
+
         return Response::make($file, 200, [
             'Content-Type' => $media->mime_type ?? 'video/mp4',
             'Content-Disposition' => 'inline; filename="' . $media->original_filename . '"',
@@ -126,11 +138,7 @@ class MediaController extends Controller
             abort(400, 'This endpoint is only for video streaming.');
         }
 
-        $filePath = Storage::disk('local')->path($media->file_path);
-
-        if (!file_exists($filePath)) {
-            abort(404, 'Media file not found.');
-        }
+        $filePath = $this->resolveMediaFilePath($media->file_path);
 
         $fileSize = filesize($filePath);
         $start = 0;

@@ -35,7 +35,7 @@
     @endif
 
     <!-- Users Table -->
-    <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
+    <div class="card border-0 shadow-lg overflow-hidden w-100" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
         <div class="card-header bg-white border-bottom d-flex flex-wrap align-items-center justify-content-between gap-2 py-3">
             <h5 class="mb-0 fw-bold" style="color: #c2410c;">All Users</h5>
             <div class="d-flex align-items-center">
@@ -44,8 +44,8 @@
             </div>
         </div>
         <div class="card-body p-4">
-            <div class="table-responsive">
-                <table id="usersTable" class="table table-hover mb-0">
+            <div class="table-responsive w-100">
+                <table id="usersTable" class="table table-hover mb-0 w-100">
                     <thead>
                         <tr>
                             <th>User</th>
@@ -79,7 +79,9 @@
                                 <span style="color: #5c5c5c;">{{ $user->phone ?? '-' }}</span>
                             </td>
                             <td>
-                                @if($user->role === 'admin')
+                                @if($user->role === 'super_admin')
+                                    <span class="badge" style="background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%); color: white; padding: 0.4rem 0.8rem; font-weight: 500;">Super Admin</span>
+                                @elseif($user->role === 'admin')
                                     <span class="badge" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 0.4rem 0.8rem; font-weight: 500;">Admin</span>
                                 @else
                                     <span class="badge" style="background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%); color: white; padding: 0.4rem 0.8rem; font-weight: 500;">User</span>
@@ -116,7 +118,7 @@
                             </td>
                             <td class="text-end">
                                 <div class="d-flex gap-2 justify-content-end">
-                                    @if(!$user->activeSubscription() && $user->role !== 'admin')
+                                    @if(!$user->activeSubscription() && !$user->isAdminLevel())
                                         <button type="button"
                                                 class="btn btn-sm btn-success quick-subscription-btn shadow-sm"
                                                 data-user-id="{{ $user->id }}"
@@ -126,16 +128,22 @@
                                             <i class="fas fa-gift me-1"></i>
                                         </button>
                                     @endif
-                                    <a href="{{ route('admin.users.edit', $user) }}" class="btn btn-sm btn-primary shadow-sm" title="Edit" style="border-radius: 8px;">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <form method="POST" action="{{ route('admin.users.destroy', $user) }}" class="d-inline form-delete" data-confirm="Are you sure you want to delete this user?">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger shadow-sm" title="Delete" style="border-radius: 8px;">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
+                                    @if(auth()->user()->isSuperAdmin() || !$user->isAdminLevel())
+                                        <a href="{{ route('admin.users.edit', $user) }}" class="btn btn-sm btn-primary shadow-sm" title="Edit" style="border-radius: 8px;">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        @if($user->id !== auth()->id())
+                                            <form method="POST" action="{{ route('admin.users.destroy', $user) }}" class="d-inline form-delete" data-confirm="Are you sure you want to delete this user?">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger shadow-sm" title="Delete" style="border-radius: 8px;">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        @endif
+                                    @else
+                                        <span class="badge bg-secondary" title="Only super admin can edit/delete admins">—</span>
+                                    @endif
                                 </div>
                             </td>
                         </tr>
@@ -152,11 +160,18 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
 <style>
-    /* Improved DataTable Styling */
+    /* DataTable full width */
+    .dataTables_wrapper {
+        width: 100% !important;
+    }
     #usersTable {
+        width: 100% !important;
         border-collapse: separate;
         border-spacing: 0;
+        table-layout: auto;
     }
+
+    /* Improved DataTable Styling */
 
     #usersTable tbody tr {
         transition: all 0.2s ease;
@@ -219,10 +234,29 @@
         padding: 0.5rem 0.75rem;
     }
 
-    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
         background: linear-gradient(135deg, #ec682a 0%, #c2410c 100%) !important;
         color: white !important;
-        border: none;
+        border: none !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+        background: rgba(236, 104, 42, 0.15) !important;
+        border-color: #ec682a !important;
+        color: #c2410c !important;
+    }
+
+    /* Bootstrap 5 pagination (if DataTables uses it) */
+    .dataTables_wrapper .page-item.active .page-link {
+        background: linear-gradient(135deg, #ec682a 0%, #c2410c 100%) !important;
+        border-color: #ec682a !important;
+        color: white !important;
+    }
+    .dataTables_wrapper .page-link:hover {
+        color: #c2410c;
+        background-color: rgba(236, 104, 42, 0.1);
+        border-color: #ec682a;
     }
 
     .dataTables_wrapper .dataTables_info {

@@ -2,7 +2,7 @@
 <header class="bg-white shadow-sm sticky-top" style="z-index: 100;">
     <div class="d-flex align-items-center justify-content-between px-3 px-md-4 py-2 py-md-3">
         <div class="d-flex align-items-center min-w-0 flex-grow-1">
-            <button class="btn btn-sm text-[#5c5c5c] d-md-none me-2 flex-shrink-0" id="mobile-sidebar-toggle" type="button" aria-label="Open menu">
+            <button class="btn btn-sm text-[#5c5c5c] d-lg-none me-2 flex-shrink-0" id="mobile-sidebar-toggle" type="button" aria-label="Open menu">
                 <i class="fas fa-bars"></i>
             </button>
             <!-- Breadcrumb -->
@@ -35,7 +35,7 @@
                     <div class="rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px; background: linear-gradient(135deg, #ec682a 0%, #c2410c 100%);">
                         <span class="text-white fw-bold small">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
                     </div>
-                    <span class="d-none d-md-inline">{{ auth()->user()->name }}</span>
+                    <span class="d-none d-lg-inline">{{ auth()->user()->name }}</span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li><a class="dropdown-item" href="{{ route('profile') }}"><i class="fas fa-user me-2"></i> Profile</a></li>

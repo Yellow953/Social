@@ -18,15 +18,6 @@ export default function Header({ activeTab }) {
                     <Link
                         href="/"
                         className="flex items-center space-x-3 no-underline mr-8 group"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            setActiveTab("");
-                            window.history.pushState(
-                                null,
-                                "",
-                                window.location.pathname,
-                            );
-                        }}
                     >
                         <img
                             src="/assets/images/logo-transparent.png"

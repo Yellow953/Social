@@ -98,11 +98,14 @@
                             <!-- Major -->
                             <div class="col-md-6 mb-3">
                                 <label for="major" class="form-label fw-bold">Major</label>
-                                <input type="text"
-                                       class="form-control @error('major') is-invalid @enderror"
-                                       id="major"
-                                       name="major"
-                                       value="{{ old('major') }}">
+                                <select class="form-control @error('major') is-invalid @enderror"
+                                        id="major"
+                                        name="major">
+                                    <option value="">Select major (optional)</option>
+                                    @foreach(config('majors') as $major)
+                                        <option value="{{ $major }}" {{ old('major') == $major ? 'selected' : '' }}>{{ $major }}</option>
+                                    @endforeach
+                                </select>
                                 @error('major')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror

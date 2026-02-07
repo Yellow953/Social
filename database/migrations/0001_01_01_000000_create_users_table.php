@@ -19,7 +19,7 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
 
-            $table->enum('role', ['user', 'admin'])->default('user');
+            $table->enum('role', ['user', 'admin', 'super_admin'])->default('user');
             $table->string('phone')->nullable();
             $table->string('study_year')->nullable();
             $table->string('major')->nullable();

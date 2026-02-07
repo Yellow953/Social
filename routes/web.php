@@ -27,7 +27,7 @@ Route::get('/', function () {
     $homepageSlides = \App\Models\HomepageSlide::orderBy('order')->orderBy('id')->get()
         ->map(fn ($s) => [
             'id' => $s->id,
-            'image_url' => asset('storage/' . $s->image_path),
+            'image_url' => asset('storage/' . $s->image_path) . '?v=' . $s->id,
             'title' => $s->title,
             'description' => $s->description,
         ])

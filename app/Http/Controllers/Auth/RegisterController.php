@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\Rule;
 
 class RegisterController extends Controller
 {
@@ -37,10 +38,22 @@ class RegisterController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                'unique:users',
+                function ($attribute, $value, $fail) {
+                    $domain = strtolower(substr(strrchr($value, '@'), 1) ?: '');
+                    if ($domain === '' || !preg_match('/^outlook\./i', $domain)) {
+                        $fail('Registration is only allowed with an Outlook email address (e.g. name@outlook.com).');
+                    }
+                },
+            ],
             'phone' => 'required|string|max:20',
             'study_year' => 'required|string|in:Sup,Spé,1e,2e,3e',
-            'major' => 'required|string|max:255',
+            'major' => ['required', 'string', Rule::in(config('majors'))],
             'password' => ['required', 'confirmed', Password::defaults()],
         ]);
 

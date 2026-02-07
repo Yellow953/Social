@@ -58,11 +58,28 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user is an admin
+     * Check if user is an admin (admin or super_admin; both can access admin panel).
      */
     public function isAdmin(): bool
     {
-        return $this->role === 'admin';
+        return in_array($this->role, ['admin', 'super_admin'], true);
+    }
+
+    /**
+     * Check if user is a super admin (can manage other admins).
+     */
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === 'super_admin';
+    }
+
+    /**
+     * Check if this user is an admin-level account (admin or super_admin).
+     * Used to restrict regular admins from editing/deleting each other.
+     */
+    public function isAdminLevel(): bool
+    {
+        return in_array($this->role, ['admin', 'super_admin'], true);
     }
 
     /**

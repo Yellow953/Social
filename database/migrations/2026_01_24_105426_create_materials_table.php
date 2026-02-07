@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('course_id')->constrained()->onDelete('cascade');
             $table->string('type'); // 'cours', 'tp', 'video_recording'
             $table->boolean('is_locked')->default(true);
+            $table->string('watermark_type', 20)->default('full');
             $table->timestamps();
         });
     }

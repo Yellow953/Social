@@ -17,6 +17,7 @@ class Material extends Model
         'course_id',
         'type', // 'cours', 'tp', 'video_recording'
         'is_locked',
+        'watermark_type', // 'none', 'full', 'logo_only', 'username_only'
     ];
 
     protected $casts = [

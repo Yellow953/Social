@@ -10,7 +10,7 @@
 <div class="container-fluid">
     <div class="mb-4">
         <h2 class="fw-bold mb-1" style="color: #c2410c;"><i class="fas fa-graduation-cap me-2" style="color: #ec682a;"></i>Académique</h2>
-        <p class="text-muted mb-0">Choisissez une année, puis un cours, puis ouvrez un matériel pour le consulter avec filigrane.</p>
+        <p class="text-muted mb-0">Choisissez une année, une filière, un cours, puis ouvrez un matériel pour le consulter avec filigrane.</p>
     </div>
 
     @if(!auth()->user()->hasActiveSubscription() && !auth()->user()->isAdmin())
@@ -25,32 +25,41 @@
         </div>
     @endif
 
-    <!-- 1. Years: cards across full width -->
+    <!-- 1. Years -->
     <section id="section-years" class="mb-5">
-        <h5 class="fw-bold mb-3" style="color: #c2410c;"><i class="fas fa-calendar-alt me-2" style="color: #ec682a;"></i>1. Choisir une année</h5>
+        <h5 class="fw-bold mb-4" style="color: #c2410c;"><i class="fas fa-calendar-alt me-2" style="color: #ec682a;"></i>1. Choisir une année</h5>
         <div id="years-loading" class="text-center py-5 text-muted">
             <div class="spinner-border me-2" role="status"></div> Chargement des années...
         </div>
-        <div id="years-cards" class="row g-3 g-md-4 d-none"></div>
+        <div id="years-cards" class="academique-step-cards academique-years-wrap row g-4 d-none"></div>
     </section>
 
-    <!-- 2. Courses: cards across full width -->
+    <!-- 2. Majors -->
+    <section id="section-majors" class="mb-5 d-none">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-4">
+            <h5 class="fw-bold mb-0" style="color: #c2410c;"><i class="fas fa-user-graduate me-2" style="color: #ec682a;"></i>2. Choisir une filière pour <span id="majors-year-label"></span></h5>
+            <a href="#" id="back-from-majors" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left me-1"></i> Changer d'année</a>
+        </div>
+        <div id="majors-cards" class="academique-step-cards academique-majors-wrap row g-4"></div>
+    </section>
+
+    <!-- 3. Courses -->
     <section id="section-courses" class="mb-5 d-none">
         <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
-            <h5 class="fw-bold mb-0" style="color: #c2410c;"><i class="fas fa-book-open me-2" style="color: #ec682a;"></i>2. Cours pour <span id="courses-year-label"></span></h5>
-            <a href="#" id="back-from-courses" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left me-1"></i> Changer d'année</a>
+            <h5 class="fw-bold mb-0" style="color: #c2410c;"><i class="fas fa-book-open me-2" style="color: #ec682a;"></i>3. Cours pour <span id="courses-year-label"></span> – <span id="courses-major-label"></span></h5>
+            <a href="#" id="back-from-courses" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left me-1"></i> Changer de filière</a>
         </div>
         <div id="courses-loading" class="text-center py-5 text-muted d-none">
             <div class="spinner-border me-2" role="status"></div> Chargement des cours...
         </div>
         <div id="courses-cards" class="row g-3 g-md-4"></div>
-        <p id="courses-empty" class="text-muted text-center py-4 d-none">Aucun cours pour cette année.</p>
+        <div id="courses-empty" class="d-none"></div>
     </section>
 
-    <!-- 3. Materials: list -->
+    <!-- 4. Materials -->
     <section id="section-materials" class="mb-5 d-none">
         <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
-            <h5 class="fw-bold mb-0" style="color: #c2410c;"><i class="fas fa-file-alt me-2" style="color: #ec682a;"></i>3. Matériel pour <span id="materials-course-label"></span></h5>
+            <h5 class="fw-bold mb-0" style="color: #c2410c;"><i class="fas fa-file-alt me-2" style="color: #ec682a;"></i>4. Matériel pour <span id="materials-course-label"></span></h5>
             <a href="#" id="back-from-materials" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left me-1"></i> Changer de cours</a>
         </div>
         <div id="materials-loading" class="text-center py-5 text-muted d-none">
@@ -69,12 +78,18 @@
     const coursesUrl = @json(route('academique.courses'));
     const materialsUrl = @json(route('academique.materials'));
     const materialsBaseUrl = @json(url('/materials'));
+    const majorsList = @json($majors);
 
     const sectionYears = document.getElementById('section-years');
     const yearsLoading = document.getElementById('years-loading');
     const yearsCards = document.getElementById('years-cards');
+    const sectionMajors = document.getElementById('section-majors');
+    const majorsYearLabel = document.getElementById('majors-year-label');
+    const majorsCards = document.getElementById('majors-cards');
+    const backFromMajors = document.getElementById('back-from-majors');
     const sectionCourses = document.getElementById('section-courses');
     const coursesYearLabel = document.getElementById('courses-year-label');
+    const coursesMajorLabel = document.getElementById('courses-major-label');
     const backFromCourses = document.getElementById('back-from-courses');
     const coursesLoading = document.getElementById('courses-loading');
     const coursesCards = document.getElementById('courses-cards');
@@ -88,6 +103,7 @@
     const materialsList = document.getElementById('materials-list');
 
     let selectedYear = null;
+    let selectedMajor = null;
     let selectedCourseId = null;
     let selectedCourseName = null;
 
@@ -106,15 +122,30 @@
         return div.innerHTML;
     }
 
-    backFromCourses.addEventListener('click', function(e) {
+    backFromMajors.addEventListener('click', function(e) {
         e.preventDefault();
         selectedYear = null;
-        selectedCourseId = null;
+        selectedMajor = null;
+        sectionMajors.classList.add('d-none');
         sectionCourses.classList.add('d-none');
         sectionMaterials.classList.add('d-none');
         sectionYears.classList.remove('d-none');
-        coursesCards.innerHTML = '';
+        majorsCards.innerHTML = '';
     });
+
+    backFromCourses.addEventListener('click', function(e) {
+        e.preventDefault();
+        goBackToMajors();
+    });
+
+    function goBackToMajors() {
+        selectedCourseId = null;
+        sectionCourses.classList.add('d-none');
+        sectionMaterials.classList.add('d-none');
+        sectionMajors.classList.remove('d-none');
+        coursesCards.innerHTML = '';
+        document.getElementById('courses-empty').classList.add('d-none');
+    }
 
     backFromMaterials.addEventListener('click', function(e) {
         e.preventDefault();
@@ -124,7 +155,7 @@
         materialsList.innerHTML = '';
     });
 
-    // Load years on page load
+    // Load years on page load (always all 5)
     fetch(yearsUrl, { headers: csrfHeaders(), credentials: 'same-origin' })
         .then(r => r.json())
         .then(data => {
@@ -133,24 +164,27 @@
             yearsCards.innerHTML = '';
             (data.years || []).forEach(year => {
                 const col = document.createElement('div');
-                col.className = 'col-6 col-sm-4 col-md col-xl';
+                col.className = 'col-6 col-md';
                 const card = document.createElement('a');
                 card.href = '#';
-                card.className = 'card border-0 shadow-sm h-100 text-decoration-none academique-year-card';
+                card.className = 'card border-0 shadow h-100 text-decoration-none academique-year-card academique-step-card';
                 card.style.borderLeft = '4px solid #ec682a';
                 card.dataset.year = year;
                 card.addEventListener('click', function(e) {
                     e.preventDefault();
                     selectedYear = year;
+                    selectedMajor = null;
+                    selectedCourseId = null;
                     document.querySelectorAll('.academique-year-card').forEach(el => el.classList.remove('border-primary'));
                     this.classList.add('border-primary');
                     sectionYears.classList.add('d-none');
-                    sectionCourses.classList.remove('d-none');
+                    sectionCourses.classList.add('d-none');
                     sectionMaterials.classList.add('d-none');
-                    coursesYearLabel.textContent = year;
-                    loadCourses(year);
+                    sectionMajors.classList.remove('d-none');
+                    majorsYearLabel.textContent = year;
+                    renderMajors();
                 });
-                card.innerHTML = '<div class="card-body text-center py-4"><i class="fas fa-calendar-alt fa-2x mb-2" style="color: #ec682a;"></i><h6 class="fw-bold mb-0 text-dark">' + escapeHtml(year) + '</h6></div>';
+                card.innerHTML = '<div class="card-body text-center d-flex flex-column align-items-center justify-content-center py-5 px-4"><div class="academique-step-icon mb-3"><i class="fas fa-calendar-alt" style="color: #ec682a;"></i></div><h5 class="fw-bold mb-1 text-dark">' + escapeHtml(year) + '</h5><small class="text-muted">Année</small></div>';
                 col.appendChild(card);
                 yearsCards.appendChild(col);
             });
@@ -159,20 +193,51 @@
             yearsLoading.innerHTML = '<span class="text-danger">Erreur de chargement</span>';
         });
 
-    function loadCourses(year) {
+    function renderMajors() {
+        majorsCards.innerHTML = '';
+        (majorsList || []).forEach(major => {
+            const col = document.createElement('div');
+            col.className = 'col-12 col-sm-6 col-lg-4';
+            const card = document.createElement('a');
+            card.href = '#';
+            card.className = 'card border-0 shadow h-100 text-decoration-none academique-major-card academique-step-card';
+            card.style.borderLeft = '4px solid #ec682a';
+            card.dataset.major = major;
+            card.addEventListener('click', function(e) {
+                e.preventDefault();
+                selectedMajor = major;
+                selectedCourseId = null;
+                document.querySelectorAll('.academique-major-card').forEach(el => el.classList.remove('border-primary'));
+                this.classList.add('border-primary');
+                sectionMajors.classList.add('d-none');
+                sectionMaterials.classList.add('d-none');
+                sectionCourses.classList.remove('d-none');
+                coursesYearLabel.textContent = selectedYear;
+                coursesMajorLabel.textContent = major;
+                loadCourses(selectedYear, major);
+            });
+            card.innerHTML = '<div class="card-body d-flex align-items-center gap-3 py-4 px-4"><div class="academique-step-icon flex-shrink-0"><i class="fas fa-user-graduate" style="color: #ec682a;"></i></div><h6 class="fw-bold mb-0 text-dark academique-major-title" title="' + escapeHtml(major) + '">' + escapeHtml(major) + '</h6></div>';
+            col.appendChild(card);
+            majorsCards.appendChild(col);
+        });
+    }
+
+    function loadCourses(year, major) {
         coursesLoading.classList.remove('d-none');
         coursesEmpty.classList.add('d-none');
         coursesCards.innerHTML = '';
-        selectedCourseId = null;
 
-        fetch(coursesUrl + '?year=' + encodeURIComponent(year), { headers: csrfHeaders(), credentials: 'same-origin' })
+        fetch(coursesUrl + '?year=' + encodeURIComponent(year) + '&major=' + encodeURIComponent(major), { headers: csrfHeaders(), credentials: 'same-origin' })
             .then(r => r.json())
             .then(data => {
                 coursesLoading.classList.add('d-none');
                 if (!data.courses || data.courses.length === 0) {
+                    coursesEmpty.innerHTML = '<div class="academique-empty-state text-center py-5 px-4 mx-auto" style="max-width: 420px;"><div class="academique-empty-icon mb-4"><i class="fas fa-book-open" style="color: #ec682a;"></i></div><h5 class="fw-bold mb-2" style="color: #5c5c5c;">Aucun cours pour le moment</h5><p class="text-muted mb-4 mb-md-0">Aucun cours n\'est disponible pour cette année et cette filière. Choisissez une autre filière ou une autre année pour voir les cours.</p><a href="#" id="courses-empty-back-major" class="btn btn-outline-secondary mt-3"><i class="fas fa-arrow-left me-2"></i>Changer de filière</a></div>';
                     coursesEmpty.classList.remove('d-none');
+                    document.getElementById('courses-empty-back-major').addEventListener('click', function(ev) { ev.preventDefault(); goBackToMajors(); });
                     return;
                 }
+                coursesEmpty.classList.add('d-none');
                 data.courses.forEach(course => {
                     const col = document.createElement('div');
                     col.className = 'col-6 col-sm-6 col-md-4 col-lg-3';
@@ -199,7 +264,7 @@
             .catch(() => {
                 coursesLoading.classList.add('d-none');
                 coursesEmpty.classList.remove('d-none');
-                coursesEmpty.textContent = 'Erreur de chargement';
+                coursesEmpty.innerHTML = '<div class="academique-empty-state text-center py-5 px-4 mx-auto" style="max-width: 420px;"><div class="academique-empty-icon mb-4"><i class="fas fa-exclamation-triangle text-danger"></i></div><h5 class="fw-bold mb-2" style="color: #5c5c5c;">Erreur de chargement</h5><p class="text-muted mb-0">Impossible de charger les cours. Réessayez plus tard.</p></div>';
             });
     }
 
@@ -256,14 +321,77 @@
 
 @push('styles')
 <style>
+/* Step 1 & 2: fuller card design */
+.academique-step-cards {
+    max-width: 900px;
+}
+.academique-years-wrap .col-md {
+    flex: 0 0 20%;
+    max-width: 20%;
+}
+@media (max-width: 767px) {
+    .academique-years-wrap .col-6 { flex: 0 0 50%; max-width: 50%; }
+}
+.academique-step-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+    border-radius: 12px !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.academique-step-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.12) !important;
+}
+.academique-step-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(236, 104, 42, 0.12) 0%, rgba(194, 65, 12, 0.08) 100%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+.academique-major-card .academique-step-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 1.25rem;
+}
+.academique-major-title {
+    font-size: 0.95rem;
+    line-height: 1.35;
+    word-break: break-word;
+}
 .academique-year-card:hover,
+.academique-major-card:hover,
 .academique-course-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1) !important;
+    transform: translateY(-4px);
+    box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.12) !important;
 }
 .academique-year-card,
+.academique-major-card,
 .academique-course-card {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Empty state when no courses for year+major */
+#courses-empty {
+    margin-top: 5rem;
+}
+.academique-empty-state {
+    background: linear-gradient(180deg, rgba(236, 104, 42, 0.06) 0%, transparent 100%);
+    border-radius: 16px;
+    border: 2px dashed rgba(236, 104, 42, 0.3);
+}
+.academique-empty-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(236, 104, 42, 0.12) 0%, rgba(194, 65, 12, 0.06) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
 }
 </style>
 @endpush

@@ -110,3 +110,28 @@ nav a, footer a {
 a:not(.btn):not([class*="text-"]) {
     color: inherit !important;
 }
+
+/* Brand orange for Bootstrap primary (replace blue) */
+.btn-primary,
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+    background: linear-gradient(135deg, #ec682a 0%, #d45a20 100%) !important;
+    border-color: #c2410c !important;
+    color: #fff !important;
+}
+.btn-primary:focus {
+    box-shadow: 0 0 0 0.25rem rgba(236, 104, 42, 0.25) !important;
+}
+.bg-primary {
+    background-color: #ec682a !important;
+}
+.text-primary {
+    color: #ec682a !important;
+}
+.border-primary {
+    border-color: #ec682a !important;
+}
+.badge.bg-primary {
+    background-color: #ec682a !important;
+}

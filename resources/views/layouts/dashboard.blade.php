@@ -28,8 +28,8 @@
         <!-- Sidebar -->
         @include('partials.dashboard.sidebar')
 
-        <!-- Mobile sidebar overlay -->
-        <div class="sidebar-overlay d-md-none" id="sidebar-overlay" aria-hidden="true"></div>
+        <!-- Mobile/tablet sidebar overlay (shown when sidebar is open on small viewports) -->
+        <div class="sidebar-overlay d-lg-none" id="sidebar-overlay" aria-hidden="true"></div>
 
         <!-- Main Content -->
         <div class="main-content flex-grow-1 d-flex flex-column min-vw-0" id="main-content">

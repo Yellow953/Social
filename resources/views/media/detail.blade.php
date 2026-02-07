@@ -9,6 +9,11 @@
 @endsection
 
 @section('content')
+@php
+    $watermarkType = $material->watermark_type ?? 'full';
+    $showLogo = in_array($watermarkType, ['full', 'logo_only']);
+    $showUsername = in_array($watermarkType, ['full', 'username_only']);
+@endphp
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
@@ -33,7 +38,8 @@
                 <div class="card-body p-0">
                     <div class="media-container" data-media-type="{{ $media->type }}" data-media-id="{{ $media->id }}">
                         @if($media->type === 'pdf')
-                            <div id="pdf-viewer-container-{{ $media->id }}" class="pdf-viewer-container" data-pdf-logo-url="{{ asset('assets/images/logo-transparent.png') }}" style="position: relative; width: 100%; min-height: 80vh; border: 1px solid #ddd; background: #f5f5f5; overflow: auto;">
+                            <div id="pdf-viewer-container-{{ $media->id }}" class="pdf-viewer-container" data-pdf-logo-url="{{ asset('assets/images/logo-transparent.png') }}" data-watermark-type="{{ $watermarkType }}" style="position: relative; width: 100%; min-height: 80vh; border: 1px solid #ddd; background: #f5f5f5; overflow: auto;">
+                                @if($showUsername)
                                 <div id="pdf-watermark-{{ $media->id }}" class="pdf-watermark-overlay media-watermark-pdf-wrap">
                                     <div class="media-username-pattern media-username-pattern-pdf">
                                         @for($i = 0; $i < 80; $i++)
@@ -41,6 +47,7 @@
                                         @endfor
                                     </div>
                                 </div>
+                                @endif
                                 <div id="pdf-pages-{{ $media->id }}" class="pdf-pages" style="padding: 20px; position: relative; z-index: 1;"></div>
                                 <div id="pdf-loading-{{ $media->id }}" class="text-center py-5 text-muted" style="position: relative; z-index: 60;">
                                     <div class="spinner-border mb-2" role="status"></div>
@@ -57,16 +64,20 @@
                                      oncontextmenu="return false;"
                                      onselectstart="return false;"
                                      draggable="false">
+                                @if($showLogo)
                                 <div class="watermark-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; display: flex; align-items: center; justify-content: center;">
                                     <img src="{{ asset('assets/images/logo-transparent.png') }}" 
                                          alt="Watermark" 
                                          class="media-watermark-logo">
                                 </div>
+                                @endif
+                                @if($showUsername)
                                 <div class="media-username-pattern media-username-pattern-image">
                                     @for($i = 0; $i < 16; $i++)
                                         <span class="media-username-pattern-item">{{ strtoupper(auth()->user()->name) }}</span>
                                     @endfor
                                 </div>
+                                @endif
                             </div>
                         @elseif($media->type === 'video')
                             <div class="video-viewer-container">
@@ -79,16 +90,20 @@
                                         <source src="{{ route('media.stream', $media) }}" type="{{ $media->mime_type ?? 'video/mp4' }}">
                                         Your browser does not support the video tag.
                                     </video>
+                                    @if($showLogo)
                                     <div class="watermark-overlay video-watermark-overlay">
                                         <img src="{{ asset('assets/images/logo-transparent.png') }}" 
                                              alt="Watermark" 
                                              class="media-watermark-logo">
                                     </div>
+                                    @endif
+                                    @if($showUsername)
                                     <div class="media-username-pattern media-username-pattern-video">
                                         @for($i = 0; $i < 16; $i++)
                                             <span class="media-username-pattern-item">{{ strtoupper(auth()->user()->name) }}</span>
                                         @endfor
                                     </div>
+                                    @endif
                                 </div>
                             </div>
                         @endif
@@ -136,8 +151,8 @@
 
     /* Bigger transparent logo on top (no server burn) */
     .media-watermark-logo {
-        width: 320px;
-        max-width: 50vw;
+        width: 480px;
+        max-width: 65vw;
         opacity: 0.4;
         pointer-events: none;
     }
@@ -173,6 +188,15 @@
     /* Logo once per PDF page (added by JS in each page wrapper) */
     .pdf-page-wrapper {
         position: relative;
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 100%;
+        text-align: center;
+    }
+    .pdf-page-wrapper canvas {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
     }
     .pdf-page-logo-overlay {
         position: absolute;
@@ -187,14 +211,14 @@
         z-index: 2;
     }
     .pdf-page-logo-overlay .media-watermark-logo {
-        max-width: 45%;
-        width: 280px;
+        max-width: 70%;
+        width: 520px;
         opacity: 0.4;
     }
     .media-username-pattern-item {
         font-style: oblique;
         font-weight: bold;
-        font-size: 1rem;
+        font-size: 1.75rem;
         white-space: nowrap;
         opacity: 0.18;
         transform: rotate(-28deg);
@@ -202,7 +226,7 @@
     }
     .media-username-pattern-pdf .media-username-pattern-item {
         opacity: 0.22;
-        font-size: 1.05rem;
+        font-size: 1.6rem;
     }
     .media-username-pattern-image .media-username-pattern-item {
         color: #5c5c5c;
@@ -216,6 +240,12 @@
 
     .pdf-viewer-container {
         position: relative;
+    }
+    .pdf-pages {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
     }
 
     /* Video: no fixed ratio — size to video’s aspect ratio, no extra empty space */
@@ -273,14 +303,17 @@
         var container = document.getElementById('pdf-pages-' + mediaId);
         var loadingEl = document.getElementById('pdf-loading-' + mediaId);
         var viewerEl = document.getElementById('pdf-viewer-container-' + mediaId);
-        var watermarkEl = document.getElementById('pdf-watermark-' + mediaId);
 
         function sizePdfWatermark() {
-            if (!viewerEl || !watermarkEl || !container) return;
-            watermarkEl.style.height = container.offsetHeight + 'px';
+            if (!viewerEl || !container) return;
+            var watermarkEl = document.getElementById('pdf-watermark-' + mediaId);
+            if (watermarkEl) watermarkEl.style.height = container.offsetHeight + 'px';
         }
 
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        var watermarkType = (viewerEl && viewerEl.getAttribute('data-watermark-type')) || 'full';
+        var showLogoOnPdf = (watermarkType === 'full' || watermarkType === 'logo_only');
 
         fetch(viewUrl, {
             headers: { 'X-PDF-Viewer-Request': '1' },
@@ -293,7 +326,7 @@
         }).then(function(pdf) {
             loadingEl.style.display = 'none';
             var totalPages = pdf.numPages;
-            var logoUrl = viewerEl.getAttribute('data-pdf-logo-url') || '';
+            var logoUrl = (viewerEl && viewerEl.getAttribute('data-pdf-logo-url')) || '';
             function renderPage(num) {
                 return pdf.getPage(num).then(function(page) {
                     var scale = 1.5;
@@ -308,7 +341,7 @@
                     canvas.style.maxWidth = '100%';
                     canvas.style.height = 'auto';
                     wrapper.appendChild(canvas);
-                    if (logoUrl) {
+                    if (logoUrl && showLogoOnPdf) {
                         var logoOverlay = document.createElement('div');
                         logoOverlay.className = 'pdf-page-logo-overlay';
                         var logoImg = document.createElement('img');

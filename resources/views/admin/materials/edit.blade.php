@@ -87,7 +87,7 @@
                             </div>
 
                             <!-- Is Locked -->
-                            <div class="col-md-12 mb-4">
+                            <div class="col-md-12 mb-3">
                                 <div class="form-check">
                                     <input class="form-check-input @error('is_locked') is-invalid @enderror"
                                            type="checkbox"
@@ -102,6 +102,23 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+                            </div>
+
+                            <!-- Watermark on media -->
+                            <div class="col-md-6 mb-4">
+                                <label for="watermark_type" class="form-label fw-bold">Watermark on media</label>
+                                <select class="form-control @error('watermark_type') is-invalid @enderror"
+                                        id="watermark_type"
+                                        name="watermark_type">
+                                    <option value="full" {{ old('watermark_type', $material->watermark_type ?? 'full') == 'full' ? 'selected' : '' }}>Full (logo + username)</option>
+                                    <option value="logo_only" {{ old('watermark_type', $material->watermark_type) == 'logo_only' ? 'selected' : '' }}>Only logo</option>
+                                    <option value="username_only" {{ old('watermark_type', $material->watermark_type) == 'username_only' ? 'selected' : '' }}>Only username</option>
+                                    <option value="none" {{ old('watermark_type', $material->watermark_type) == 'none' ? 'selected' : '' }}>No watermark</option>
+                                </select>
+                                <small class="text-muted">Applied when users view PDF, images, or video.</small>
+                                @error('watermark_type')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <!-- Existing Media -->

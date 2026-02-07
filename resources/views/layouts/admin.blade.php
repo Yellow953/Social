@@ -85,7 +85,13 @@
                     </div>
                     <div class="flex-grow-1">
                         <p class="mb-0 fw-bold text-dark small">{{ auth()->user()->name }}</p>
-                        <p class="mb-0 text-muted small">Administrator</p>
+                        <p class="mb-0 text-muted small">
+                            @if(auth()->user()->isSuperAdmin())
+                                <span class="badge" style="background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%); color: white; font-size: 0.7rem;">Super Admin</span>
+                            @else
+                                Administrator
+                            @endif
+                        </p>
                     </div>
                 </div>
                 <div class="d-flex gap-2">

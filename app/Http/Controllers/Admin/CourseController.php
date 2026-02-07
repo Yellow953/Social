@@ -7,6 +7,7 @@ use App\Models\Course;
 use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class CourseController extends Controller
 {
@@ -30,10 +31,13 @@ class CourseController extends Controller
             'name' => 'required|string|max:255',
             'code' => 'required|string|max:50|unique:courses,code',
             'description' => 'nullable|string',
-            'major' => 'nullable|string|max:255',
+            'major' => ['nullable', 'string', Rule::in(array_merge([null, ''], config('majors')))],
             'year' => 'nullable|string|max:50',
         ]);
 
+        if (($validated['major'] ?? '') === '') {
+            $validated['major'] = null;
+        }
         $course = Course::create($validated);
 
         // Notify all users about new course
@@ -57,10 +61,13 @@ class CourseController extends Controller
             'name' => 'required|string|max:255',
             'code' => 'required|string|max:50|unique:courses,code,' . $course->id,
             'description' => 'nullable|string',
-            'major' => 'nullable|string|max:255',
+            'major' => ['nullable', 'string', Rule::in(array_merge([null, ''], config('majors')))],
             'year' => 'nullable|string|max:50',
         ]);
 
+        if (($validated['major'] ?? '') === '') {
+            $validated['major'] = null;
+        }
         $course->update($validated);
 
         // Notify all users about course update

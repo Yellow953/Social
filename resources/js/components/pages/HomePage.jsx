@@ -312,23 +312,23 @@ export default function HomePage({ homepageSlides = [] }) {
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.6, delay: 0.8 }}
                     >
-                        <div className="relative overflow-hidden rounded-xl">
+                        <div className="relative overflow-hidden rounded-xl w-full">
                             <motion.div
-                                className="flex transition-transform duration-500 ease-in-out"
+                                className="flex flex-nowrap transition-transform duration-500 ease-in-out"
                                 style={{
-                                    transform: `translateX(-${carouselIndex * 100}%)`,
+                                    width: `${carouselLength * 100}%`,
+                                    transform: `translateX(-${carouselIndex * (100 / carouselLength)}%)`,
                                 }}
-                                key={carouselIndex}
-                                initial={{ opacity: 0, x: 50 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ duration: 0.5 }}
                             >
-                                {carouselItems.map((item) =>
+                                {carouselItems.map((item, index) =>
                                     hasSlides ? (
                                         <div
-                                            key={item.id}
-                                            className="min-w-full rounded-xl overflow-hidden shadow-lg relative bg-gray-900"
-                                            style={{ aspectRatio: "1200/500" }}
+                                            key={item.id != null ? `slide-${item.id}` : `slide-${index}`}
+                                            className="flex-shrink-0 rounded-xl overflow-hidden shadow-lg relative bg-gray-900"
+                                            style={{
+                                                width: `${100 / carouselLength}%`,
+                                                aspectRatio: "1200/500",
+                                            }}
                                         >
                                             <img
                                                 src={item.image_url}
@@ -355,9 +355,12 @@ export default function HomePage({ homepageSlides = [] }) {
                                         </div>
                                     ) : (
                                         <div
-                                            key={item.id}
-                                            className="min-w-full bg-white rounded-xl p-6 sm:p-8 md:p-12 border-2 shadow-lg flex flex-col items-center text-center"
-                                            style={{ borderColor: "#ec682a" }}
+                                            key={item.id != null ? `box-${item.id}` : `box-${index}`}
+                                            className="flex-shrink-0 bg-white rounded-xl p-6 sm:p-8 md:p-12 border-2 shadow-lg flex flex-col items-center text-center"
+                                            style={{
+                                                borderColor: "#ec682a",
+                                                width: `${100 / carouselLength}%`,
+                                            }}
                                         >
                                             <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-[#ec682a] to-[#d45a20] rounded-xl flex items-center justify-center mb-4 sm:mb-6">
                                                 <i

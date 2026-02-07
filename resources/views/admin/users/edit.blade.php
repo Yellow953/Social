@@ -66,16 +66,22 @@
                             <!-- Role -->
                             <div class="col-md-6 mb-3">
                                 <label for="role" class="form-label fw-bold">Role <span class="text-danger">*</span></label>
-                                <select class="form-control @error('role') is-invalid @enderror"
-                                        id="role"
-                                        name="role"
-                                        required>
-                                    <option value="user" {{ old('role', $user->role) == 'user' ? 'selected' : '' }}>User</option>
-                                    <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Admin</option>
-                                </select>
-                                @error('role')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                                @if($user->isSuperAdmin())
+                                    <input type="text" class="form-control bg-light" value="Super Admin" readonly>
+                                    <input type="hidden" name="role" value="super_admin">
+                                    <small class="text-muted">Super admin role cannot be changed from the dashboard.</small>
+                                @else
+                                    <select class="form-control @error('role') is-invalid @enderror"
+                                            id="role"
+                                            name="role"
+                                            required>
+                                        <option value="user" {{ old('role', $user->role) == 'user' ? 'selected' : '' }}>User</option>
+                                        <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Admin</option>
+                                    </select>
+                                    @error('role')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                @endif
                             </div>
 
                             <!-- Study Year -->
@@ -99,11 +105,14 @@
                             <!-- Major -->
                             <div class="col-md-6 mb-3">
                                 <label for="major" class="form-label fw-bold">Major</label>
-                                <input type="text"
-                                       class="form-control @error('major') is-invalid @enderror"
-                                       id="major"
-                                       name="major"
-                                       value="{{ old('major', $user->major) }}">
+                                <select class="form-control @error('major') is-invalid @enderror"
+                                        id="major"
+                                        name="major">
+                                    <option value="">Select major (optional)</option>
+                                    @foreach(config('majors') as $major)
+                                        <option value="{{ $major }}" {{ old('major', $user->major) == $major ? 'selected' : '' }}>{{ $major }}</option>
+                                    @endforeach
+                                </select>
                                 @error('major')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror

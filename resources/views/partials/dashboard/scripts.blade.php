@@ -93,7 +93,7 @@
     const sidebarOverlay = document.getElementById('sidebar-overlay');
 
     function toggleMobileSidebar() {
-        if (window.innerWidth <= 767.98) {
+        if (window.innerWidth <= 991.98) {
             sidebar.classList.toggle('show');
             if (sidebarOverlay) sidebarOverlay.classList.toggle('show', sidebar.classList.contains('show'));
             document.body.classList.toggle('overflow-hidden', sidebar.classList.contains('show'));
@@ -112,9 +112,9 @@
         });
     }
 
-    // Close sidebar on mobile when clicking outside
+    // Close sidebar on mobile/tablet when clicking outside
     document.addEventListener('click', function(event) {
-        if (window.innerWidth <= 767.98) {
+        if (window.innerWidth <= 991.98) {
             if (!sidebar.contains(event.target) && mobileSidebarToggle && !mobileSidebarToggle.contains(event.target) && sidebar.classList.contains('show')) {
                 sidebar.classList.remove('show');
                 if (sidebarOverlay) sidebarOverlay.classList.remove('show');

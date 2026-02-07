@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -30,10 +31,13 @@ class UserController extends Controller
             'password' => 'required|string|min:8|confirmed',
             'role' => 'required|in:user,admin',
             'study_year' => 'nullable|string|in:Sup,Spé,1e,2e,3e',
-            'major' => 'nullable|string|max:255',
+            'major' => ['nullable', 'string', Rule::in(array_merge([null, ''], config('majors')))],
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
+        if (($validated['major'] ?? '') === '') {
+            $validated['major'] = null;
+        }
 
         User::create($validated);
 
@@ -43,11 +47,19 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
+        if ($user->isAdminLevel() && !auth()->user()->isSuperAdmin()) {
+            abort(403, 'Only a super admin can edit admin users.');
+        }
+        
         return view('admin.users.edit', compact('user'));
     }
 
     public function update(Request $request, User $user)
     {
+        if ($user->isAdminLevel() && !auth()->user()->isSuperAdmin()) {
+            abort(403, 'Only a super admin can edit admin users.');
+        }
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
@@ -55,13 +67,20 @@ class UserController extends Controller
             'password' => 'nullable|string|min:8|confirmed',
             'role' => 'required|in:user,admin',
             'study_year' => 'nullable|string|in:Sup,Spé,1e,2e,3e',
-            'major' => 'nullable|string|max:255',
+            'major' => ['nullable', 'string', Rule::in(array_merge([null, ''], config('majors')))],
         ]);
 
+        if (($validated['major'] ?? '') === '') {
+            $validated['major'] = null;
+        }
         if (!empty($validated['password'])) {
             $validated['password'] = Hash::make($validated['password']);
         } else {
             unset($validated['password']);
+        }
+
+        if ($user->isSuperAdmin()) {
+            unset($validated['role']);
         }
 
         $user->update($validated);
@@ -72,10 +91,13 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
-        // Prevent deleting yourself
         if ($user->id === auth()->id()) {
             return redirect()->route('admin.users.index')
                 ->with('error', 'You cannot delete your own account.');
+        }
+
+        if ($user->isAdminLevel() && !auth()->user()->isSuperAdmin()) {
+            abort(403, 'Only a super admin can delete admin users.');
         }
 
         $user->delete();
