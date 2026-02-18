@@ -10,7 +10,7 @@
 <div class="container-fluid">
     <div class="mb-4">
         <h2 class="fw-bold mb-1" style="color: #c2410c;"><i class="fas fa-graduation-cap me-2" style="color: #ec682a;"></i>Académique</h2>
-        <p class="text-muted mb-0">Choisissez une année, une filière, un cours, puis ouvrez un matériel pour le consulter avec filigrane.</p>
+        <p class="text-muted mb-0">Choisissez une année, une filière, un semestre, un cours, puis ouvrez un matériel pour le consulter avec filigrane.</p>
     </div>
 
     @if(!auth()->user()->hasActiveSubscription() && !auth()->user()->isAdmin())
@@ -43,11 +43,20 @@
         <div id="majors-cards" class="academique-step-cards academique-majors-wrap row g-4"></div>
     </section>
 
-    <!-- 3. Courses -->
+    <!-- 3. Semester -->
+    <section id="section-semester" class="mb-5 d-none">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-4">
+            <h5 class="fw-bold mb-0" style="color: #c2410c;"><i class="fas fa-layer-group me-2" style="color: #ec682a;"></i>3. Choisir un semestre pour <span id="semester-year-label"></span> – <span id="semester-major-label"></span></h5>
+            <a href="#" id="back-from-semester" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left me-1"></i> Changer de filière</a>
+        </div>
+        <div id="semester-cards" class="academique-step-cards row g-4"></div>
+    </section>
+
+    <!-- 4. Courses -->
     <section id="section-courses" class="mb-5 d-none">
         <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
-            <h5 class="fw-bold mb-0" style="color: #c2410c;"><i class="fas fa-book-open me-2" style="color: #ec682a;"></i>3. Cours pour <span id="courses-year-label"></span> – <span id="courses-major-label"></span></h5>
-            <a href="#" id="back-from-courses" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left me-1"></i> Changer de filière</a>
+            <h5 class="fw-bold mb-0" style="color: #c2410c;"><i class="fas fa-book-open me-2" style="color: #ec682a;"></i>4. Cours pour <span id="courses-year-label"></span> – <span id="courses-major-label"></span> (Semestre <span id="courses-semester-label"></span>)</h5>
+            <a href="#" id="back-from-courses" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left me-1"></i> Changer de semestre</a>
         </div>
         <div id="courses-loading" class="text-center py-5 text-muted d-none">
             <div class="spinner-border me-2" role="status"></div> Chargement des cours...
@@ -56,10 +65,10 @@
         <div id="courses-empty" class="d-none"></div>
     </section>
 
-    <!-- 4. Materials -->
+    <!-- 5. Materials -->
     <section id="section-materials" class="mb-5 d-none">
         <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
-            <h5 class="fw-bold mb-0" style="color: #c2410c;"><i class="fas fa-file-alt me-2" style="color: #ec682a;"></i>4. Matériel pour <span id="materials-course-label"></span></h5>
+            <h5 class="fw-bold mb-0" style="color: #c2410c;"><i class="fas fa-file-alt me-2" style="color: #ec682a;"></i>5. Matériel pour <span id="materials-course-label"></span></h5>
             <a href="#" id="back-from-materials" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left me-1"></i> Changer de cours</a>
         </div>
         <div id="materials-loading" class="text-center py-5 text-muted d-none">
@@ -87,9 +96,15 @@
     const majorsYearLabel = document.getElementById('majors-year-label');
     const majorsCards = document.getElementById('majors-cards');
     const backFromMajors = document.getElementById('back-from-majors');
+    const sectionSemester = document.getElementById('section-semester');
+    const semesterYearLabel = document.getElementById('semester-year-label');
+    const semesterMajorLabel = document.getElementById('semester-major-label');
+    const semesterCards = document.getElementById('semester-cards');
+    const backFromSemester = document.getElementById('back-from-semester');
     const sectionCourses = document.getElementById('section-courses');
     const coursesYearLabel = document.getElementById('courses-year-label');
     const coursesMajorLabel = document.getElementById('courses-major-label');
+    const coursesSemesterLabel = document.getElementById('courses-semester-label');
     const backFromCourses = document.getElementById('back-from-courses');
     const coursesLoading = document.getElementById('courses-loading');
     const coursesCards = document.getElementById('courses-cards');
@@ -104,6 +119,7 @@
 
     let selectedYear = null;
     let selectedMajor = null;
+    let selectedSemester = null;
     let selectedCourseId = null;
     let selectedCourseName = null;
 
@@ -126,23 +142,42 @@
         e.preventDefault();
         selectedYear = null;
         selectedMajor = null;
+        selectedSemester = null;
         sectionMajors.classList.add('d-none');
+        sectionSemester.classList.add('d-none');
         sectionCourses.classList.add('d-none');
         sectionMaterials.classList.add('d-none');
         sectionYears.classList.remove('d-none');
         majorsCards.innerHTML = '';
     });
 
-    backFromCourses.addEventListener('click', function(e) {
+    backFromSemester.addEventListener('click', function(e) {
         e.preventDefault();
         goBackToMajors();
     });
 
+    backFromCourses.addEventListener('click', function(e) {
+        e.preventDefault();
+        goBackToSemester();
+    });
+
     function goBackToMajors() {
+        selectedSemester = null;
         selectedCourseId = null;
+        sectionSemester.classList.add('d-none');
         sectionCourses.classList.add('d-none');
         sectionMaterials.classList.add('d-none');
         sectionMajors.classList.remove('d-none');
+        semesterCards.innerHTML = '';
+        coursesCards.innerHTML = '';
+        document.getElementById('courses-empty').classList.add('d-none');
+    }
+
+    function goBackToSemester() {
+        selectedCourseId = null;
+        sectionCourses.classList.add('d-none');
+        sectionMaterials.classList.add('d-none');
+        sectionSemester.classList.remove('d-none');
         coursesCards.innerHTML = '';
         document.getElementById('courses-empty').classList.add('d-none');
     }
@@ -174,10 +209,12 @@
                     e.preventDefault();
                     selectedYear = year;
                     selectedMajor = null;
+                    selectedSemester = null;
                     selectedCourseId = null;
                     document.querySelectorAll('.academique-year-card').forEach(el => el.classList.remove('border-primary'));
                     this.classList.add('border-primary');
                     sectionYears.classList.add('d-none');
+                    sectionSemester.classList.add('d-none');
                     sectionCourses.classList.add('d-none');
                     sectionMaterials.classList.add('d-none');
                     sectionMajors.classList.remove('d-none');
@@ -206,15 +243,17 @@
             card.addEventListener('click', function(e) {
                 e.preventDefault();
                 selectedMajor = major;
+                selectedSemester = null;
                 selectedCourseId = null;
                 document.querySelectorAll('.academique-major-card').forEach(el => el.classList.remove('border-primary'));
                 this.classList.add('border-primary');
                 sectionMajors.classList.add('d-none');
+                sectionCourses.classList.add('d-none');
                 sectionMaterials.classList.add('d-none');
-                sectionCourses.classList.remove('d-none');
-                coursesYearLabel.textContent = selectedYear;
-                coursesMajorLabel.textContent = major;
-                loadCourses(selectedYear, major);
+                sectionSemester.classList.remove('d-none');
+                semesterYearLabel.textContent = selectedYear;
+                semesterMajorLabel.textContent = major;
+                renderSemester();
             });
             card.innerHTML = '<div class="card-body d-flex align-items-center gap-3 py-4 px-4"><div class="academique-step-icon flex-shrink-0"><i class="fas fa-user-graduate" style="color: #ec682a;"></i></div><h6 class="fw-bold mb-0 text-dark academique-major-title" title="' + escapeHtml(major) + '">' + escapeHtml(major) + '</h6></div>';
             col.appendChild(card);
@@ -222,19 +261,48 @@
         });
     }
 
-    function loadCourses(year, major) {
+    function renderSemester() {
+        semesterCards.innerHTML = '';
+        ['1', '2'].forEach(function(sem) {
+            const col = document.createElement('div');
+            col.className = 'col-6 col-md';
+            const card = document.createElement('a');
+            card.href = '#';
+            card.className = 'card border-0 shadow h-100 text-decoration-none academique-semester-card academique-step-card';
+            card.style.borderLeft = '4px solid #ec682a';
+            card.dataset.semester = sem;
+            card.addEventListener('click', function(e) {
+                e.preventDefault();
+                selectedSemester = sem;
+                document.querySelectorAll('.academique-semester-card').forEach(el => el.classList.remove('border-primary'));
+                this.classList.add('border-primary');
+                sectionSemester.classList.add('d-none');
+                sectionMaterials.classList.add('d-none');
+                sectionCourses.classList.remove('d-none');
+                coursesYearLabel.textContent = selectedYear;
+                coursesMajorLabel.textContent = selectedMajor;
+                coursesSemesterLabel.textContent = sem;
+                loadCourses(selectedYear, selectedMajor, sem);
+            });
+            card.innerHTML = '<div class="card-body text-center d-flex flex-column align-items-center justify-content-center py-5 px-4"><div class="academique-step-icon mb-3"><i class="fas fa-layer-group" style="color: #ec682a;"></i></div><h5 class="fw-bold mb-1 text-dark">Semestre ' + sem + '</h5><small class="text-muted">Semester ' + sem + '</small></div>';
+            col.appendChild(card);
+            semesterCards.appendChild(col);
+        });
+    }
+
+    function loadCourses(year, major, semester) {
         coursesLoading.classList.remove('d-none');
         coursesEmpty.classList.add('d-none');
         coursesCards.innerHTML = '';
 
-        fetch(coursesUrl + '?year=' + encodeURIComponent(year) + '&major=' + encodeURIComponent(major), { headers: csrfHeaders(), credentials: 'same-origin' })
+        fetch(coursesUrl + '?year=' + encodeURIComponent(year) + '&major=' + encodeURIComponent(major) + '&semester=' + encodeURIComponent(semester), { headers: csrfHeaders(), credentials: 'same-origin' })
             .then(r => r.json())
             .then(data => {
                 coursesLoading.classList.add('d-none');
                 if (!data.courses || data.courses.length === 0) {
-                    coursesEmpty.innerHTML = '<div class="academique-empty-state text-center py-5 px-4 mx-auto" style="max-width: 420px;"><div class="academique-empty-icon mb-4"><i class="fas fa-book-open" style="color: #ec682a;"></i></div><h5 class="fw-bold mb-2" style="color: #5c5c5c;">Aucun cours pour le moment</h5><p class="text-muted mb-4 mb-md-0">Aucun cours n\'est disponible pour cette année et cette filière. Choisissez une autre filière ou une autre année pour voir les cours.</p><a href="#" id="courses-empty-back-major" class="btn btn-outline-secondary mt-3"><i class="fas fa-arrow-left me-2"></i>Changer de filière</a></div>';
+                    coursesEmpty.innerHTML = '<div class="academique-empty-state text-center py-5 px-4 mx-auto" style="max-width: 420px;"><div class="academique-empty-icon mb-4"><i class="fas fa-book-open" style="color: #ec682a;"></i></div><h5 class="fw-bold mb-2" style="color: #5c5c5c;">Aucun cours pour le moment</h5><p class="text-muted mb-4 mb-md-0">Aucun cours n\'est disponible pour cette année, filière et semestre. Choisissez un autre semestre ou une autre filière.</p><a href="#" id="courses-empty-back-semester" class="btn btn-outline-secondary mt-3"><i class="fas fa-arrow-left me-2"></i>Changer de semestre</a></div>';
                     coursesEmpty.classList.remove('d-none');
-                    document.getElementById('courses-empty-back-major').addEventListener('click', function(ev) { ev.preventDefault(); goBackToMajors(); });
+                    document.getElementById('courses-empty-back-semester').addEventListener('click', function(ev) { ev.preventDefault(); goBackToSemester(); });
                     return;
                 }
                 coursesEmpty.classList.add('d-none');
@@ -363,12 +431,14 @@
 }
 .academique-year-card:hover,
 .academique-major-card:hover,
+.academique-semester-card:hover,
 .academique-course-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.12) !important;
 }
 .academique-year-card,
 .academique-major-card,
+.academique-semester-card,
 .academique-course-card {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }

@@ -17,6 +17,18 @@
                     <h5 class="mb-0 fw-bold" style="color: #c2410c;"><i class="fas fa-edit me-2" style="color: #ec682a;"></i>Edit Material</h5>
                 </div>
                 <div class="card-body p-4">
+                    @if(session('success'))
+                        <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+                            <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    @endif
+                    @if(session('error'))
+                        <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+                            <i class="fas fa-exclamation-circle me-2"></i>{{ session('error') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    @endif
                     <form method="POST" action="{{ route('admin.materials.update', $material) }}" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
@@ -132,17 +144,36 @@
                                             <div class="card-body p-3">
                                                 <div class="d-flex align-items-center mb-2">
                                                     <i class="fas fa-{{ $media->type === 'pdf' ? 'file-pdf text-danger' : ($media->type === 'video' ? 'file-video text-primary' : 'file-image text-success') }} fa-2x me-2"></i>
-                                                    <div class="flex-grow-1">
-                                                        <h6 class="mb-0 text-truncate" style="max-width: 200px;" title="{{ $media->original_filename }}">{{ $media->original_filename }}</h6>
+                                                    <div class="flex-grow-1 min-w-0">
+                                                        <label for="media_name_{{ $media->id }}" class="form-label small mb-0 fw-bold">File name</label>
+                                                        <input type="text" class="form-control form-control-sm" name="media_name[{{ $media->id }}]" id="media_name_{{ $media->id }}" value="{{ old('media_name.'.$media->id, $media->original_filename) }}" placeholder="Rename file">
                                                         <small class="text-muted">{{ $media->formatted_file_size }}</small>
                                                     </div>
                                                 </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" name="delete_media[]" value="{{ $media->id }}" id="delete_media_{{ $media->id }}">
-                                                    <label class="form-check-label text-danger" for="delete_media_{{ $media->id }}">
-                                                        <i class="fas fa-trash me-1"></i>Delete
+                                                <div class="d-flex flex-wrap gap-1 mt-2">
+                                                    <a href="{{ route('admin.materials.media.download', $media) }}" class="btn btn-sm btn-outline-primary" title="Download" style="border-radius: 6px;">
+                                                        <i class="fas fa-download"></i> Download
+                                                    </a>
+                                                    @if($media->type === 'image')
+                                                    <button type="submit" form="convert-to-pdf-form-{{ $media->id }}" class="btn btn-sm btn-outline-secondary" title="Convert to PDF" style="border-radius: 6px;" onclick="return confirm('Create a PDF from this image and add it to the material? The image will be kept.');">
+                                                        <i class="fas fa-file-pdf"></i> To PDF
+                                                    </button>
+                                                    @endif
+                                                </div>
+                                                <div class="form-check mt-2">
+                                                    <input type="hidden" name="media_lock[{{ $media->id }}]" value="0">
+                                                    <input class="form-check-input" type="checkbox" name="media_lock[{{ $media->id }}]" value="1" id="media_lock_{{ $media->id }}" {{ old('media_lock.'.$media->id, $media->is_locked) ? 'checked' : '' }}>
+                                                    <label class="form-check-label text-muted" for="media_lock_{{ $media->id }}">
+                                                        Locked (subscription required to view)
                                                     </label>
                                                 </div>
+                                                <div class="form-check mt-1">
+                                                    <input class="form-check-input" type="checkbox" name="keep_media[]" value="{{ $media->id }}" id="keep_media_{{ $media->id }}" checked>
+                                                    <label class="form-check-label text-muted" for="keep_media_{{ $media->id }}">
+                                                        Keep file
+                                                    </label>
+                                                </div>
+                                                <small class="text-muted">Uncheck "Keep file" to remove this file when saving.</small>
                                             </div>
                                         </div>
                                     </div>
@@ -161,7 +192,8 @@
                                         <p class="text-muted mb-0">Supported: PDF, Video (MP4, WebM, OGG, MOV, AVI), Images (JPG, PNG, GIF, WEBP)</p>
                                     </div>
                                 </div>
-                                <div id="media-preview" class="mt-3"></div>
+                                <div id="media-preview" class="mt-3 row g-3"></div>
+                                <input type="hidden" name="material_temp_uploads" id="material-temp-uploads-input" value="">
                                 @error('media')
                                     <div class="text-danger mt-2">{{ $message }}</div>
                                 @enderror
@@ -178,6 +210,13 @@
                             </a>
                         </div>
                     </form>
+
+                    {{-- Standalone forms for "To PDF" so they are not nested inside the main form --}}
+                    @foreach($material->media->where('type', 'image') as $media)
+                    <form id="convert-to-pdf-form-{{ $media->id }}" method="POST" action="{{ route('admin.materials.media.convert-to-pdf', $media) }}" class="d-none">
+                        @csrf
+                    </form>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -185,7 +224,6 @@
 </div>
 
 @push('styles')
-@vite(['resources/js/dropzone-init.js'])
 <style>
     .dropzone-modern {
         border: 2px dashed #ec682a !important;
@@ -276,120 +314,73 @@
 @endpush
 
 @push('scripts')
-@vite(['resources/js/dropzone-init.js'])
+<script src="https://cdn.jsdelivr.net/npm/dropzone@6.0.0-beta.2/dist/dropzone-min.js"></script>
 <script>
-    // Wait for DOM and Dropzone to be ready
-    document.addEventListener('DOMContentLoaded', function() {
-        // Disable auto-discover to prevent conflicts
-        if (typeof Dropzone !== 'undefined') {
-            Dropzone.autoDiscover = false;
+document.addEventListener('DOMContentLoaded', function() {
+    Dropzone.autoDiscover = false;
+    var uploadTempUrl = @json(route('admin.materials.upload-temp'));
+    var tempIds = [];
+    var hiddenInput = document.getElementById('material-temp-uploads-input');
+    var previewContainer = document.getElementById('media-preview');
 
-    // Initialize Dropzone
-    const mediaDropzone = new Dropzone("#media-dropzone", {
-        url: "{{ route('admin.materials.update', $material) }}",
-        paramName: "media",
-        maxFilesize: 500, // 500 MB
+    var mediaDropzone = new Dropzone("#media-dropzone", {
+        url: uploadTempUrl,
+        paramName: "file",
+        maxFilesize: 500,
         acceptedFiles: ".pdf,.mp4,.webm,.ogg,.mov,.avi,.mkv,.m4v,.jpg,.jpeg,.png,.gif,.webp",
         addRemoveLinks: true,
-        clickable: true, // Explicitly enable clicking
+        clickable: true,
         dictDefaultMessage: "",
         dictRemoveFile: '<i class="fas fa-times"></i> Remove',
-        dictCancelUpload: '<i class="fas fa-times-circle"></i> Cancel',
-        dictUploadCanceled: "Upload canceled",
-        dictInvalidFileType: "Invalid file type",
-        dictFileTooBig: "File is too big (@{{filesize}}MB). Max filesize: @{{maxFilesize}}MB",
-        parallelUploads: 5,
-        uploadMultiple: true,
-        autoProcessQueue: false, // We'll process on form submit
-        previewTemplate: `
-            <div class="dz-preview dz-file-preview">
-                <div class="dz-image">
-                    <img data-dz-thumbnail />
-                </div>
-                <div class="dz-details">
-                    <div class="dz-filename"><span data-dz-name></span></div>
-                    <div class="dz-size" data-dz-size></div>
-                    <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
-                    <div class="dz-error-message"><span data-dz-errormessage></span></div>
-                </div>
-                <div class="dz-remove" data-dz-remove>
-                    <i class="fas fa-times"></i>
-                </div>
-            </div>
-        `,
+        parallelUploads: 3,
+        uploadMultiple: false,
+        autoProcessQueue: true,
+        previewTemplate: '<div class="col-md-3 mb-3"><div class="card border shadow-sm h-100"><div class="card-body p-3 text-center"><div class="dz-image mb-2" style="min-height: 80px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-file fa-3x text-muted"></i></div><div class="dz-details"><div class="dz-filename small text-truncate mb-1" style="max-width: 100%;"><span data-dz-name></span></div><div class="dz-size small text-muted mb-2" data-dz-size></div><div class="dz-progress" style="display: none;"><div class="progress" style="height: 6px;"><div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" data-dz-uploadprogress style="width: 0%;"></div></div></div><div class="dz-success small text-success mt-1" style="display: none;"><i class="fas fa-check-circle"></i> Uploaded</div><div class="dz-error-message text-danger small mt-2" style="display: none;"><span data-dz-errormessage></span></div></div><button type="button" class="btn btn-sm btn-danger mt-2 dz-remove" data-dz-remove><i class="fas fa-times me-1"></i> Remove</button></div></div></div>',
         init: function() {
-            const dropzone = this;
-            const form = document.querySelector('form');
-
-            // Always intercept form submission to include Dropzone files
-            if (!form) {
-                return;
-            }
-
-            form.addEventListener('submit', function(e) {
-                // Get files from Dropzone
-                const files = dropzone.getAcceptedFiles();
-                
-                if (files.length > 0) {
-                    // Prevent default form submission
-                    e.preventDefault();
-                    e.stopPropagation();
-
-                    // Create FormData from the form
-                    const formData = new FormData(form);
-
-                    // Add all Dropzone files to FormData
-                    files.forEach((file, index) => {
-                        const blob = file.file || file;
-                        formData.append('media[]', blob, file.name || (blob && blob.name) || 'file');
-                    });
-
-                    // Get CSRF token
-                    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || 
-                                     form.querySelector('input[name="_token"]')?.value;
-
-                    if (!csrfToken) {
-                        return;
+            var dz = this;
+            dz.on('addedfile', function(file) {
+                var ext = (file.name || '').split('.').pop().toLowerCase();
+                var iconClass = 'fa-file text-secondary', iconColor = '';
+                if (ext === 'pdf') { iconClass = 'fa-file-pdf'; iconColor = 'text-danger'; }
+                else if (['mp4','webm','ogg','mov','avi','mkv','m4v'].includes(ext)) { iconClass = 'fa-file-video'; iconColor = 'text-primary'; }
+                else if (['jpg','jpeg','png','gif','webp'].includes(ext)) { iconClass = 'fa-file-image'; iconColor = 'text-success'; }
+                setTimeout(function() {
+                    var el = file.previewElement;
+                    if (el && el.querySelector) {
+                        var img = el.querySelector('.dz-image');
+                        if (img) img.innerHTML = '<i class="fas ' + iconClass + ' fa-3x ' + iconColor + '"></i>';
                     }
-
-                    // Submit via fetch
-                    fetch(form.action, {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest',
-                            'X-CSRF-TOKEN': csrfToken,
-                        }
-                    })
-                    .then(response => {
-                        if (response.redirected) {
-                            window.location.href = response.url;
-                        } else {
-                            return response.text().then(html => {
-                                document.open();
-                                document.write(html);
-                                document.close();
-                            });
-                        }
-                    });
-                }
+                }, 10);
+                if (previewContainer && file.previewElement) previewContainer.appendChild(file.previewElement);
+            });
+            dz.on('sending', function(file, xhr, formData) {
+                var prog = file.previewElement.querySelector('.dz-progress');
+                var successEl = file.previewElement.querySelector('.dz-success');
+                if (prog) prog.style.display = 'block';
+                if (successEl) successEl.style.display = 'none';
+                var token = document.querySelector('meta[name="csrf-token"]');
+                if (token) formData.append('_token', token.getAttribute('content'));
+            });
+            dz.on('uploadprogress', function(file, progress) {
+                var bar = file.previewElement.querySelector('[data-dz-uploadprogress]');
+                if (bar) bar.style.width = progress + '%';
+            });
+            dz.on('success', function(file, response) {
+                if (response && response.id) { tempIds.push(response.id); hiddenInput.value = JSON.stringify(tempIds); }
+                var prog = file.previewElement.querySelector('.dz-progress');
+                var successEl = file.previewElement.querySelector('.dz-success');
+                if (prog) prog.style.display = 'none';
+                if (successEl) successEl.style.display = 'block';
+            });
+            dz.on('removedfile', function(file) {
+                if (file.tempId) { var i = tempIds.indexOf(file.tempId); if (i > -1) tempIds.splice(i, 1); hiddenInput.value = JSON.stringify(tempIds); }
+            });
+            dz.on('complete', function(file) {
+                if (file.status === 'success' && file.xhr && file.xhr.response) { try { var r = JSON.parse(file.xhr.response); if (r.id) file.tempId = r.id; } catch(e) {} }
             });
         }
     });
-
-    // Custom file type icons
-    mediaDropzone.on("addedfile", function(file) {
-        const ext = file.name.split('.').pop().toLowerCase();
-        let icon = 'fa-file';
-        
-        if (['pdf'].includes(ext)) icon = 'fa-file-pdf text-danger';
-        else if (['mp4', 'webm', 'ogg', 'mov', 'avi'].includes(ext)) icon = 'fa-file-video text-primary';
-        else if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext)) icon = 'fa-file-image text-success';
-        
-        file.previewElement.querySelector('.dz-image').innerHTML = `<i class="fas ${icon} fa-4x" style="padding: 20px;"></i>`;
-    });
-        }
-    });
+});
 </script>
 @endpush
 @endsection

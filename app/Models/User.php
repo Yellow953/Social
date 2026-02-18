@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
@@ -164,7 +164,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user has verified email
+     * Check if user has verified email (MustVerifyEmail contract).
      */
     public function hasVerifiedEmail(): bool
     {
@@ -172,13 +172,21 @@ class User extends Authenticatable
     }
 
     /**
-     * Mark email as verified
+     * Mark email as verified (MustVerifyEmail contract).
      */
     public function markEmailAsVerified(): void
     {
         $this->email_verified = true;
         $this->email_verified_at = now();
         $this->save();
+    }
+
+    /**
+     * Send the email verification notification (MustVerifyEmail contract).
+     */
+    public function sendEmailVerificationNotification(): void
+    {
+        $this->notify(new \Illuminate\Auth\Notifications\VerifyEmail);
     }
 
     /**

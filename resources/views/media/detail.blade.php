@@ -149,11 +149,11 @@
         pointer-events: none !important;
     }
 
-    /* Bigger transparent logo on top (no server burn) */
+    /* Bigger logo on top (no server burn) – less transparent for visibility */
     .media-watermark-logo {
         width: 480px;
         max-width: 65vw;
-        opacity: 0.4;
+        opacity: 0.65;
         pointer-events: none;
     }
 
@@ -188,15 +188,6 @@
     /* Logo once per PDF page (added by JS in each page wrapper) */
     .pdf-page-wrapper {
         position: relative;
-        margin-left: auto;
-        margin-right: auto;
-        max-width: 100%;
-        text-align: center;
-    }
-    .pdf-page-wrapper canvas {
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
     }
     .pdf-page-logo-overlay {
         position: absolute;
@@ -213,7 +204,7 @@
     .pdf-page-logo-overlay .media-watermark-logo {
         max-width: 70%;
         width: 520px;
-        opacity: 0.4;
+        opacity: 0.65;
     }
     .media-username-pattern-item {
         font-style: oblique;
@@ -240,12 +231,6 @@
 
     .pdf-viewer-container {
         position: relative;
-    }
-    .pdf-pages {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
     }
 
     /* Video: no fixed ratio — size to video’s aspect ratio, no extra empty space */

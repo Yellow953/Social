@@ -33,6 +33,7 @@ class CourseController extends Controller
             'description' => 'nullable|string',
             'major' => ['nullable', 'string', Rule::in(array_merge([null, ''], config('majors')))],
             'year' => 'nullable|string|max:50',
+            'semester' => 'required|string|in:1,2',
         ]);
 
         if (($validated['major'] ?? '') === '') {
@@ -63,6 +64,7 @@ class CourseController extends Controller
             'description' => 'nullable|string',
             'major' => ['nullable', 'string', Rule::in(array_merge([null, ''], config('majors')))],
             'year' => 'nullable|string|max:50',
+            'semester' => 'required|string|in:1,2',
         ]);
 
         if (($validated['major'] ?? '') === '') {

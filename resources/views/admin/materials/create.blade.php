@@ -131,8 +131,9 @@
                                     </div>
                                 </div>
                                 <div id="media-preview" class="mt-3 row g-3"></div>
-                                <input type="hidden" name="media_files" id="media-files-input">
-                                <small class="text-muted d-block mt-1">Images are compressed (max width 1920px). PDF and video are stored as-is. For large videos, ensure <code>upload_max_filesize</code> and <code>post_max_size</code> in php.ini are sufficient (e.g. 512M).</small>
+                                <input type="hidden" name="material_temp_uploads" id="material-temp-uploads-input" value="">
+                                <input type="hidden" name="material_temp_names" id="material-temp-names-input" value="">
+                                <small class="text-muted d-block mt-1">Rename files in the boxes below. Images are compressed (max width 1920px). PDF and video are stored as-is. For large videos, ensure <code>upload_max_filesize</code> and <code>post_max_size</code> in php.ini are sufficient (e.g. 512M).</small>
                                 @error('media')
                                     <div class="text-danger mt-2">{{ $message }}</div>
                                 @enderror
@@ -267,179 +268,120 @@
 <script src="https://cdn.jsdelivr.net/npm/dropzone@6.0.0-beta.2/dist/dropzone-min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Disable auto-discover
     Dropzone.autoDiscover = false;
+    const uploadTempUrl = @json(route('admin.materials.upload-temp'));
+    const tempIds = [];
+    const tempNames = {};
+    const hiddenInput = document.getElementById('material-temp-uploads-input');
+    const hiddenNamesInput = document.getElementById('material-temp-names-input');
+    const previewContainer = document.getElementById('media-preview');
+    function syncTempNames() { hiddenNamesInput.value = JSON.stringify(tempNames); }
 
-    // Store files to be submitted with form
-    const filesToSubmit = [];
-
-    // Initialize Dropzone
     const mediaDropzone = new Dropzone("#media-dropzone", {
-        url: "#", // We won't use this URL, files will be submitted with form
-        paramName: "media",
-        maxFilesize: 500, // 500 MB
+        url: uploadTempUrl,
+        paramName: "file",
+        maxFilesize: 500,
         acceptedFiles: ".pdf,.mp4,.webm,.ogg,.mov,.avi,.mkv,.m4v,.jpg,.jpeg,.png,.gif,.webp",
         addRemoveLinks: true,
         clickable: true,
         dictDefaultMessage: "",
         dictRemoveFile: '<i class="fas fa-times"></i> Remove',
         dictCancelUpload: '<i class="fas fa-times-circle"></i> Cancel',
-        dictUploadCanceled: "Upload canceled",
-        dictInvalidFileType: "Invalid file type",
-        dictFileTooBig: "File is too big (@{{filesize}}MB). Max filesize: @{{maxFilesize}}MB",
-        parallelUploads: 10,
+        parallelUploads: 3,
         uploadMultiple: false,
-        autoProcessQueue: false, // Don't auto-upload, we'll submit with form
+        autoProcessQueue: true,
         previewTemplate: `
             <div class="col-md-3 mb-3">
                 <div class="card border shadow-sm h-100">
                     <div class="card-body p-3 text-center">
-                        <div class="dz-image mb-2" style="min-height: 80px; display: flex; align-items: center; justify-content: center;">
-                            <i class="fas fa-file fa-3x text-muted"></i>
-                        </div>
+                        <div class="dz-image mb-2" style="min-height: 80px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-file fa-3x text-muted"></i></div>
                         <div class="dz-details">
                             <div class="dz-filename small text-truncate mb-1" style="max-width: 100%;" title=""><span data-dz-name></span></div>
                             <div class="dz-size small text-muted mb-2" data-dz-size></div>
-                            <div class="dz-progress" style="display: none;">
-                                <div class="progress" style="height: 5px;">
-                                    <div class="progress-bar" role="progressbar" data-dz-uploadprogress></div>
-                                </div>
-                            </div>
+                            <div class="dz-progress" style="display: none;"><div class="progress" style="height: 6px;"><div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" data-dz-uploadprogress style="width: 0%;"></div></div></div>
+                            <div class="dz-success small text-success mt-1" style="display: none;"><i class="fas fa-check-circle"></i> Uploaded</div>
+                            <div class="dz-rename-wrap mt-2" style="display: none;"><label class="form-label small mb-0">File name</label><input type="text" class="form-control form-control-sm dz-rename-input" placeholder="Rename" data-dz-rename></div>
                             <div class="dz-error-message text-danger small mt-2" style="display: none;"><span data-dz-errormessage></span></div>
                         </div>
-                        <button type="button" class="btn btn-sm btn-danger mt-2 dz-remove" data-dz-remove>
-                            <i class="fas fa-times me-1"></i> Remove
-                        </button>
+                        <button type="button" class="btn btn-sm btn-danger mt-2 dz-remove" data-dz-remove><i class="fas fa-times me-1"></i> Remove</button>
                     </div>
                 </div>
             </div>
         `,
         init: function() {
-            const dropzone = this;
-            const form = document.querySelector('form[action="{{ route('admin.materials.store') }}"]');
-            const previewContainer = document.getElementById('media-preview');
-
-            // Move previews to custom container
-            dropzone.on('addedfile', function(file) {
-                // Set custom icon based on file type
-                const ext = file.name.split('.').pop().toLowerCase();
-                let iconClass = 'fa-file text-secondary';
-                let iconColor = '';
-                
-                if (ext === 'pdf') {
-                    iconClass = 'fa-file-pdf';
-                    iconColor = 'text-danger';
-                } else if (['mp4', 'webm', 'ogg', 'mov', 'avi', 'mkv', 'm4v'].includes(ext)) {
-                    iconClass = 'fa-file-video';
-                    iconColor = 'text-primary';
-                } else if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext)) {
-                    iconClass = 'fa-file-image';
-                    iconColor = 'text-success';
-                }
-                
-                // Update icon in preview
-                setTimeout(() => {
-                    const previewElement = file.previewElement;
-                    if (previewElement) {
-                        const imageContainer = previewElement.querySelector('.dz-image');
-                        if (imageContainer) {
-                            imageContainer.innerHTML = `<i class="fas ${iconClass} fa-3x ${iconColor}"></i>`;
-                        }
+            const dz = this;
+            dz.on('addedfile', function(file) {
+                var ext = (file.name || '').split('.').pop().toLowerCase();
+                var iconClass = 'fa-file text-secondary', iconColor = '';
+                if (ext === 'pdf') { iconClass = 'fa-file-pdf'; iconColor = 'text-danger'; }
+                else if (['mp4','webm','ogg','mov','avi','mkv','m4v'].includes(ext)) { iconClass = 'fa-file-video'; iconColor = 'text-primary'; }
+                else if (['jpg','jpeg','png','gif','webp'].includes(ext)) { iconClass = 'fa-file-image'; iconColor = 'text-success'; }
+                setTimeout(function() {
+                    var el = file.previewElement;
+                    if (el) {
+                        var img = el.querySelector('.dz-image');
+                        if (img) img.innerHTML = '<i class="fas ' + iconClass + ' fa-3x ' + iconColor + '"></i>';
                     }
                 }, 10);
-
-                // Store file for form submission
-                filesToSubmit.push(file);
-                
-                // Move preview to custom container
-                if (previewContainer && file.previewElement) {
-                    previewContainer.appendChild(file.previewElement);
-                }
+                if (previewContainer && file.previewElement) previewContainer.appendChild(file.previewElement);
             });
-
-            // Handle file removal
-            dropzone.on('removedfile', function(file) {
-                // Remove from files array
-                const index = filesToSubmit.indexOf(file);
-                if (index > -1) {
-                    filesToSubmit.splice(index, 1);
-                }
+            dz.on('sending', function(file, xhr, formData) {
+                var prog = file.previewElement.querySelector('.dz-progress');
+                var successEl = file.previewElement.querySelector('.dz-success');
+                if (prog) prog.style.display = 'block';
+                if (successEl) successEl.style.display = 'none';
+                var token = document.querySelector('meta[name="csrf-token"]');
+                if (token) formData.append('_token', token.getAttribute('content'));
             });
-
-            // Handle errors
-            dropzone.on('error', function(file, errorMessage) {
-                console.error('Dropzone error:', file.name, errorMessage);
-                // Remove from files array on error
-                const index = filesToSubmit.indexOf(file);
-                if (index > -1) {
-                    filesToSubmit.splice(index, 1);
-                }
+            dz.on('uploadprogress', function(file, progress) {
+                var bar = file.previewElement.querySelector('[data-dz-uploadprogress]');
+                if (bar) bar.style.width = progress + '%';
             });
-
-            // Intercept form submission
-            if (form) {
-                form.addEventListener('submit', function(e) {
-                    // Add files to form data
-                    if (filesToSubmit.length > 0) {
-                        // Create a new FormData from the form
-                        const formData = new FormData(form);
-                        
-                        // Add all files (use raw file for FormData; Dropzone file may be File or wrapper)
-                        filesToSubmit.forEach((file) => {
-                            const blob = file.file || file;
-                            const name = file.name || (blob && blob.name) || 'file';
-                            formData.append('media[]', blob, name);
-                        });
-
-                        // Prevent default submission
-                        e.preventDefault();
-                        e.stopPropagation();
-
-                        // Disable submit button
-                        const submitBtn = form.querySelector('button[type="submit"]');
-                        if (submitBtn) {
-                            submitBtn.disabled = true;
-                            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Creating Session...';
-                        }
-
-                        // Get CSRF token
-                        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || 
-                                         form.querySelector('input[name="_token"]')?.value;
-
-                        // Submit via fetch
-                        fetch(form.action, {
-                            method: 'POST',
-                            body: formData,
-                            headers: {
-                                'X-Requested-With': 'XMLHttpRequest',
-                                'X-CSRF-TOKEN': csrfToken,
-                            }
-                        })
-                        .then(response => {
-                            if (response.redirected) {
-                                window.location.href = response.url;
-                            } else if (response.ok) {
-                                return response.text().then(html => {
-                                    // If response contains HTML (validation errors), update page
-                                    document.open();
-                                    document.write(html);
-                                    document.close();
-                                });
-                            } else {
-                                throw new Error('Server error: ' + response.status);
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            if (submitBtn) {
-                                submitBtn.disabled = false;
-                                submitBtn.innerHTML = '<i class="fas fa-save me-2"></i>Create Session';
-                            }
+            dz.on('success', function(file, response) {
+                if (response && response.id) {
+                    tempIds.push(response.id);
+                    hiddenInput.value = JSON.stringify(tempIds);
+                    tempNames[response.id] = response.original_filename || file.name || '';
+                    syncTempNames();
+                    var renameWrap = file.previewElement.querySelector('.dz-rename-wrap');
+                    var renameInput = file.previewElement.querySelector('.dz-rename-input');
+                    if (renameWrap && renameInput) {
+                        renameWrap.style.display = 'block';
+                        renameInput.value = tempNames[response.id];
+                        renameInput.addEventListener('input', function() {
+                            tempNames[response.id] = this.value.trim() || response.original_filename || file.name || '';
+                            syncTempNames();
                         });
                     }
-                    // If no files, let form submit normally
-                });
-            }
+                }
+                var prog = file.previewElement.querySelector('.dz-progress');
+                var successEl = file.previewElement.querySelector('.dz-success');
+                if (prog) prog.style.display = 'none';
+                if (successEl) successEl.style.display = 'block';
+            });
+            dz.on('removedfile', function(file) {
+                if (file.tempId) {
+                    var i = tempIds.indexOf(file.tempId);
+                    if (i > -1) tempIds.splice(i, 1);
+                    delete tempNames[file.tempId];
+                    hiddenInput.value = JSON.stringify(tempIds);
+                    syncTempNames();
+                }
+            });
+            dz.on('error', function(file, msg) {
+                if (file.xhr && file.xhr.response) {
+                    try { var r = JSON.parse(file.xhr.response); if (r.error) msg = r.error; } catch(e) {}
+                }
+                console.error('Upload error:', file.name, msg);
+            });
+            dz.on('complete', function(file) {
+                if (file.status === 'success' && file.xhr && file.xhr.response) {
+                    try {
+                        var r = JSON.parse(file.xhr.response);
+                        if (r.id) file.tempId = r.id;
+                    } catch(e) {}
+                }
+            });
         }
     });
 });

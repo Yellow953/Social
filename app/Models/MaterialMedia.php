@@ -20,11 +20,13 @@ class MaterialMedia extends Model
         'mime_type',
         'file_size',
         'order',
+        'is_locked',
     ];
 
     protected $casts = [
         'file_size' => 'integer',
         'order' => 'integer',
+        'is_locked' => 'boolean',
     ];
 
     /**
@@ -33,6 +35,24 @@ class MaterialMedia extends Model
     public function material(): BelongsTo
     {
         return $this->belongsTo(Material::class);
+    }
+
+    /**
+     * Check if user can access this media (material must be accessible; if media is locked, subscription required).
+     */
+    public function canBeAccessedBy($user): bool
+    {
+        $material = $this->material;
+        if (!$material || !$material->canBeAccessedBy($user)) {
+            return false;
+        }
+        if (!$this->is_locked) {
+            return true;
+        }
+        if (!$user || $user->isAdmin()) {
+            return true;
+        }
+        return $user->hasActiveSubscription();
     }
 
     /**

@@ -29,19 +29,21 @@ class AcademiqueController extends Controller
     }
 
     /**
-     * Return courses for a given year and major. Only courses matching both are returned.
+     * Return courses for a given year, major and semester. Only courses matching all are returned.
      */
     public function courses(Request $request)
     {
         $request->validate([
             'year' => 'required|string|max:50',
             'major' => 'required|string|max:255',
+            'semester' => 'required|string|in:1,2',
         ]);
 
         $courses = Course::where('year', $request->year)
             ->where('major', $request->major)
+            ->where('semester', $request->semester)
             ->orderBy('name')
-            ->get(['id', 'name', 'code', 'year', 'major']);
+            ->get(['id', 'name', 'code', 'year', 'major', 'semester']);
 
         return response()->json(['courses' => $courses]);
     }

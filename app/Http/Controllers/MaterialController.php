@@ -60,13 +60,16 @@ class MaterialController extends Controller
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
-        $media = $material->media()->orderBy('order')->get()->map(function ($m) {
+        $media = $material->media()->orderBy('order')->get()->map(function ($m) use ($user) {
+            $canAccess = $m->canBeAccessedBy($user);
             return [
                 'id' => $m->id,
                 'original_filename' => $m->original_filename,
                 'type' => $m->type,
                 'formatted_file_size' => $m->formatted_file_size,
                 'detail_url' => route('media.detail', $m),
+                'is_locked' => (bool) $m->is_locked,
+                'can_access' => $canAccess,
             ];
         });
 

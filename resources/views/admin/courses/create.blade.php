@@ -66,7 +66,7 @@
 
                         <div class="row">
                             <!-- Major -->
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label for="major" class="form-label fw-bold">Major / Speciality</label>
                                 <select class="form-control @error('major') is-invalid @enderror"
                                         id="major"
@@ -82,7 +82,7 @@
                             </div>
 
                             <!-- Year -->
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label for="year" class="form-label fw-bold">Year</label>
                                 <select class="form-control @error('year') is-invalid @enderror"
                                         id="year"
@@ -95,6 +95,22 @@
                                     <option value="3e" {{ old('year') == '3e' ? 'selected' : '' }}>3e</option>
                                 </select>
                                 @error('year')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <!-- Semester -->
+                            <div class="col-md-4 mb-3">
+                                <label for="semester" class="form-label fw-bold">Semester <span class="text-danger">*</span></label>
+                                <select class="form-control @error('semester') is-invalid @enderror"
+                                        id="semester"
+                                        name="semester"
+                                        required>
+                                    <option value="">Select semester</option>
+                                    <option value="1" {{ old('semester') == '1' ? 'selected' : '' }}>Semester 1</option>
+                                    <option value="2" {{ old('semester') == '2' ? 'selected' : '' }}>Semester 2</option>
+                                </select>
+                                @error('semester')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>

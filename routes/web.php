@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\VerifyOtpController;
 use App\Http\Controllers\Auth\VerifyTwoFactorController;
+use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\MaterialController;
@@ -57,7 +58,12 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'register']);
 
-// OTP Verification routes
+// Email verification (link in email)
+Route::get('/email/verify', [EmailVerificationController::class, 'notice'])->middleware('auth')->name('verification.notice');
+Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])->middleware(['auth', 'signed'])->name('verification.verify');
+Route::post('/email/verification-notification', [EmailVerificationController::class, 'send'])->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
+// OTP Verification routes (kept for other flows if needed)
 Route::get('/verify-otp', [VerifyOtpController::class, 'show'])->name('verify-otp');
 Route::post('/verify-otp', [VerifyOtpController::class, 'verify']);
 Route::post('/resend-otp', [VerifyOtpController::class, 'resend'])->name('resend-otp');
@@ -73,8 +79,8 @@ Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink
 Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
 Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
 
-// Protected routes (require authentication)
-Route::middleware(['auth', 'single.device'])->group(function () {
+// Protected routes (require authentication + verified email)
+Route::middleware(['auth', 'verified', 'single.device'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/academic', [AcademiqueController::class, 'index'])->name('academique');
     Route::get('/academic/years', [AcademiqueController::class, 'years'])->name('academique.years');
@@ -119,6 +125,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('courses', \App\Http\Controllers\Admin\CourseController::class);
 
     // Materials CRUD (admin)
+    Route::post('materials/upload-temp', [\App\Http\Controllers\Admin\MaterialController::class, 'uploadTemp'])->name('materials.upload-temp');
+    Route::patch('materials/{material}/toggle-lock', [\App\Http\Controllers\Admin\MaterialController::class, 'toggleLock'])->name('materials.toggle-lock');
+    Route::get('materials/media/{material_media}/download', [\App\Http\Controllers\Admin\MaterialController::class, 'downloadMedia'])->name('materials.media.download');
+    Route::post('materials/media/{material_media}/convert-to-pdf', [\App\Http\Controllers\Admin\MaterialController::class, 'convertToPdf'])->name('materials.media.convert-to-pdf');
     Route::resource('materials', \App\Http\Controllers\Admin\MaterialController::class)->parameters(['session' => 'material']);
 
     // Content Management (homepage slideshow)

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('mime_type')->nullable();
             $table->integer('file_size')->nullable();
             $table->integer('order')->default(0);
+            $table->boolean('is_locked')->default(true);
             $table->timestamps();
         });
     }

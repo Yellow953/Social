@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->string('major')->nullable();
             $table->string('year')->nullable();
+            $table->string('semester')->default('1');
             $table->timestamps();
         });
     }

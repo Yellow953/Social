@@ -142,16 +142,19 @@
                 return;
             }
             listWrap.classList.remove('d-none');
+            var subscriptionUrl = @json(route('subscriptions.index'));
             media.forEach(function(m) {
                 var col = document.createElement('div');
                 col.className = 'col-md-4 col-sm-6';
-                col.innerHTML = '<a href="' + escapeHtml(m.detail_url) + '" class="text-decoration-none">' +
+                var href = m.can_access ? m.detail_url : subscriptionUrl;
+                var lockBadge = !m.can_access ? '<span class="badge bg-warning text-dark mt-2"><i class="fas fa-lock me-1"></i>Subscription required</span>' : (m.is_locked ? '<span class="badge bg-secondary mt-2"><i class="fas fa-lock me-1"></i>Protected</span>' : '');
+                col.innerHTML = '<a href="' + escapeHtml(href) + '" class="text-decoration-none">' +
                     '<div class="card border shadow-sm h-100 media-card" style="transition: all 0.3s ease; cursor: pointer;">' +
                     '<div class="card-body text-center p-4">' +
                     '<div class="mb-3">' + typeIcon(m.type) + '</div>' +
                     '<h6 class="mb-2 text-dark text-truncate" style="max-width: 100%;" title="' + escapeHtml(m.original_filename) + '">' + escapeHtml(m.original_filename) + '</h6>' +
                     '<small class="text-muted">' + escapeHtml(m.formatted_file_size || '') + '</small>' +
-                    '<div class="mt-3"><span class="badge bg-' + typeBadgeClass(m.type) + '">' + escapeHtml((m.type || '').charAt(0).toUpperCase() + (m.type || '').slice(1)) + '</span></div>' +
+                    '<div class="mt-3"><span class="badge bg-' + typeBadgeClass(m.type) + '">' + escapeHtml((m.type || '').charAt(0).toUpperCase() + (m.type || '').slice(1)) + '</span>' + lockBadge + '</div>' +
                     '</div></div></a>';
                 listWrap.appendChild(col);
             });

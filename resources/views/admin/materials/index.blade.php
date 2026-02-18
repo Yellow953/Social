@@ -59,11 +59,16 @@
                             <td>{{ $material->course->name }}</td>
                             <td><span class="badge bg-secondary">{{ ucfirst(str_replace('_', ' ', $material->type)) }}</span></td>
                             <td>
-                                @if($material->is_locked)
-                                    <span class="badge bg-warning">Locked</span>
-                                @else
-                                    <span class="badge bg-success">Available</span>
-                                @endif
+                                <span class="material-lock-badge badge {{ $material->is_locked ? 'bg-warning' : 'bg-success' }}" data-material-id="{{ $material->id }}">
+                                    {{ $material->is_locked ? 'Locked' : 'Available' }}
+                                </span>
+                                <button type="button"
+                                        class="btn btn-sm btn-outline-{{ $material->is_locked ? 'success' : 'warning' }} ms-1 material-lock-toggle"
+                                        title="{{ $material->is_locked ? 'Unlock' : 'Lock' }}"
+                                        data-material-id="{{ $material->id }}"
+                                        style="border-radius: 8px;">
+                                    <i class="fas fa-{{ $material->is_locked ? 'lock-open' : 'lock' }}"></i>
+                                </button>
                             </td>
                             <td>{{ $material->created_at->format('M d, Y') }}</td>
                             <td class="text-end">
@@ -103,4 +108,46 @@
         @endif
     </div>
 </div>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.material-lock-toggle').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var id = this.getAttribute('data-material-id');
+            var row = this.closest('tr');
+            var badge = row.querySelector('.material-lock-badge');
+            var icon = this.querySelector('i');
+            if (!id || !badge) return;
+            var csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            fetch('{{ url('admin/materials') }}/' + id + '/toggle-lock', {
+                method: 'PATCH',
+                headers: {
+                    'X-CSRF-TOKEN': csrf,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                if (data.is_locked) {
+                    badge.className = 'material-lock-badge badge bg-warning';
+                    badge.textContent = 'Locked';
+                    btn.className = 'btn btn-sm btn-outline-success ms-1 material-lock-toggle';
+                    btn.title = 'Unlock';
+                    icon.className = 'fas fa-lock-open';
+                } else {
+                    badge.className = 'material-lock-badge badge bg-success';
+                    badge.textContent = 'Available';
+                    btn.className = 'btn btn-sm btn-outline-warning ms-1 material-lock-toggle';
+                    btn.title = 'Lock';
+                    icon.className = 'fas fa-lock';
+                }
+            })
+            .catch(function() { alert('Failed to update lock status'); });
+        });
+    });
+});
+</script>
+@endpush
 @endsection

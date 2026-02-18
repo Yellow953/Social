@@ -46,6 +46,8 @@
                         <tr>
                             <th class="border-0">Code</th>
                             <th class="border-0">Name</th>
+                            <th class="border-0">Year</th>
+                            <th class="border-0">Semester</th>
                             <th class="border-0">Description</th>
                             <th class="border-0">Materials</th>
                             <th class="border-0">Created</th>
@@ -57,6 +59,8 @@
                         <tr>
                             <td><strong>{{ $course->code }}</strong></td>
                             <td>{{ $course->name }}</td>
+                            <td>{{ $course->year ?? '—' }}</td>
+                            <td>{{ $course->semester ? 'Semester ' . $course->semester : '—' }}</td>
                             <td>
                                 @if($course->description)
                                     {{ Str::limit($course->description, 50) }}
@@ -85,7 +89,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="6" class="text-center py-5">
+                            <td colspan="8" class="text-center py-5">
                                 <i class="fas fa-book-open text-muted mb-3" style="font-size: 3rem;"></i>
                                 <h5 class="text-muted">No courses found</h5>
                                 <a href="{{ route('admin.courses.create') }}" class="btn btn-primary mt-3">

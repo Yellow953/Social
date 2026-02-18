@@ -18,8 +18,8 @@ class MediaController extends Controller
         $user = Auth::user();
         $material = $media->material;
 
-        if (!$material->canBeAccessedBy($user)) {
-            abort(403, 'You need an active SOCIALPLUS subscription to access this media.');
+        if (!$media->canBeAccessedBy($user)) {
+            abort(403, $media->is_locked ? 'This file is locked. An active SOCIALPLUS subscription is required to view it.' : 'You do not have access to this media.');
         }
 
         return view('media.detail', compact('media', 'material'));
@@ -33,8 +33,8 @@ class MediaController extends Controller
         $user = Auth::user();
         $material = $media->material;
 
-        if (!$material->canBeAccessedBy($user)) {
-            abort(403, 'You need an active SOCIALPLUS subscription to access this media.');
+        if (!$media->canBeAccessedBy($user)) {
+            abort(403, $media->is_locked ? 'This file is locked. An active SOCIALPLUS subscription is required to view it.' : 'You do not have access to this media.');
         }
 
         $filePath = $this->resolveMediaFilePath($media->file_path);
@@ -130,8 +130,8 @@ class MediaController extends Controller
         $user = Auth::user();
         $material = $media->material;
 
-        if (!$material->canBeAccessedBy($user)) {
-            abort(403, 'You need an active SOCIALPLUS subscription to access this media.');
+        if (!$media->canBeAccessedBy($user)) {
+            abort(403, $media->is_locked ? 'This file is locked. An active SOCIALPLUS subscription is required to view it.' : 'You do not have access to this media.');
         }
 
         if ($media->type !== 'video') {
