@@ -21,7 +21,7 @@ export default function Header({ activeTab }) {
                     >
                         <img
                             src="/assets/images/logo-transparent.png"
-                            alt="ESIB Social"
+                            alt="ESIB Social Logo"
                             className="w-12 h-12 object-contain group-hover:scale-110 transition-transform"
                         />
                         <span className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-[#1a2744] to-[#243b55] bg-clip-text text-transparent">
