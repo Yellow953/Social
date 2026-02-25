@@ -21,7 +21,7 @@ return new class extends Migration
             $table->boolean('used')->default(false);
             $table->timestamps();
             
-            $table->index(['email', 'code', 'type']);
+            $table->index('email');
             $table->index(['user_id', 'type']);
         });
     }
