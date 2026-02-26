@@ -45,8 +45,8 @@ class RegisterController extends Controller
                 'unique:users',
                 function ($attribute, $value, $fail) {
                     $domain = strtolower(substr(strrchr($value, '@'), 1) ?: '');
-                    if ($domain === '' || !preg_match('/^outlook\./i', $domain)) {
-                        $fail('Registration is only allowed with an Outlook email address (e.g. name@outlook.com).');
+                    if ($domain !== 'net.usj.edu.lb') {
+                        $fail('Registration is only allowed with a university email address (e.g. name@net.usj.edu.lb).');
                     }
                 },
             ],
@@ -72,6 +72,7 @@ class RegisterController extends Controller
         Auth::login($user);
 
         event(new Registered($user));
+        $user->sendEmailVerificationNotification();
 
         return redirect()->route('verification.notice')
             ->with('success', 'Registration successful! Please check your email for the verification link.');

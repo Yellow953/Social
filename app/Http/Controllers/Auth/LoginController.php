@@ -46,37 +46,31 @@ class LoginController extends Controller
         if (Auth::validate($credentials)) {
             $user = User::where('email', $request->email)->first();
 
-            // Check if email is verified
+            // Log the user in immediately
+            Auth::login($user, $remember);
+            $request->session()->regenerate();
+
+            // If email not verified, redirect to verification page
             if (!$user->hasVerifiedEmail()) {
-                throw ValidationException::withMessages([
-                    'email' => ['Please verify your email address before logging in.'],
-                ]);
+                return redirect()->route('verification.notice');
             }
 
-            // Check if 2FA is enabled
+            // If 2FA is enabled, send code and hold behind 2FA gate
             if ($user->two_factor_enabled) {
-                // Generate and send 2FA code
                 $otp = Otp::createForTwoFactor($user);
                 Notification::route('mail', $user->email)
                     ->notify(new \App\Notifications\SendTwoFactorCodeNotification($otp->code));
 
-                // Store user ID in session for 2FA verification
-                $request->session()->put('two_factor_user_id', $user->id);
-                $request->session()->put('two_factor_remember', $remember);
+                $request->session()->put('two_factor_pending', true);
 
                 return redirect()->route('verify-2fa')
                     ->with('success', 'Please check your email for the two-factor authentication code.');
             }
 
-            // If 2FA is disabled, proceed with normal login
-            Auth::login($user, $remember);
-            $request->session()->regenerate();
-
-            // Update device information: this device becomes the only allowed one; any other device will be logged out on next request
+            // No 2FA — update device and redirect
             $deviceIdentifier = User::generateDeviceIdentifier($request);
             $user->updateDeviceInfo($deviceIdentifier);
 
-            // Redirect based on user role
             if ($user->isAdmin()) {
                 return redirect()->intended('/admin/dashboard');
             }

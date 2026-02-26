@@ -6,6 +6,9 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\URL;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -186,7 +189,22 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function sendEmailVerificationNotification(): void
     {
-        $this->notify(new \Illuminate\Auth\Notifications\VerifyEmail);
+        $verificationUrl = URL::temporarySignedRoute(
+            'verification.verify',
+            Carbon::now()->addMinutes(60),
+            ['id' => $this->getKey(), 'hash' => sha1($this->email)]
+        );
+
+        $name = $this->name;
+        $email = $this->email;
+
+        Mail::raw(
+            "Hello {$name},\n\nPlease verify your email by clicking the link below:\n\n{$verificationUrl}\n\nThis link expires in 60 minutes.\n\nIf you did not create an account, ignore this email.",
+            function ($message) use ($email, $name) {
+                $message->to($email, $name)
+                    ->subject('Verify Your Email Address - ESIB Social');
+            }
+        );
     }
 
     /**

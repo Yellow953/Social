@@ -13,7 +13,7 @@
         <div class="position-absolute" style="bottom: 40%; right: 5%; width: 90px; height: 90px; background: rgba(236,104,42,0.4); border-radius: 50%; animation: float 5s ease-in-out infinite;"></div>
         <div class="position-absolute" style="top: 70%; left: 30%; width: 110px; height: 110px; background: rgba(236,104,42,0.4); border-radius: 50%; animation: float 6.5s ease-in-out infinite;"></div>
     </div>
-    
+
     <style>
         @keyframes float {
             0%, 100% { transform: translateY(0px) translateX(0px); }
@@ -61,10 +61,10 @@
                                        id="email"
                                        name="email"
                                        value="{{ old('email') }}"
-                                       placeholder="Email (e.g. name@outlook.com)"
+                                       placeholder="Email (e.g. name@net.usj.edu.lb)"
                                        required
                                        autocomplete="email">
-                                <div class="form-text small mx-2">Only Outlook addresses are accepted (e.g. name@outlook.com).</div>
+                                <div class="form-text small mx-2">Only University addresses are accepted (e.g. name@net.usj.edu.lb).</div>
                                 @error('email')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror

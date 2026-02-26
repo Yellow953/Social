@@ -15,7 +15,7 @@ class VerifyTwoFactorController extends Controller
      */
     public function show()
     {
-        if (!session()->has('two_factor_user_id')) {
+        if (!Auth::check() || !session()->has('two_factor_pending')) {
             return redirect()->route('login')
                 ->with('error', 'Please login first.');
         }
@@ -32,15 +32,13 @@ class VerifyTwoFactorController extends Controller
             'code' => 'required|string|size:6',
         ]);
 
-        $userId = session()->get('two_factor_user_id');
-        $remember = session()->get('two_factor_remember', false);
+        $user = Auth::user();
 
-        if (!$userId) {
+        if (!$user || !session()->has('two_factor_pending')) {
             return redirect()->route('login')
                 ->with('error', 'Session expired. Please login again.');
         }
 
-        $user = User::findOrFail($userId);
         $otp = Otp::verify($user->email, $request->code, 'two_factor');
 
         if (!$otp) {
@@ -49,21 +47,14 @@ class VerifyTwoFactorController extends Controller
             ])->withInput();
         }
 
-        // Mark OTP as used
         $otp->markAsUsed();
 
-        // Log the user in
-        Auth::login($user, $remember);
-        $request->session()->regenerate();
+        $request->session()->forget('two_factor_pending');
 
-        // Update device information: this device becomes the only allowed one; any other device will be logged out on next request
+        // Update device information
         $deviceIdentifier = User::generateDeviceIdentifier($request);
         $user->updateDeviceInfo($deviceIdentifier);
 
-        // Clear session
-        $request->session()->forget(['two_factor_user_id', 'two_factor_remember']);
-
-        // Redirect based on user role
         if ($user->isAdmin()) {
             return redirect()->intended('/admin/dashboard')
                 ->with('success', 'Login successful! Welcome back.');
@@ -77,16 +68,13 @@ class VerifyTwoFactorController extends Controller
      */
     public function resend(Request $request)
     {
-        $userId = session()->get('two_factor_user_id');
+        $user = Auth::user();
 
-        if (!$userId) {
+        if (!$user || !session()->has('two_factor_pending')) {
             return redirect()->route('login')
                 ->with('error', 'Session expired. Please login again.');
         }
 
-        $user = User::findOrFail($userId);
-
-        // Generate and send new 2FA code
         $otp = Otp::createForTwoFactor($user);
         \Illuminate\Support\Facades\Notification::route('mail', $user->email)
             ->notify(new \App\Notifications\SendTwoFactorCodeNotification($otp->code));

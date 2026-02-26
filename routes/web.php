@@ -46,9 +46,11 @@ Route::get('/verify-otp', [VerifyOtpController::class, 'show'])->name('verify-ot
 Route::post('/verify-otp', [VerifyOtpController::class, 'verify']);
 Route::post('/resend-otp', [VerifyOtpController::class, 'resend'])->name('resend-otp');
 
-Route::get('/verify-2fa', [VerifyTwoFactorController::class, 'show'])->name('verify-2fa');
-Route::post('/verify-2fa', [VerifyTwoFactorController::class, 'verify']);
-Route::post('/resend-2fa', [VerifyTwoFactorController::class, 'resend'])->name('resend-2fa');
+Route::middleware('auth')->group(function () {
+    Route::get('/verify-2fa', [VerifyTwoFactorController::class, 'show'])->name('verify-2fa');
+    Route::post('/verify-2fa', [VerifyTwoFactorController::class, 'verify']);
+    Route::post('/resend-2fa', [VerifyTwoFactorController::class, 'resend'])->name('resend-2fa');
+});
 
 Route::get('/forgot-password', [ForgotPasswordController::class, 'showForgotPasswordForm'])->name('password.request');
 Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
@@ -56,7 +58,7 @@ Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showRese
 Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
 
 // ─── Protected (auth + verified email + single device) ───────────────────────
-Route::middleware(['auth', 'verified', 'single.device'])->group(function () {
+Route::middleware(['auth', 'two_factor', 'verified', 'single.device'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/academic', [AcademiqueController::class, 'index'])->name('academique');
@@ -95,7 +97,7 @@ Route::middleware(['auth', 'verified', 'single.device'])->group(function () {
 });
 
 // ─── Admin (auth + admin role) ────────────────────────────────────────────────
-Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'two_factor', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::get('/analytics', [AdminAnalyticsController::class, 'index'])->name('analytics');
     Route::get('/access-logs', [AdminAccessLogController::class, 'index'])->name('access-logs');
