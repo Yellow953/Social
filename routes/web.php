@@ -40,6 +40,7 @@ Route::post('/register', [RegisterController::class, 'register']);
 Route::get('/email/verify', [EmailVerificationController::class, 'notice'])->middleware('auth')->name('verification.notice');
 Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])->middleware(['auth', 'signed'])->name('verification.verify');
 Route::post('/email/verification-notification', [EmailVerificationController::class, 'send'])->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+Route::post('/email/resend-verification', [EmailVerificationController::class, 'resendFromLogin'])->middleware('throttle:6,1')->name('verification.resend-from-login');
 
 Route::get('/verify-otp', [VerifyOtpController::class, 'show'])->name('verify-otp');
 Route::post('/verify-otp', [VerifyOtpController::class, 'verify']);

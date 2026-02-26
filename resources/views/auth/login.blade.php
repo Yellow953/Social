@@ -33,6 +33,10 @@
                             <h3 class="fw-bold mb-1" style="color: #5c5c5c;">Welcome Back</h3>
                         </div>
 
+                        @if(session('resend_success'))
+                            <div class="alert alert-success small py-2 mb-3">{{ session('resend_success') }}</div>
+                        @endif
+
                         <!-- Form -->
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
@@ -50,6 +54,15 @@
                                        autofocus>
                                 @error('email')
                                     <div class="invalid-feedback">{{ $message }}</div>
+                                    @if(str_contains($message, 'verify your email'))
+                                        <form method="POST" action="{{ route('verification.resend-from-login') }}" class="mt-2">
+                                            @csrf
+                                            <input type="hidden" name="email" value="{{ old('email') }}">
+                                            <button type="submit" class="btn btn-sm btn-link p-0 text-decoration-none" style="color: #ec682a;">
+                                                Resend verification email
+                                            </button>
+                                        </form>
+                                    @endif
                                 @enderror
                             </div>
 
