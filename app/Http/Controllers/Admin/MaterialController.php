@@ -26,7 +26,7 @@ class MaterialController extends Controller
 
     public function create()
     {
-        $courses = Course::orderBy('name')->get();
+        $courses = Course::select('id', 'name', 'code', 'major', 'year', 'semester')->orderBy('id', 'DESC')->get();
         return view('admin.materials.create', compact('courses'));
     }
 
@@ -36,7 +36,7 @@ class MaterialController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'course_id' => 'required|exists:courses,id',
-            'type' => 'required|string|in:cours,tp,video_recording',
+            'type' => 'required|string|in:cours,tp,td,tc,resume,partiel,final,video_recording',
             'is_locked' => 'boolean',
             'watermark_type' => 'nullable|string|in:none,full,logo_only,username_only',
             'media' => 'nullable|array',
@@ -68,7 +68,7 @@ class MaterialController extends Controller
 
     public function edit(Material $material)
     {
-        $courses = Course::orderBy('name')->get();
+        $courses = Course::select('id', 'name', 'code', 'major', 'year', 'semester')->orderBy('id', 'DESC')->get();
         $material->load('media');
         return view('admin.materials.edit', compact('material', 'courses'));
     }
@@ -320,6 +320,42 @@ class MaterialController extends Controller
             \Log::warning('FPDF image to PDF failed', ['path' => $imagePath, 'error' => $e->getMessage()]);
             return false;
         }
+    }
+
+    public function duplicate(Material $material)
+    {
+        $newMaterial = Material::create([
+            'title' => $material->title,
+            'description' => $material->description,
+            'course_id' => $material->course_id,
+            'type' => $material->type,
+            'is_locked' => $material->is_locked,
+            'watermark_type' => $material->watermark_type,
+        ]);
+
+        foreach ($material->media as $media) {
+            $newFilePath = null;
+            if (Storage::disk('local')->exists($media->file_path)) {
+                $ext = pathinfo($media->file_path, PATHINFO_EXTENSION);
+                $newFilename = sprintf('material_%d_%s_%d_%s.%s', $newMaterial->id, $media->type, $media->order, Str::random(8), $ext);
+                $newFilePath = 'materials/media/' . $newFilename;
+                Storage::disk('local')->copy($media->file_path, $newFilePath);
+            }
+
+            MaterialMedia::create([
+                'material_id' => $newMaterial->id,
+                'type' => $media->type,
+                'file_path' => $newFilePath ?? $media->file_path,
+                'original_filename' => $media->original_filename,
+                'mime_type' => $media->mime_type,
+                'file_size' => $media->file_size,
+                'order' => $media->order,
+                'is_locked' => $media->is_locked,
+            ]);
+        }
+
+        return redirect()->route('admin.materials.index')
+            ->with('success', 'Material duplicated successfully.');
     }
 
     public function destroy(Material $material)

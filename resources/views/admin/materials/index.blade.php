@@ -73,9 +73,17 @@
                             <td>{{ $material->created_at->format('M d, Y') }}</td>
                             <td class="text-end">
                                 <div class="d-flex gap-2 justify-content-end">
+                                    <form method="POST" action="{{ route('admin.materials.duplicate', $material) }}" class="d-inline form-duplicate" data-confirm="Duplicate this material and all its files?">
+                                        @csrf
+                                        <button type="submit" class="btn btn-sm btn-info shadow-sm" title="Duplicate" style="border-radius: 8px;">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                    </form>
+
                                     <a href="{{ route('admin.materials.edit', $material) }}" class="btn btn-sm btn-primary shadow-sm" title="Edit" style="border-radius: 8px;">
                                         <i class="fas fa-edit"></i>
                                     </a>
+
                                     <form method="POST" action="{{ route('admin.materials.destroy', $material) }}" class="d-inline form-delete" data-confirm="Are you sure you want to delete this material?">
                                         @csrf
                                         @method('DELETE')

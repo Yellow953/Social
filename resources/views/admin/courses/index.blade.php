@@ -74,9 +74,17 @@
                             <td>{{ $course->created_at->format('M d, Y') }}</td>
                             <td class="text-end">
                                 <div class="d-flex gap-2 justify-content-end">
+                                    <form method="POST" action="{{ route('admin.courses.duplicate', $course) }}" class="d-inline form-duplicate" data-confirm="Duplicate this course and all its materials?">
+                                        @csrf
+                                        <button type="submit" class="btn btn-sm btn-info shadow-sm" title="Duplicate" style="border-radius: 8px;">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                    </form>
+
                                     <a href="{{ route('admin.courses.edit', $course) }}" class="btn btn-sm btn-primary shadow-sm" title="Edit" style="border-radius: 8px;">
                                         <i class="fas fa-edit"></i>
                                     </a>
+
                                     <form method="POST" action="{{ route('admin.courses.destroy', $course) }}" class="d-inline form-delete" data-confirm="Are you sure you want to delete this course?">
                                         @csrf
                                         @method('DELETE')

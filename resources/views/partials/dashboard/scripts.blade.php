@@ -26,10 +26,35 @@
             });
         });
     }
+    function attachDuplicateConfirmations() {
+        document.querySelectorAll('form.form-duplicate').forEach(function(form) {
+            if (form.dataset.swalAttached) return;
+            form.dataset.swalAttached = '1';
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                var msg = form.getAttribute('data-confirm') || 'Duplicate this item?';
+                Swal.fire({
+                    title: 'Duplicate?',
+                    text: msg,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#6c757d',
+                    cancelButtonColor: '#adb5bd',
+                    confirmButtonText: 'Yes, duplicate it'
+                }).then(function(result) {
+                    if (result.isConfirmed) form.submit();
+                });
+            });
+        });
+    }
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', attachDeleteConfirmations);
+        document.addEventListener('DOMContentLoaded', function() {
+            attachDeleteConfirmations();
+            attachDuplicateConfirmations();
+        });
     } else {
         attachDeleteConfirmations();
+        attachDuplicateConfirmations();
     }
 </script>
 

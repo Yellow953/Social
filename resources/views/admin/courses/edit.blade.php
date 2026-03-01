@@ -68,11 +68,11 @@
                         <div class="row">
                             <!-- Major -->
                             <div class="col-md-4 mb-3">
-                                <label for="major" class="form-label fw-bold">Major / Speciality</label>
+                                <label for="major" class="form-label fw-bold">Major / Speciality <span class="text-danger">*</span></label>
                                 <select class="form-control @error('major') is-invalid @enderror"
                                         id="major"
-                                        name="major">
-                                    <option value="">Select major (optional)</option>
+                                        name="major" required>
+                                    <option value="">Select major</option>
                                     @foreach(config('majors') as $major)
                                         <option value="{{ $major }}" {{ old('major', $course->major) == $major ? 'selected' : '' }}>{{ $major }}</option>
                                     @endforeach
@@ -84,11 +84,11 @@
 
                             <!-- Year -->
                             <div class="col-md-4 mb-3">
-                                <label for="year" class="form-label fw-bold">Year</label>
+                                <label for="year" class="form-label fw-bold">Year <span class="text-danger">*</span></label>
                                 <select class="form-control @error('year') is-invalid @enderror"
                                         id="year"
                                         name="year">
-                                    <option value="">Select year (optional)</option>
+                                    <option value="">Select year</option>
                                     <option value="Sup" {{ old('year', $course->year) == 'Sup' ? 'selected' : '' }}>Sup</option>
                                     <option value="Spé" {{ old('year', $course->year) == 'Spé' ? 'selected' : '' }}>Spé</option>
                                     <option value="1e" {{ old('year', $course->year) == '1e' ? 'selected' : '' }}>1e</option>

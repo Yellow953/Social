@@ -37,6 +37,10 @@
                     <i class="fas fa-play-circle fa-lg me-3"></i>
                     <span class="nav-text" id="nav-admin-materials">Materials</span>
                 </a>
+                <a href="{{ route('calculator') }}" data-tooltip="Calculatrice" class="sidebar-item d-flex align-items-center px-3 py-3 mb-2 rounded text-decoration-none {{ request()->is('calculator*') ? 'active' : '' }}">
+                    <i class="fas fa-calculator fa-lg me-3"></i>
+                    <span class="nav-text" id="nav-calculator">Calculatrice</span>
+                </a>
                 <a href="{{ route('admin.analytics') }}" data-tooltip="Analytics" class="sidebar-item d-flex align-items-center px-3 py-3 mb-2 rounded text-decoration-none {{ request()->is('admin/analytics*') ? 'active' : '' }}">
                     <i class="fas fa-chart-line fa-lg me-3"></i>
                     <span class="nav-text" id="nav-admin-analytics">Analytics</span>

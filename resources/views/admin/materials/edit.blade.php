@@ -72,7 +72,7 @@
                                     <option value="">Select a course</option>
                                     @foreach($courses as $course)
                                         <option value="{{ $course->id }}" {{ old('course_id', $material->course_id) == $course->id ? 'selected' : '' }}>
-                                            {{ $course->name }} ({{ $course->code }})
+                                            {{ $course->name }} | {{ $course->code }} | {{ $course->major }} | {{ $course->year }} | {{ $course->semester }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -91,6 +91,11 @@
                                     <option value="">Select type</option>
                                     <option value="cours" {{ old('type', $material->type) == 'cours' ? 'selected' : '' }}>Cours</option>
                                     <option value="tp" {{ old('type', $material->type) == 'tp' ? 'selected' : '' }}>TP</option>
+                                    <option value="tc" {{ old('type', $material->type) == 'tc' ? 'selected' : '' }}>TC</option>
+                                    <option value="td" {{ old('type', $material->type) == 'td' ? 'selected' : '' }}>TD</option><option value="td" {{ old('type', $material->type) == 'td' ? 'selected' : '' }}>TD</option>
+                                    <option value="resume" {{ old('type', $material->type) == 'resume' ? 'selected' : '' }}>Resume</option>
+                                    <option value="partiel" {{ old('type', $material->type) == 'partiel' ? 'selected' : '' }}>Partiel</option>
+                                    <option value="final" {{ old('type', $material->type) == 'final' ? 'selected' : '' }}>Final</option>
                                     <option value="video_recording" {{ old('type', $material->type) == 'video_recording' ? 'selected' : '' }}>Video recording</option>
                                 </select>
                                 @error('type')
@@ -252,7 +257,7 @@
         margin: 0;
         cursor: pointer;
     }
-    
+
     .dropzone-modern {
         cursor: pointer;
     }

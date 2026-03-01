@@ -59,7 +59,7 @@
                                     <option value="">Select a course</option>
                                     @foreach($courses as $course)
                                         <option value="{{ $course->id }}" {{ old('course_id') == $course->id ? 'selected' : '' }}>
-                                            {{ $course->name }} ({{ $course->code }})
+                                            {{ $course->name }} | {{ $course->code }} | {{ $course->major }} | {{ $course->year }} | {{ $course->semester }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -77,7 +77,12 @@
                                         required>
                                     <option value="">Select type</option>
                                     <option value="cours" {{ old('type') == 'cours' ? 'selected' : '' }}>Cours</option>
+                                    <option value="td" {{ old('type') == 'td' ? 'selected' : '' }}>TD</option>
                                     <option value="tp" {{ old('type') == 'tp' ? 'selected' : '' }}>TP</option>
+                                    <option value="tc" {{ old('type') == 'tc' ? 'selected' : '' }}>TC</option>
+                                    <option value="resume" {{ old('type') == 'resume' ? 'selected' : '' }}>Resume</option>
+                                    <option value="partiel" {{ old('type') == 'partiel' ? 'selected' : '' }}>Partiel</option>
+                                    <option value="final" {{ old('type') == 'final' ? 'selected' : '' }}>Final</option>
                                     <option value="video_recording" {{ old('type') == 'video_recording' ? 'selected' : '' }}>Video recording</option>
                                 </select>
                                 @error('type')
@@ -133,7 +138,7 @@
                                 <div id="media-preview" class="mt-3 row g-3"></div>
                                 <input type="hidden" name="material_temp_uploads" id="material-temp-uploads-input" value="">
                                 <input type="hidden" name="material_temp_names" id="material-temp-names-input" value="">
-                                <small class="text-muted d-block mt-1">Rename files in the boxes below. Images are compressed (max width 1920px). PDF and video are stored as-is. For large videos, ensure <code>upload_max_filesize</code> and <code>post_max_size</code> in php.ini are sufficient (e.g. 512M).</small>
+                                <small class="text-muted d-block mt-1">Rename files in the boxes below. Images are compressed (max width 1920px). PDF and video are stored as-is.</small>
                                 @error('media')
                                     <div class="text-danger mt-2">{{ $message }}</div>
                                 @enderror
@@ -186,7 +191,7 @@
         margin: 0;
         cursor: pointer;
     }
-    
+
     .dropzone-modern {
         cursor: pointer;
     }
