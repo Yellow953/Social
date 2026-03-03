@@ -3,7 +3,6 @@
 @section('title', 'Edit Slide | ESIB SOCIAL Admin')
 
 @section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Admin</a></li>
     <li class="breadcrumb-item"><a href="{{ route('admin.content-management.index') }}">Content Management</a></li>
     <li class="breadcrumb-item active" aria-current="page">Edit</li>
 @endsection

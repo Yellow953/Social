@@ -15,13 +15,36 @@ use Illuminate\Validation\Rule;
 
 class CourseController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $courses = Course::withCount('materials')
-            ->orderBy('name')
-            ->paginate(20);
+        $query = Course::withCount('materials');
 
-        return view('admin.courses.index', compact('courses'));
+        if ($request->filled('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
+                  ->orWhere('code', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        if ($request->filled('major')) {
+            $query->where('major', $request->major);
+        }
+
+        if ($request->filled('year')) {
+            $query->where('year', $request->year);
+        }
+
+        if ($request->filled('semester')) {
+            $query->where('semester', $request->semester);
+        }
+
+        $courses = $query->orderBy('name')->paginate(20)->withQueryString();
+
+        return view('admin.courses.index', [
+            'courses' => $courses,
+            'majors'  => config('majors'),
+            'filters' => $request->only(['search', 'major', 'year', 'semester']),
+        ]);
     }
 
     public function create()
@@ -53,6 +76,7 @@ class CourseController extends Controller
 
     public function edit(Course $course)
     {
+        $course->load('materials');
         return view('admin.courses.edit', compact('course'));
     }
 

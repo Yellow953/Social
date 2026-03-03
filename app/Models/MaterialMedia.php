@@ -21,6 +21,7 @@ class MaterialMedia extends Model
         'file_size',
         'order',
         'is_locked',
+        'watermark_type',
     ];
 
     protected $casts = [

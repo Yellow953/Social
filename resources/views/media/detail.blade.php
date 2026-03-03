@@ -10,7 +10,7 @@
 
 @section('content')
 @php
-    $watermarkType = $material->watermark_type ?? 'full';
+    $watermarkType = $media->watermark_type ?? $material->watermark_type ?? 'full';
     $showLogo = in_array($watermarkType, ['full', 'logo_only']);
     $showUsername = in_array($watermarkType, ['full', 'username_only']);
 @endphp

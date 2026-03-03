@@ -3,7 +3,6 @@
 @section('title', 'Edit Material | ESIB SOCIAL Admin')
 
 @section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Admin</a></li>
     <li class="breadcrumb-item"><a href="{{ route('admin.materials.index') }}">Materials</a></li>
     <li class="breadcrumb-item active" aria-current="page">Edit</li>
 @endsection
@@ -172,7 +171,17 @@
                                                         Locked (subscription required to view)
                                                     </label>
                                                 </div>
-                                                <div class="form-check mt-1">
+                                                <div class="mt-2">
+                                                    <label class="form-label small mb-1 text-muted">Watermark</label>
+                                                    <select class="form-select form-select-sm" name="media_watermark[{{ $media->id }}]">
+                                                        <option value="" {{ $media->watermark_type === null ? 'selected' : '' }}>Inherit from material</option>
+                                                        <option value="full" {{ $media->watermark_type === 'full' ? 'selected' : '' }}>Full (logo + username)</option>
+                                                        <option value="logo_only" {{ $media->watermark_type === 'logo_only' ? 'selected' : '' }}>Only logo</option>
+                                                        <option value="username_only" {{ $media->watermark_type === 'username_only' ? 'selected' : '' }}>Only username</option>
+                                                        <option value="none" {{ $media->watermark_type === 'none' ? 'selected' : '' }}>No watermark</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-check mt-2">
                                                     <input class="form-check-input" type="checkbox" name="keep_media[]" value="{{ $media->id }}" id="keep_media_{{ $media->id }}" checked>
                                                     <label class="form-check-label text-muted" for="keep_media_{{ $media->id }}">
                                                         Keep file

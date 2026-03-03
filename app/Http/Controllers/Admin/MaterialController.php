@@ -14,14 +14,34 @@ use Illuminate\Support\Str;
 
 class MaterialController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $materials = Material::with('course')
-            ->orderBy('course_id')
-            ->orderBy('created_at')
-            ->paginate(20);
+        $query = Material::with('course');
 
-        return view('admin.materials.index', compact('materials'));
+        if ($request->filled('search')) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->filled('course_id')) {
+            $query->where('course_id', $request->course_id);
+        }
+
+        if ($request->filled('type')) {
+            $query->where('type', $request->type);
+        }
+
+        if ($request->filled('locked')) {
+            $query->where('is_locked', $request->locked === '1');
+        }
+
+        $materials = $query->orderBy('course_id')->orderBy('created_at')->paginate(20)->withQueryString();
+        $courses   = Course::select('id', 'name', 'code')->orderBy('name')->get();
+
+        return view('admin.materials.index', [
+            'materials' => $materials,
+            'courses'   => $courses,
+            'filters'   => $request->only(['search', 'course_id', 'type', 'locked']),
+        ]);
     }
 
     public function create()
@@ -79,7 +99,7 @@ class MaterialController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'course_id' => 'required|exists:courses,id',
-            'type' => 'required|string|in:cours,tp,video_recording',
+            'type' => 'required|string|in:cours,tp,td,tc,resume,partiel,final,video_recording',
             'is_locked' => 'boolean',
             'watermark_type' => 'nullable|string|in:none,full,logo_only,username_only',
             'keep_media' => 'nullable|array',
@@ -90,6 +110,8 @@ class MaterialController extends Controller
             'material_temp_names' => 'nullable|string',
             'media_name' => 'nullable|array',
             'media_name.*' => 'nullable|string|max:255',
+            'media_watermark' => 'nullable|array',
+            'media_watermark.*' => 'nullable|string|in:none,full,logo_only,username_only',
         ]);
 
         $validated['is_locked'] = $request->has('is_locked');
@@ -111,15 +133,19 @@ class MaterialController extends Controller
 
         if ($request->has('keep_media')) {
             $keepMedia = (array) $request->input('keep_media', []);
-            $mediaNames = $request->input('media_name', []);
-            $mediaLocks = $request->input('media_lock', []);
-            $material->media()->whereIn('id', $keepMedia)->each(function (MaterialMedia $media) use ($mediaNames, $mediaLocks) {
+            $mediaNames      = $request->input('media_name', []);
+            $mediaLocks      = $request->input('media_lock', []);
+            $mediaWatermarks = $request->input('media_watermark', []);
+            $material->media()->whereIn('id', $keepMedia)->each(function (MaterialMedia $media) use ($mediaNames, $mediaLocks, $mediaWatermarks) {
                 $updates = [];
                 if (isset($mediaNames[$media->id]) && is_string($mediaNames[$media->id]) && trim($mediaNames[$media->id]) !== '') {
                     $updates['original_filename'] = trim($mediaNames[$media->id]);
                 }
                 if (array_key_exists($media->id, $mediaLocks)) {
                     $updates['is_locked'] = !empty($mediaLocks[$media->id]);
+                }
+                if (array_key_exists($media->id, $mediaWatermarks)) {
+                    $updates['watermark_type'] = $mediaWatermarks[$media->id] ?: null;
                 }
                 if (!empty($updates)) {
                     $media->update($updates);

@@ -3,7 +3,6 @@
 @section('title', 'Courses Management | ESIB SOCIAL Admin')
 
 @section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Admin</a></li>
     <li class="breadcrumb-item active" aria-current="page">Courses</li>
 @endsection
 
@@ -33,6 +32,50 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     @endif
+
+    <!-- Filters -->
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body py-3">
+            <form method="GET" action="{{ route('admin.courses.index') }}" class="row g-2 align-items-end">
+                <div class="col-md-4">
+                    <input type="text" name="search" class="form-control" placeholder="Search by name or code…" value="{{ $filters['search'] ?? '' }}">
+                </div>
+                <div class="col-md-2">
+                    <select name="major" class="form-select">
+                        <option value="">All Majors</option>
+                        @foreach($majors as $major)
+                            <option value="{{ $major }}" {{ ($filters['major'] ?? '') === $major ? 'selected' : '' }}>{{ $major }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select name="year" class="form-select">
+                        <option value="">All Years</option>
+                        @foreach(['Sup', 'Spé', '1e', '2e', '3e'] as $y)
+                            <option value="{{ $y }}" {{ ($filters['year'] ?? '') === $y ? 'selected' : '' }}>{{ $y }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select name="semester" class="form-select">
+                        <option value="">All Semesters</option>
+                        <option value="1" {{ ($filters['semester'] ?? '') === '1' ? 'selected' : '' }}>Semester 1</option>
+                        <option value="2" {{ ($filters['semester'] ?? '') === '2' ? 'selected' : '' }}>Semester 2</option>
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary flex-fill">
+                        <i class="fas fa-filter me-1"></i>Filter
+                    </button>
+                    @if(array_filter($filters ?? []))
+                        <a href="{{ route('admin.courses.index') }}" class="btn btn-outline-secondary" title="Clear filters">
+                            <i class="fas fa-times"></i>
+                        </a>
+                    @endif
+                </div>
+            </form>
+        </div>
+    </div>
 
     <!-- Courses Table -->
     <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">

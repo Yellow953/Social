@@ -3,7 +3,6 @@
 @section('title', 'Create User | ESIB SOCIAL Admin')
 
 @section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Admin</a></li>
     <li class="breadcrumb-item"><a href="{{ route('admin.users.index') }}">Users</a></li>
     <li class="breadcrumb-item active" aria-current="page">Create</li>
 @endsection
