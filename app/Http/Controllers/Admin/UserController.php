@@ -100,6 +100,10 @@ class UserController extends Controller
             abort(403, 'Only a super admin can delete admin users.');
         }
 
+        $user->materialAccessLogs()->delete();
+        $user->subscriptions()->delete();
+        $user->otps()->delete();
+        $user->notifications()->delete();
         $user->delete();
 
         return redirect()->route('admin.users.index')

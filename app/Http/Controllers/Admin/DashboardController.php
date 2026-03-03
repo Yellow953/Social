@@ -35,6 +35,7 @@ class DashboardController extends Controller
 
         // Get recent activity (last 20 access logs)
         $recentActivity = MaterialAccessLog::with(['user', 'material.course'])
+            ->whereHas('user')
             ->orderBy('accessed_at', 'desc')
             ->limit(20)
             ->get();
