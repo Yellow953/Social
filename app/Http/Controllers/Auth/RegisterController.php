@@ -26,7 +26,7 @@ class RegisterController extends Controller
             }
             return redirect('/dashboard');
         }
-        
+
         return view('auth.register');
     }
 
@@ -65,8 +65,9 @@ class RegisterController extends Controller
             'major' => $request->major,
             'password' => Hash::make($request->password),
             'role' => 'user',
-            'email_verified' => false,
-            'two_factor_enabled' => true,
+            'email_verified' => true,
+            'email_verified_at' => now(),
+            'two_factor_enabled' => false,
         ]);
 
         Auth::login($user);

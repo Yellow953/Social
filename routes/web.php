@@ -57,8 +57,8 @@ Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink
 Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
 Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
 
-// ─── Protected (auth + verified email + single device) ───────────────────────
-Route::middleware(['auth', 'two_factor', 'verified', 'single.device'])->group(function () {
+// ─── Protected (auth email + single device) ───────────────────────
+Route::middleware(['auth', 'two_factor', 'single.device'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/academic', [AcademiqueController::class, 'index'])->name('academique');

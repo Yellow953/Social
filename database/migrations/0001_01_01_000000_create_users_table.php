@@ -28,7 +28,7 @@ return new class extends Migration
             $table->timestamp('last_device_login_at')->nullable();
             $table->boolean('email_verified')->default(false);
             $table->timestamp('email_verified_at')->nullable();
-            $table->boolean('two_factor_enabled')->default(true);
+            $table->boolean('two_factor_enabled')->default(false);
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
