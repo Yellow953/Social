@@ -113,6 +113,8 @@ Route::middleware(['auth', 'two_factor', 'admin'])->prefix('admin')->name('admin
     Route::resource('courses', AdminCourseController::class);
 
     Route::post('materials/upload-temp', [AdminMaterialController::class, 'uploadTemp'])->name('materials.upload-temp');
+    Route::get('materials/bulk-upload', [AdminMaterialController::class, 'bulkUpload'])->name('materials.bulk-upload');
+    Route::post('materials/bulk-assign', [AdminMaterialController::class, 'bulkAssign'])->name('materials.bulk-assign');
     Route::patch('materials/{material}/toggle-lock', [AdminMaterialController::class, 'toggleLock'])->name('materials.toggle-lock');
     Route::get('materials/media/{material_media}/download', [AdminMaterialController::class, 'downloadMedia'])->name('materials.media.download');
     Route::post('materials/media/{material_media}/convert-to-pdf', [AdminMaterialController::class, 'convertToPdf'])->name('materials.media.convert-to-pdf');

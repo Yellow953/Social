@@ -15,9 +15,14 @@
                         style="color: #ec682a;"></i>Materials Management</h2>
                 <p class="text-muted mb-0">Manage all materials (cours, TP, video recording) in the platform</p>
             </div>
-            <a href="{{ route('admin.materials.create') }}" class="btn btn-primary">
-                <i class="fas fa-plus me-2"></i>Add Material
-            </a>
+            <div class="d-flex gap-2">
+                <a href="{{ route('admin.materials.bulk-upload') }}" class="btn btn-outline-primary">
+                    <i class="fas fa-layer-group me-2"></i>Bulk Upload
+                </a>
+                <a href="{{ route('admin.materials.create') }}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Add Material
+                </a>
+            </div>
         </div>
 
         @if (session('success'))

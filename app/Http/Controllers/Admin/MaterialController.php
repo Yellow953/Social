@@ -121,18 +121,20 @@ class MaterialController extends Controller
 
         $material->update($validated);
 
+        $newMediaIds = [];
+
         if ($request->hasFile('media')) {
-            $this->handleMediaUploads($request, $material);
+            $newMediaIds = array_merge($newMediaIds, $this->handleMediaUploads($request, $material));
         }
 
         $tempIds = $request->input('material_temp_uploads') ? json_decode($request->input('material_temp_uploads'), true) : [];
         $tempNames = $request->input('material_temp_names') ? json_decode($request->input('material_temp_names'), true) : [];
         if (is_array($tempIds) && !empty($tempIds)) {
-            $this->processTempUploads($material, $tempIds, is_array($tempNames) ? $tempNames : []);
+            $newMediaIds = array_merge($newMediaIds, $this->processTempUploads($material, $tempIds, is_array($tempNames) ? $tempNames : []));
         }
 
         if ($request->has('keep_media')) {
-            $keepMedia = (array) $request->input('keep_media', []);
+            $keepMedia = array_merge((array) $request->input('keep_media', []), $newMediaIds);
             $mediaNames      = $request->input('media_name', []);
             $mediaLocks      = $request->input('media_lock', []);
             $mediaWatermarks = $request->input('media_watermark', []);
@@ -384,6 +386,114 @@ class MaterialController extends Controller
             ->with('success', 'Material duplicated successfully.');
     }
 
+    public function bulkUpload()
+    {
+        $courses = Course::with(['materials' => function ($q) {
+            $q->orderBy('title');
+        }])->orderBy('name')->get(['id', 'name', 'code', 'major', 'year', 'semester']);
+
+        $coursesData = $courses->map(function ($c) {
+            return [
+                'id'        => $c->id,
+                'label'     => $c->name . ' | ' . $c->code . ' | Yr' . $c->year . ' ' . $c->major,
+                'materials' => $c->materials->map(fn ($m) => ['id' => $m->id, 'title' => $m->title])->values(),
+            ];
+        })->values();
+
+        return view('admin.materials.bulk-upload', compact('courses', 'coursesData'));
+    }
+
+    public function bulkAssign(Request $request)
+    {
+        $request->validate([
+            'assignments' => 'required|string',
+        ]);
+
+        $assignments = json_decode($request->input('assignments'), true);
+        if (!is_array($assignments) || empty($assignments)) {
+            return redirect()->back()->with('error', 'No assignments provided.');
+        }
+
+        $uploads = session('material_temp_uploads', []);
+        $dir = Storage::disk('local')->path('materials/media');
+        if (!is_dir($dir)) {
+            \Illuminate\Support\Facades\File::makeDirectory($dir, 0755, true);
+        }
+
+        $count = 0;
+
+        foreach ($assignments as $assignment) {
+            $uuid        = $assignment['uuid'] ?? null;
+            $materialIds = array_filter((array) ($assignment['material_ids'] ?? []));
+            $displayName = $assignment['display_name'] ?? null;
+            $watermark   = $assignment['watermark_type'] ?? 'full';
+            $isLocked    = !empty($assignment['is_locked']);
+
+            if (!$uuid || empty($materialIds) || !isset($uploads[$uuid])) {
+                continue;
+            }
+
+            $entry    = $uploads[$uuid];
+            $tempPath = Storage::disk('local')->path($entry['path']);
+            if (!file_exists($tempPath)) {
+                unset($uploads[$uuid]);
+                continue;
+            }
+
+            $displayName = (is_string($displayName) && trim($displayName) !== '')
+                ? trim($displayName)
+                : $entry['original_filename'];
+
+            $type = $entry['type'];
+            $ext  = pathinfo($entry['original_filename'], PATHINFO_EXTENSION)
+                ?: ($type === 'pdf' ? 'pdf' : ($type === 'video' ? 'mp4' : 'jpg'));
+
+            foreach ($materialIds as $materialId) {
+                $material = Material::find($materialId);
+                if (!$material) {
+                    continue;
+                }
+
+                $maxOrder          = (int) $material->media()->max('order') + 1;
+                $finalRelativePath = 'materials/media/' . $this->storedMediaFilename($material, $type, $maxOrder, $ext);
+
+                try {
+                    if ($type === 'image') {
+                        [$finalRelativePath, $storedSize] = $this->storeImageCompressedFromPath($tempPath, $ext, $material->id, $maxOrder);
+                    } else {
+                        $finalAbsPath = Storage::disk('local')->path($finalRelativePath);
+                        copy($tempPath, $finalAbsPath);
+                        $storedSize = (int) filesize($finalAbsPath);
+                    }
+
+                    MaterialMedia::create([
+                        'material_id'       => $material->id,
+                        'type'              => $type,
+                        'file_path'         => $finalRelativePath,
+                        'original_filename' => $displayName,
+                        'mime_type'         => $entry['mime_type'],
+                        'file_size'         => $storedSize,
+                        'order'             => $maxOrder,
+                        'is_locked'         => $isLocked,
+                        'watermark_type'    => $watermark ?: null,
+                    ]);
+
+                    $count++;
+                } catch (\Throwable $e) {
+                    \Log::error('bulkAssign: failed to assign file', ['uuid' => $uuid, 'material_id' => $materialId, 'error' => $e->getMessage()]);
+                }
+            }
+
+            @unlink($tempPath);
+            unset($uploads[$uuid]);
+        }
+
+        session(['material_temp_uploads' => $uploads]);
+
+        return redirect()->route('admin.materials.index')
+            ->with('success', "$count file copy(ies) successfully assigned to materials.");
+    }
+
     public function destroy(Material $material)
     {
         foreach ($material->media as $media) {
@@ -428,8 +538,9 @@ class MaterialController extends Controller
      * Process temp uploads from session: move/compress to final path with renamed file, create MaterialMedia.
      * $tempNames: optional array [uuid => custom display name] for original_filename.
      */
-    private function processTempUploads(Material $material, array $tempIds, array $tempNames = []): void
+    private function processTempUploads(Material $material, array $tempIds, array $tempNames = []): array
     {
+        $createdIds = [];
         $uploads = session('material_temp_uploads', []);
         $maxOrder = (int) $material->media()->max('order');
         $dir = Storage::disk('local')->path('materials/media');
@@ -466,7 +577,7 @@ class MaterialController extends Controller
                     Storage::disk('local')->put($finalRelativePath, file_get_contents($tempPath));
                 }
 
-                MaterialMedia::create([
+                $created = MaterialMedia::create([
                     'material_id' => $material->id,
                     'type' => $type,
                     'file_path' => $finalRelativePath,
@@ -476,18 +587,22 @@ class MaterialController extends Controller
                     'order' => $maxOrder,
                     'is_locked' => $material->is_locked,
                 ]);
+                $createdIds[] = $created->id;
             } finally {
                 @unlink($tempPath);
             }
             unset($uploads[$uuid]);
         }
         session(['material_temp_uploads' => $uploads]);
+        return $createdIds;
     }
 
-    private function handleMediaUploads(Request $request, Material $material)
+    private function handleMediaUploads(Request $request, Material $material): array
     {
+        $createdIds = [];
+
         if (!$request->hasFile('media')) {
-            return;
+            return $createdIds;
         }
 
         $files = $request->file('media');
@@ -525,7 +640,7 @@ class MaterialController extends Controller
                     continue;
                 }
 
-                MaterialMedia::create([
+                $created = MaterialMedia::create([
                     'material_id' => $material->id,
                     'type' => $type,
                     'file_path' => $path,
@@ -535,11 +650,14 @@ class MaterialController extends Controller
                     'order' => $maxOrder,
                     'is_locked' => $material->is_locked,
                 ]);
+                $createdIds[] = $created->id;
             } catch (\Exception $e) {
                 $maxOrder--;
                 continue;
             }
         }
+
+        return $createdIds;
     }
 
     private function notifyUsersAboutMaterial(Material $material, string $action = 'created')
