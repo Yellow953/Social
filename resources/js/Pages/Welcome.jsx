@@ -49,7 +49,7 @@ export default function Welcome({ page = 'home' }) {
             case 'about':
                 return <AboutPage />;
             case 'academique':
-                return <AcademiquePage />;
+                return <AcademiquePage years={props.years ?? []} majors={props.majors ?? []} />;
             case 'calculatrice':
                 return <CalculatricePage />;
             default:

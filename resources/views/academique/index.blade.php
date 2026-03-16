@@ -49,7 +49,7 @@
             <h5 class="fw-bold mb-0" style="color: #c2410c;"><i class="fas fa-layer-group me-2" style="color: #ec682a;"></i>3. Choisir un semestre pour <span id="semester-year-label"></span> – <span id="semester-major-label"></span></h5>
             <a href="#" id="back-from-semester" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left me-1"></i> Changer de filière</a>
         </div>
-        <div id="semester-cards" class="academique-step-cards row g-4"></div>
+        <div id="semester-cards" class="row g-4" style="max-width:100%;width:100%;"></div>
     </section>
 
     <!-- 4. Courses -->
@@ -75,9 +75,7 @@
             <div class="spinner-border me-2" role="status"></div> Chargement du matériel...
         </div>
         <p id="materials-empty" class="text-muted text-center py-4 d-none">Aucun matériel pour ce cours.</p>
-        <div id="materials-list-wrap" class="card border-0 shadow-sm d-none" style="border-left: 4px solid #ec682a !important;">
-            <ul id="materials-list" class="list-group list-group-flush"></ul>
-        </div>
+        <div id="materials-grid" class="row g-4"></div>
     </section>
 </div>
 
@@ -114,8 +112,7 @@
     const backFromMaterials = document.getElementById('back-from-materials');
     const materialsLoading = document.getElementById('materials-loading');
     const materialsEmpty = document.getElementById('materials-empty');
-    const materialsListWrap = document.getElementById('materials-list-wrap');
-    const materialsList = document.getElementById('materials-list');
+    const materialsGrid  = document.getElementById('materials-grid');
 
     let selectedYear = null;
     let selectedMajor = null;
@@ -187,7 +184,7 @@
         selectedCourseId = null;
         sectionMaterials.classList.add('d-none');
         sectionCourses.classList.remove('d-none');
-        materialsList.innerHTML = '';
+        materialsGrid.innerHTML = '';
     });
 
     // Load years on page load (always all 5)
@@ -221,7 +218,7 @@
                     majorsYearLabel.textContent = year;
                     renderMajors();
                 });
-                card.innerHTML = '<div class="card-body text-center d-flex flex-column align-items-center justify-content-center py-5 px-4"><div class="academique-step-icon mb-3"><i class="fas fa-calendar-alt" style="color: #ec682a;"></i></div><h5 class="fw-bold mb-1 text-dark">' + escapeHtml(year) + '</h5><small class="text-muted">Année</small></div>';
+                card.innerHTML = '<div class="card-body text-center d-flex flex-column align-items-center justify-content-center py-5 px-3" style="min-height:240px;"><div class="academique-step-icon academique-year-icon mb-4"><i class="fas fa-calendar-alt" style="color: #ec682a;"></i></div><h2 class="fw-bold mb-1 text-dark">' + escapeHtml(year) + '</h2><small class="text-muted fs-6">Année</small></div>';
                 col.appendChild(card);
                 yearsCards.appendChild(col);
             });
@@ -234,7 +231,7 @@
         majorsCards.innerHTML = '';
         (majorsList || []).forEach(major => {
             const col = document.createElement('div');
-            col.className = 'col-12 col-sm-6 col-lg-4';
+            col.className = 'col-12 col-sm-6 col-lg-3';
             const card = document.createElement('a');
             card.href = '#';
             card.className = 'card border-0 shadow h-100 text-decoration-none academique-major-card academique-step-card';
@@ -255,7 +252,7 @@
                 semesterMajorLabel.textContent = major;
                 renderSemester();
             });
-            card.innerHTML = '<div class="card-body d-flex align-items-center gap-3 py-4 px-4"><div class="academique-step-icon flex-shrink-0"><i class="fas fa-user-graduate" style="color: #ec682a;"></i></div><h6 class="fw-bold mb-0 text-dark academique-major-title" title="' + escapeHtml(major) + '">' + escapeHtml(major) + '</h6></div>';
+            card.innerHTML = '<div class="card-body text-center d-flex flex-column align-items-center justify-content-center py-5 px-3" style="min-height:200px;"><div class="academique-step-icon academique-major-icon mb-4"><i class="fas fa-user-graduate" style="color: #ec682a;"></i></div><h5 class="fw-bold mb-0 text-dark academique-major-title" title="' + escapeHtml(major) + '">' + escapeHtml(major) + '</h5></div>';
             col.appendChild(card);
             majorsCards.appendChild(col);
         });
@@ -265,7 +262,7 @@
         semesterCards.innerHTML = '';
         ['1', '2'].forEach(function(sem) {
             const col = document.createElement('div');
-            col.className = 'col-6 col-md';
+            col.className = 'col-6';
             const card = document.createElement('a');
             card.href = '#';
             card.className = 'card border-0 shadow h-100 text-decoration-none academique-semester-card academique-step-card';
@@ -284,7 +281,7 @@
                 coursesSemesterLabel.textContent = sem;
                 loadCourses(selectedYear, selectedMajor, sem);
             });
-            card.innerHTML = '<div class="card-body text-center d-flex flex-column align-items-center justify-content-center py-5 px-4"><div class="academique-step-icon mb-3"><i class="fas fa-layer-group" style="color: #ec682a;"></i></div><h5 class="fw-bold mb-1 text-dark">Semestre ' + sem + '</h5><small class="text-muted">Semester ' + sem + '</small></div>';
+            card.innerHTML = '<div class="card-body text-center d-flex flex-column align-items-center justify-content-center py-5 px-3" style="min-height:240px;"><div class="academique-step-icon academique-semester-icon mb-4"><i class="fas fa-layer-group" style="color: #ec682a;"></i></div><h2 class="fw-bold mb-1 text-dark">Semestre ' + sem + '</h2><small class="text-muted fs-6">Semester ' + sem + '</small></div>';
             col.appendChild(card);
             semesterCards.appendChild(col);
         });
@@ -308,7 +305,7 @@
                 coursesEmpty.classList.add('d-none');
                 data.courses.forEach(course => {
                     const col = document.createElement('div');
-                    col.className = 'col-6 col-sm-6 col-md-4 col-lg-3';
+                    col.className = 'col-12 col-sm-6 col-lg-4';
                     const card = document.createElement('a');
                     card.href = '#';
                     card.className = 'card border-0 shadow-sm h-100 text-decoration-none academique-course-card';
@@ -324,7 +321,7 @@
                         sectionMaterials.classList.remove('d-none');
                         loadMaterials(course.id);
                     });
-                    card.innerHTML = '<div class="card-body"><i class="fas fa-book-open mb-2" style="color: #ec682a;"></i><h6 class="fw-bold mb-1 text-dark text-truncate" title="' + escapeHtml(course.name) + '">' + escapeHtml(course.name) + '</h6>' + (course.code ? '<small class="text-muted">' + escapeHtml(course.code) + '</small>' : '') + '</div>';
+                    card.innerHTML = '<div class="card-body text-center d-flex flex-column align-items-center justify-content-center py-5 px-3" style="min-height:200px;"><div class="academique-step-icon academique-course-icon mb-4"><i class="fas fa-book-open" style="color: #ec682a;"></i></div><h5 class="fw-bold mb-1 text-dark" title="' + escapeHtml(course.name) + '">' + escapeHtml(course.name) + '</h5>' + (course.code ? '<small class="text-muted fs-6">' + escapeHtml(course.code) + '</small>' : '') + '</div>';
                     col.appendChild(card);
                     coursesCards.appendChild(col);
                 });
@@ -336,11 +333,21 @@
             });
     }
 
+    const materialTypeMeta = {
+        cours:           { label: 'Cours',           icon: 'fa-book',           color: '#2563eb', bg: '#dbeafe' },
+        tp:              { label: 'TP',               icon: 'fa-flask',          color: '#16a34a', bg: '#dcfce7' },
+        td:              { label: 'TD',               icon: 'fa-pencil-alt',     color: '#7c3aed', bg: '#ede9fe' },
+        tc:              { label: 'TC',               icon: 'fa-clipboard',      color: '#ec682a', bg: '#fff3ed' },
+        resume:          { label: 'Résumé',           icon: 'fa-compress-alt',   color: '#0891b2', bg: '#cffafe' },
+        partiel:         { label: 'Partiel',          icon: 'fa-file-alt',       color: '#d97706', bg: '#fef9c3' },
+        final:           { label: 'Final',            icon: 'fa-graduation-cap', color: '#dc2626', bg: '#fee2e2' },
+        video_recording: { label: 'Enregistrement',  icon: 'fa-video',          color: '#4f46e5', bg: '#e0e7ff' },
+    };
+
     function loadMaterials(courseId) {
         materialsLoading.classList.remove('d-none');
         materialsEmpty.classList.add('d-none');
-        materialsListWrap.classList.add('d-none');
-        materialsList.innerHTML = '';
+        materialsGrid.innerHTML = '';
 
         fetch(materialsUrl + '?course_id=' + courseId, { headers: csrfHeaders(), credentials: 'same-origin' })
             .then(r => r.json())
@@ -350,32 +357,45 @@
                     materialsEmpty.classList.remove('d-none');
                     return;
                 }
-                materialsListWrap.classList.remove('d-none');
+
                 data.materials.forEach(m => {
-                    const li = document.createElement('li');
-                    li.className = 'list-group-item d-flex align-items-center justify-content-between gap-3 py-3';
-                    const desc = (m.description || '').substring(0, 80);
+                    const meta    = materialTypeMeta[m.type] || { label: m.type, icon: 'fa-file', color: '#6b7280', bg: '#f3f4f6' };
                     const summary = m.media_summary || {};
-                    const types = [];
-                    if (summary.pdf) types.push('<span class="badge bg-danger me-1" title="PDF"><i class="fas fa-file-pdf me-1"></i>' + summary.pdf + '</span>');
-                    if (summary.video) types.push('<span class="badge bg-primary me-1" title="Video"><i class="fas fa-video me-1"></i>' + summary.video + '</span>');
-                    if (summary.image) types.push('<span class="badge bg-success me-1" title="Image"><i class="fas fa-image me-1"></i>' + summary.image + '</span>');
-                    const typesHtml = types.length ? '<div class="d-flex flex-wrap gap-1 mt-1">' + types.join('') + '</div>' : '';
-                    li.innerHTML = '<div class="flex-grow-1 min-w-0"><strong class="d-block">' + escapeHtml(m.title) + '</strong>' + (desc ? '<small class="text-muted d-block">' + escapeHtml(desc) + ((m.description || '').length > 80 ? '…' : '') + '</small>' : '') + typesHtml + '</div>';
-                    if (m.can_access) {
-                        const link = document.createElement('a');
-                        link.href = materialsBaseUrl + '/' + m.id;
-                        link.className = 'btn btn-sm btn-primary flex-shrink-0';
-                        link.innerHTML = '<i class="fas fa-eye me-1"></i> Voir';
-                        li.appendChild(link);
-                    } else {
-                        const span = document.createElement('span');
-                        span.className = 'badge bg-secondary flex-shrink-0';
-                        span.innerHTML = '<i class="fas fa-lock me-1"></i> Verrouillé';
-                        span.title = 'Abonnement requis';
-                        li.appendChild(span);
-                    }
-                    materialsList.appendChild(li);
+                    const desc    = (m.description || '').substring(0, 100);
+
+                    const mediaBadges = [
+                        summary.pdf   ? `<span class="material-media-badge pdf"><i class="fas fa-file-pdf"></i> ${summary.pdf}</span>`   : '',
+                        summary.video ? `<span class="material-media-badge video"><i class="fas fa-video"></i> ${summary.video}</span>`   : '',
+                        summary.image ? `<span class="material-media-badge img"><i class="fas fa-image"></i> ${summary.image}</span>`     : '',
+                    ].filter(Boolean).join('');
+
+                    const col  = document.createElement('div');
+                    col.className = 'col-12 col-sm-6 col-lg-4';
+
+                    const locked = m.is_locked && !m.can_access;
+
+                    col.innerHTML = `
+                        <div class="material-card h-100 ${locked ? 'material-card--locked' : ''}">
+                            <div class="material-card-header">
+                                <div class="material-type-icon" style="background:${meta.bg};color:${meta.color};">
+                                    <i class="fas ${meta.icon}"></i>
+                                </div>
+                                <span class="material-type-label" style="background:${meta.bg};color:${meta.color};">${meta.label}</span>
+                                ${m.is_locked ? '<span class="material-lock-badge"><i class="fas fa-lock"></i></span>' : ''}
+                            </div>
+                            <div class="material-card-body">
+                                <h5 class="material-title">${escapeHtml(m.title)}</h5>
+                                ${desc ? `<p class="material-desc">${escapeHtml(desc)}${(m.description||'').length > 100 ? '…' : ''}</p>` : ''}
+                                ${mediaBadges ? `<div class="material-media-badges">${mediaBadges}</div>` : ''}
+                            </div>
+                            <div class="material-card-footer">
+                                ${m.can_access
+                                    ? `<a href="${materialsBaseUrl}/${m.id}" class="material-btn-access"><i class="fas fa-eye me-2"></i>Voir le matériel</a>`
+                                    : `<span class="material-btn-locked"><i class="fas fa-lock me-2"></i>Abonnement requis</span>`}
+                            </div>
+                        </div>`;
+
+                    materialsGrid.appendChild(col);
                 });
             })
             .catch(() => {
@@ -393,9 +413,19 @@
 .academique-step-cards {
     max-width: 900px;
 }
+.academique-years-wrap {
+    max-width: 100% !important;
+    width: 100% !important;
+}
 .academique-years-wrap .col-md {
     flex: 0 0 20%;
     max-width: 20%;
+}
+.academique-year-icon {
+    width: 96px !important;
+    height: 96px !important;
+    font-size: 2.6rem !important;
+    border-radius: 20px !important;
 }
 @media (max-width: 767px) {
     .academique-years-wrap .col-6 { flex: 0 0 50%; max-width: 50%; }
@@ -419,10 +449,27 @@
     justify-content: center;
     font-size: 1.5rem;
 }
-.academique-major-card .academique-step-icon {
-    width: 48px;
-    height: 48px;
-    font-size: 1.25rem;
+.academique-major-icon {
+    width: 96px !important;
+    height: 96px !important;
+    font-size: 2.6rem !important;
+    border-radius: 20px !important;
+}
+.academique-majors-wrap {
+    max-width: 100% !important;
+    width: 100% !important;
+}
+.academique-semester-icon {
+    width: 96px !important;
+    height: 96px !important;
+    font-size: 2.6rem !important;
+    border-radius: 20px !important;
+}
+.academique-course-icon {
+    width: 72px !important;
+    height: 72px !important;
+    font-size: 2rem !important;
+    border-radius: 16px !important;
 }
 .academique-major-title {
     font-size: 0.95rem;
@@ -441,6 +488,117 @@
 .academique-semester-card,
 .academique-course-card {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* ── Material cards ───────────────────────────────────────────── */
+.material-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform .2s ease, box-shadow .2s ease;
+    border-left: 4px solid #ec682a;
+}
+.material-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0,0,0,.10);
+}
+.material-card--locked {
+    border-left-color: #9ca3af;
+    opacity: .85;
+}
+.material-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 18px 12px;
+    border-bottom: 1px solid #f1f5f9;
+}
+.material-type-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+.material-type-label {
+    font-size: .75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    border-radius: 6px;
+    padding: 3px 8px;
+}
+.material-lock-badge {
+    margin-left: auto;
+    color: #9ca3af;
+    font-size: .9rem;
+}
+.material-card-body {
+    padding: 14px 18px;
+    flex: 1;
+}
+.material-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 6px;
+    line-height: 1.35;
+}
+.material-desc {
+    font-size: .83rem;
+    color: #6b7280;
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+.material-media-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.material-media-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: .75rem;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 999px;
+}
+.material-media-badge.pdf   { background: #fee2e2; color: #dc2626; }
+.material-media-badge.video { background: #dbeafe; color: #2563eb; }
+.material-media-badge.img   { background: #dcfce7; color: #16a34a; }
+.material-card-footer {
+    padding: 12px 18px;
+    border-top: 1px solid #f1f5f9;
+}
+.material-btn-access {
+    display: block;
+    text-align: center;
+    padding: 10px;
+    background: linear-gradient(135deg, #ec682a, #c2410c);
+    color: #fff;
+    font-weight: 600;
+    font-size: .875rem;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: opacity .15s;
+}
+.material-btn-access:hover { opacity: .88; color: #fff; }
+.material-btn-locked {
+    display: block;
+    text-align: center;
+    padding: 10px;
+    background: #f3f4f6;
+    color: #9ca3af;
+    font-weight: 600;
+    font-size: .875rem;
+    border-radius: 10px;
 }
 
 /* Empty state when no courses for year+major */

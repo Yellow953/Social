@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Course;
 use App\Models\HomepageSlide;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -30,7 +31,16 @@ class WelcomeController extends Controller
 
     public function academique(): Response
     {
-        return Inertia::render('Welcome', ['page' => 'academique']);
+        $yearOrder = ['Sup', 'Spé', '1e', '2e', '3e'];
+        $existingYears = Course::distinct()->pluck('year')->filter()->flip();
+        $years = collect($yearOrder)->filter(fn($y) => $existingYears->has($y))->values();
+        $majors = Course::distinct()->orderBy('major')->pluck('major')->filter()->values();
+
+        return Inertia::render('Welcome', [
+            'page'   => 'academique',
+            'years'  => $years,
+            'majors' => $majors,
+        ]);
     }
 
     public function calculatrice(): Response

@@ -20,12 +20,11 @@ class AcademiqueController extends Controller
     }
 
     /**
-     * Return all standard years (always show all 5, even with no courses).
+     * Return all standard years.
      */
     public function years(Request $request)
     {
-        $years = ['Sup', 'Spé', '1e', '2e', '3e'];
-        return response()->json(['years' => $years]);
+        return response()->json(['years' => ['Sup', 'Spé', '1e', '2e', '3e']]);
     }
 
     /**

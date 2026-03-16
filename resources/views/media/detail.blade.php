@@ -34,6 +34,10 @@
                         </h5>
                         <small class="text-muted">{{ $media->formatted_file_size }}</small>
                     </div>
+                    <button id="fullscreen-btn" title="Fullscreen (F)" class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2">
+                        <i id="fullscreen-icon" class="fas fa-expand"></i>
+                        <span id="fullscreen-label" class="d-none d-sm-inline">Fullscreen</span>
+                    </button>
                 </div>
                 <div class="card-body p-0">
                     <div class="media-container" data-media-type="{{ $media->type }}" data-media-id="{{ $media->id }}">
@@ -275,6 +279,47 @@
         position: absolute;
         inset: 0;
     }
+
+    /* ── Fullscreen ─────────────────────────────────────────────────── */
+    .media-container:fullscreen,
+    .media-container:-webkit-full-screen {
+        background: #111;
+        width: 100vw;
+        height: 100vh;
+        overflow: auto;
+        display: flex;
+        flex-direction: column;
+    }
+    /* PDF in fullscreen: let the viewer scroll */
+    .media-container:fullscreen .pdf-viewer-container,
+    .media-container:-webkit-full-screen .pdf-viewer-container {
+        flex: 1;
+        min-height: 0;
+        overflow: auto;
+        height: 100vh;
+    }
+    /* Image in fullscreen: center it */
+    .media-container:fullscreen .image-viewer-container,
+    .media-container:-webkit-full-screen .image-viewer-container {
+        flex: 1;
+        min-height: 0;
+        height: 100vh;
+        background: #111;
+    }
+    .media-container:fullscreen .image-viewer-container img,
+    .media-container:-webkit-full-screen .image-viewer-container img {
+        max-height: 100vh;
+    }
+    /* Video in fullscreen: fill height */
+    .media-container:fullscreen .video-viewer-container,
+    .media-container:-webkit-full-screen .video-viewer-container {
+        flex: 1;
+        height: 100vh;
+    }
+    .media-container:fullscreen .media-video-player,
+    .media-container:-webkit-full-screen .media-video-player {
+        max-height: 100vh;
+    }
 </style>
 @endpush
 
@@ -398,6 +443,57 @@
             this.removeAttribute('download');
         });
     });
+
+    // ── Fullscreen ──────────────────────────────────────────────────
+    (function () {
+        const btn       = document.getElementById('fullscreen-btn');
+        const icon      = document.getElementById('fullscreen-icon');
+        const label     = document.getElementById('fullscreen-label');
+        const target    = document.querySelector('.media-container');
+
+        if (!btn || !target) return;
+
+        function enterFullscreen() {
+            if (target.requestFullscreen)       target.requestFullscreen();
+            else if (target.webkitRequestFullscreen) target.webkitRequestFullscreen();
+        }
+
+        function exitFullscreen() {
+            if (document.exitFullscreen)            document.exitFullscreen();
+            else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+        }
+
+        function isFullscreen() {
+            return !!(document.fullscreenElement || document.webkitFullscreenElement);
+        }
+
+        function updateBtn() {
+            if (isFullscreen()) {
+                icon.className  = 'fas fa-compress';
+                label.textContent = 'Exit fullscreen';
+                btn.title = 'Exit fullscreen (F or Esc)';
+            } else {
+                icon.className  = 'fas fa-expand';
+                label.textContent = 'Fullscreen';
+                btn.title = 'Fullscreen (F)';
+            }
+        }
+
+        btn.addEventListener('click', function () {
+            isFullscreen() ? exitFullscreen() : enterFullscreen();
+        });
+
+        document.addEventListener('fullscreenchange',        updateBtn);
+        document.addEventListener('webkitfullscreenchange',  updateBtn);
+
+        // F key toggles fullscreen
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'f' || e.key === 'F') {
+                if (document.activeElement && ['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) return;
+                isFullscreen() ? exitFullscreen() : enterFullscreen();
+            }
+        });
+    })();
 </script>
 @endpush
 @endsection

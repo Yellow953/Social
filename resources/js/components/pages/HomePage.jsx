@@ -250,7 +250,7 @@ export default function HomePage({ homepageSlides = [] }) {
                         <img
                             src="/assets/images/logo-transparent.png"
                             alt="ESIB Social"
-                            className="h-16 sm:h-20 md:h-24 w-auto object-contain drop-shadow-lg"
+                            className="h-20 sm:h-30 md:h-50 w-auto object-contain drop-shadow-lg"
                         />
                     </motion.div>
                     {/* Main Title with Gradient */}
@@ -261,7 +261,7 @@ export default function HomePage({ homepageSlides = [] }) {
                         transition={{ duration: 0.6, delay: 0.2 }}
                     >
                         <h1
-                            className="text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-bold mb-4"
+                            className="text-4xl sm:text-6xl md:text-8xl lg:text-10xl font-bold mb-4"
                             style={{
                                 background:
                                     "linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%)",
@@ -295,7 +295,7 @@ export default function HomePage({ homepageSlides = [] }) {
                             href="/register"
                             className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-[#ec682a] to-[#d45a20] text-white font-bold rounded-xl hover:shadow-2xl hover:scale-105 transition-all no-underline text-base sm:text-lg transform text-center"
                         >
-                            Get Started Free
+                            Get Started
                         </a>
                         <a
                             href="/login"
@@ -463,7 +463,7 @@ export default function HomePage({ homepageSlides = [] }) {
                             {
                                 icon: "fas fa-users",
                                 title: "Community Learning",
-                                desc: "Join thousands of students learning together",
+                                desc: "Join hundreds of students learning together",
                             },
                             {
                                 icon: "fas fa-calculator",

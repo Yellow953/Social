@@ -1,6 +1,6 @@
 <!-- Header -->
 <header class="bg-white shadow-sm sticky-top" style="z-index: 100;">
-    <div class="d-flex align-items-center justify-content-between px-3 px-md-4 py-2 py-md-3">
+    <div class="d-flex align-items-center justify-content-between px-3 px-md-4 py-2 py-md-1">
         <div class="d-flex align-items-center min-w-0 flex-grow-1">
             <button class="btn btn-sm text-[#5c5c5c] d-lg-none me-2 flex-shrink-0" id="mobile-sidebar-toggle" type="button" aria-label="Open menu">
                 <i class="fas fa-bars"></i>

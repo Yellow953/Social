@@ -198,7 +198,7 @@ export default function AboutPage() {
                             Ready to Start Your Learning Journey?
                         </h3>
                         <p className="text-white/90 text-base sm:text-lg mb-6 sm:mb-8 max-w-2xl mx-auto">
-                            Join thousands of students who are already using
+                            Join hundreds of students who are already using
                             ESIB SOCIAL to excel in their studies
                         </p>
                         <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
@@ -208,7 +208,7 @@ export default function AboutPage() {
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                             >
-                                Get Started Free
+                                Get Started
                             </motion.a>
                             <motion.a
                                 href="/login"

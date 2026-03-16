@@ -14,7 +14,7 @@ export default function Header({ activeTab }) {
             }}
         >
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center justify-between h-20">
+                <div className="flex items-center justify-between py-2">
                     <Link
                         href="/"
                         className="flex items-center space-x-3 no-underline mr-8 group"
@@ -31,6 +31,16 @@ export default function Header({ activeTab }) {
 
                     {/* Desktop Navigation */}
                     <div className="hidden md:flex items-center space-x-1 flex-1 max-w-2xl mx-8">
+                        <Link
+                            href="/"
+                            className={`px-4 py-2 font-medium text-sm rounded-lg transition-all ${
+                                activeTab === ""
+                                    ? "text-[#ec682a] border-b-2 border-[#ec682a]"
+                                    : "text-[#5c5c5c] hover:text-[#ec682a]"
+                            } no-underline`}
+                        >
+                            Home
+                        </Link>
                         <Link
                             href="/about"
                             className={`px-4 py-2 font-medium text-sm rounded-lg transition-all ${
