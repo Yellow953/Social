@@ -324,16 +324,18 @@ export default function HomePage({ homepageSlides = [] }) {
                                     hasSlides ? (
                                         <div
                                             key={item.id != null ? `slide-${item.id}` : `slide-${index}`}
-                                            className="flex-shrink-0 rounded-xl overflow-hidden shadow-lg relative bg-gray-900"
+                                            className="flex-shrink-0 rounded-xl overflow-hidden shadow-lg relative bg-gray-900 flex items-center justify-center"
                                             style={{
                                                 width: `${100 / carouselLength}%`,
-                                                aspectRatio: "1200/500",
+                                                minHeight: "300px",
+                                                maxHeight: "600px",
                                             }}
                                         >
                                             <img
                                                 src={item.image_url}
                                                 alt={item.title || "Slide"}
-                                                className="w-full h-full object-cover"
+                                                className="w-full h-full object-contain"
+                                                style={{ maxHeight: "600px" }}
                                             />
                                             {(item.title || item.description) && (
                                                 <div

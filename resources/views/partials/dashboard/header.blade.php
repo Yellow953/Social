@@ -20,6 +20,11 @@
             </nav>
         </div>
         <div class="d-flex align-items-center gap-2 gap-md-3 flex-shrink-0">
+            <!-- Frontend Website -->
+            <a href="{{ route('home') }}" class="btn btn-sm text-[#5c5c5c] text-decoration-none d-flex align-items-center gap-1" title="Go to website">
+                <i class="fas fa-globe"></i>
+                <span class="d-none d-lg-inline">Website</span>
+            </a>
             <!-- Notifications -->
             <a href="{{ route('notifications.index') }}" class="btn btn-sm position-relative text-[#5c5c5c] text-decoration-none">
                 <i class="fas fa-bell"></i>

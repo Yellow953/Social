@@ -68,7 +68,7 @@ class CourseController extends Controller
         $this->notifyUsers('course', 'New Course Available', "A new course \"{$course->name}\" has been added to the platform.", [
             'course_id' => $course->id,
             'course_name' => $course->name,
-        ]);
+        ], $course);
 
         return redirect()->route('admin.courses.index')
             ->with('success', 'Course created successfully.');
@@ -96,7 +96,7 @@ class CourseController extends Controller
         $this->notifyUsers('course', 'Course Updated', "The course \"{$course->name}\" has been updated.", [
             'course_id' => $course->id,
             'course_name' => $course->name,
-        ]);
+        ], $course);
 
         return redirect()->route('admin.courses.index')
             ->with('success', 'Course updated successfully.');
@@ -169,11 +169,22 @@ class CourseController extends Controller
     }
 
     /**
-     * Notify users about course changes
+     * Notify users about course changes, filtered by year and major
      */
-    private function notifyUsers(string $type, string $title, string $message, array $data = [])
+    private function notifyUsers(string $type, string $title, string $message, array $data = [], ?Course $course = null)
     {
-        $users = User::where('role', 'user')->get();
+        $query = User::where('role', 'user');
+
+        if ($course) {
+            if ($course->year !== null && $course->year !== '') {
+                $query->where('study_year', $course->year);
+            }
+            if ($course->major !== null && $course->major !== '') {
+                $query->where('major', $course->major);
+            }
+        }
+
+        $users = $query->get();
 
         foreach ($users as $user) {
             Notification::create([

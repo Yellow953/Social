@@ -285,6 +285,7 @@ document.addEventListener('DOMContentLoaded', function() {
         url: uploadTempUrl,
         paramName: "file",
         maxFilesize: 500,
+        timeout: 120000,
         acceptedFiles: ".pdf,.mp4,.webm,.ogg,.mov,.avi,.mkv,.m4v,.jpg,.jpeg,.png,.gif,.webp",
         addRemoveLinks: true,
         clickable: true,
@@ -374,9 +375,15 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             dz.on('error', function(file, msg) {
                 if (file.xhr && file.xhr.response) {
-                    try { var r = JSON.parse(file.xhr.response); if (r.error) msg = r.error; } catch(e) {}
+                    try { var r = JSON.parse(file.xhr.response); if (r.errors && r.errors.file) msg = r.errors.file[0]; else if (r.error) msg = r.error; } catch(e) {}
                 }
-                console.error('Upload error:', file.name, msg);
+                if (typeof msg !== 'string') msg = 'Upload failed. Please try again.';
+                var prog = file.previewElement.querySelector('.dz-progress');
+                var errorEl = file.previewElement.querySelector('.dz-error-message');
+                var errorSpan = file.previewElement.querySelector('[data-dz-errormessage]');
+                if (prog) prog.style.display = 'none';
+                if (errorSpan) errorSpan.textContent = msg;
+                if (errorEl) errorEl.style.display = 'block';
             });
             dz.on('complete', function(file) {
                 if (file.status === 'success' && file.xhr && file.xhr.response) {

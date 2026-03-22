@@ -55,7 +55,7 @@
                 </a>
                 <a href="{{ route('admin.content-management.index') }}" data-tooltip="Content Management" class="sidebar-item d-flex align-items-center px-3 py-3 mb-2 rounded text-decoration-none {{ request()->is('admin/content-management*') ? 'active' : '' }}">
                     <i class="fas fa-images fa-lg me-3"></i>
-                    <span class="nav-text" id="nav-admin-content">Content Management</span>
+                    <span class="nav-text" id="nav-admin-content">Content</span>
                 </a>
                 <a href="{{ route('notifications.index') }}" data-tooltip="Notifications" class="sidebar-item d-flex align-items-center px-3 py-3 mb-2 rounded text-decoration-none {{ request()->is('notifications*') ? 'active' : '' }}">
                     <i class="fas fa-bell fa-lg me-3"></i>

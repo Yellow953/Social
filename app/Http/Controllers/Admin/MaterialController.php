@@ -665,13 +665,19 @@ class MaterialController extends Controller
         $material->load('course');
         $course = $material->course;
 
-        // Only notify users whose study year and major match the course (e.g. 1st year + GIS)
+        // Only notify users whose study year and major match the course
         $query = User::where('role', 'user');
         if ($course->year !== null && $course->year !== '') {
             $query->where('study_year', $course->year);
+        } else {
+            // Course has no year set — skip notification to avoid spamming all users
+            return;
         }
         if ($course->major !== null && $course->major !== '') {
             $query->where('major', $course->major);
+        } else {
+            // Course has no major set — skip notification to avoid spamming all users
+            return;
         }
         $users = $query->get();
 

@@ -55,7 +55,7 @@
                             @foreach($slides as $slide)
                             <tr>
                                 <td>
-                                    <img src="{{ asset('storage/' . $slide->image_path) }}" alt="" class="rounded" style="width: 80px; height: 50px; object-fit: cover;">
+                                    <img src="{{ asset('storage/' . $slide->image_path) }}" alt="" class="rounded" style="width: auto; height: 50px; object-fit: contain;">
                                 </td>
                                 <td>
                                     <strong>{{ $slide->title ?: '—' }}</strong>
