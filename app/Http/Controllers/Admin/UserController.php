@@ -68,7 +68,10 @@ class UserController extends Controller
             'role' => 'required|in:user,admin',
             'study_year' => 'nullable|string|in:Sup,Spé,1e,2e,3e',
             'major' => ['nullable', 'string', Rule::in(array_merge([null, ''], config('majors')))],
+            'is_active' => 'boolean',
         ]);
+
+        $validated['is_active'] = $request->boolean('is_active');
 
         if (($validated['major'] ?? '') === '') {
             $validated['major'] = null;
@@ -108,6 +111,29 @@ class UserController extends Controller
 
         return redirect()->route('admin.users.index')
             ->with('success', 'User deleted successfully.');
+    }
+
+    public function toggleActive(User $user)
+    {
+        $user->update(['is_active' => !$user->is_active]);
+
+        return response()->json([
+            'success' => true,
+            'is_active' => $user->is_active,
+            'message' => $user->is_active ? 'Account enabled.' : 'Account disabled.',
+        ]);
+    }
+
+    public function disableAllUsers()
+    {
+        if (!auth()->user()->isSuperAdmin()) {
+            abort(403);
+        }
+
+        User::where('role', 'user')->update(['is_active' => false]);
+
+        return redirect()->route('admin.users.index')
+            ->with('success', 'All student accounts have been disabled.');
     }
 
     public function createQuickSubscription(User $user)

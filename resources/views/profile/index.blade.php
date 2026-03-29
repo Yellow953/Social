@@ -29,6 +29,18 @@
                     <hr class="my-4">
                     <div class="text-start">
                         <h6 class="fw-bold mb-3">Account Stats</h6>
+                        @if(auth()->user()->study_year)
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Year</span>
+                            <span class="fw-bold">{{ auth()->user()->study_year }}</span>
+                        </div>
+                        @endif
+                        @if(auth()->user()->major)
+                        <div class="mb-2">
+                            <span class="text-muted d-block" style="font-size:0.8rem;">Major</span>
+                            <span class="fw-bold">{{ auth()->user()->major }}</span>
+                        </div>
+                        @endif
                         <div class="d-flex justify-content-between mb-2">
                             <span class="text-muted">Member since</span>
                             <span class="fw-bold">{{ auth()->user()->created_at->format('M Y') }}</span>

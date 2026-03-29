@@ -34,6 +34,7 @@ class User extends Authenticatable // implements MustVerifyEmail
         'email_verified',
         'email_verified_at',
         'two_factor_enabled',
+        'is_active',
     ];
 
     /**
@@ -57,6 +58,7 @@ class User extends Authenticatable // implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'last_device_login_at' => 'datetime',
+            'is_active' => 'boolean',
         ];
     }
 

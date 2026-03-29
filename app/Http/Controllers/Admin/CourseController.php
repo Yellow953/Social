@@ -11,7 +11,6 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
 
 class CourseController extends Controller
 {
@@ -26,16 +25,28 @@ class CourseController extends Controller
             });
         }
 
-        if ($request->filled('major')) {
-            $query->where('major', $request->major);
-        }
-
         if ($request->filled('year')) {
-            $query->where('year', $request->year);
+            $query->whereRaw(
+                "JSON_SEARCH(combinations, 'one', ?, NULL, '$[*].year') IS NOT NULL",
+                [$request->year]
+            );
         }
-
         if ($request->filled('semester')) {
-            $query->where('semester', $request->semester);
+            $query->whereRaw(
+                "JSON_SEARCH(combinations, 'one', ?, NULL, '$[*].semester') IS NOT NULL",
+                [$request->semester]
+            );
+        }
+        if ($request->filled('major')) {
+            $major = $request->major;
+            $query->where(function ($q) use ($major) {
+                $q->whereRaw(
+                    "JSON_SEARCH(combinations, 'one', ?, NULL, '$[*].majors[*]') IS NOT NULL",
+                    [$major]
+                )->orWhereRaw(
+                    "JSON_SEARCH(combinations, 'one', '*', NULL, '$[*].majors[*]') IS NOT NULL"
+                );
+            });
         }
 
         $courses = $query->orderBy('name')->paginate(20)->withQueryString();
@@ -55,12 +66,18 @@ class CourseController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'code' => 'required|string|max:50',
-            'description' => 'nullable|string',
-            'major' => ['required', 'string', Rule::in(array_merge([null, ''], config('majors')))],
-            'year' => 'required|string|max:50',
-            'semester' => 'required|string|in:1,2',
+            'name'                      => 'required|string|max:255',
+            'code'                      => 'required|string|max:50',
+            'description'               => 'nullable|string',
+            'combinations'              => 'required|array|min:1',
+            'combinations.*.year'       => 'required|string|in:Sup,Spé,1e,2e,3e',
+            'combinations.*.semester'   => 'required|string|in:1,2',
+            'combinations.*.majors'     => 'required|array|min:1',
+            'combinations.*.majors.*'   => ['required', 'string', function ($attribute, $value, $fail) {
+                if ($value !== '*' && !\in_array($value, config('majors'))) {
+                    $fail("Invalid major: $value");
+                }
+            }],
         ]);
 
         $course = Course::create($validated);
@@ -83,12 +100,18 @@ class CourseController extends Controller
     public function update(Request $request, Course $course)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'code' => 'required|string|max:50',
-            'description' => 'nullable|string',
-            'major' => ['required', 'string', Rule::in(array_merge([null, ''], config('majors')))],
-            'year' => 'required|string|max:50',
-            'semester' => 'required|string|in:1,2',
+            'name'                      => 'required|string|max:255',
+            'code'                      => 'required|string|max:50',
+            'description'               => 'nullable|string',
+            'combinations'              => 'required|array|min:1',
+            'combinations.*.year'       => 'required|string|in:Sup,Spé,1e,2e,3e',
+            'combinations.*.semester'   => 'required|string|in:1,2',
+            'combinations.*.majors'     => 'required|array|min:1',
+            'combinations.*.majors.*'   => ['required', 'string', function ($attribute, $value, $fail) {
+                if ($value !== '*' && !\in_array($value, config('majors'))) {
+                    $fail("Invalid major: $value");
+                }
+            }],
         ]);
 
         $course->update($validated);
@@ -105,23 +128,21 @@ class CourseController extends Controller
     public function duplicate(Course $course)
     {
         $newCourse = Course::create([
-            'name' => $course->name,
-            'code' => $course->code,
-            'description' => $course->description,
-            'major' => $course->major,
-            'year' => $course->year,
-            'semester' => $course->semester,
+            'name'         => $course->name,
+            'code'         => $course->code,
+            'description'  => $course->description,
+            'combinations' => $course->combinations,
         ]);
 
         foreach ($course->materials()->with('media')->get() as $material) {
             $newMaterial = Material::create([
                 'title' => $material->title,
                 'description' => $material->description,
-                'course_id' => $newCourse->id,
                 'type' => $material->type,
                 'is_locked' => $material->is_locked,
                 'watermark_type' => $material->watermark_type,
             ]);
+            $newMaterial->courses()->attach($newCourse->id);
 
             foreach ($material->media as $media) {
                 $newFilePath = $this->duplicateMediaFile($media->file_path, $newMaterial->id, $media->type, $media->order);
@@ -175,12 +196,20 @@ class CourseController extends Controller
     {
         $query = User::where('role', 'user');
 
-        if ($course) {
-            if ($course->year !== null && $course->year !== '') {
-                $query->where('study_year', $course->year);
+        if ($course && !empty($course->combinations)) {
+            $years   = collect($course->combinations)->pluck('year')->unique()->values()->all();
+            $hasStar = collect($course->combinations)
+                ->flatMap(fn($c) => $c['majors'] ?? [])->contains('*');
+            $majors  = collect($course->combinations)
+                ->flatMap(fn($c) => $c['majors'] ?? [])
+                ->filter(fn($m) => $m !== '*')
+                ->unique()->values()->all();
+
+            if (!empty($years)) {
+                $query->whereIn('study_year', $years);
             }
-            if ($course->major !== null && $course->major !== '') {
-                $query->where('major', $course->major);
+            if (!$hasStar && !empty($majors)) {
+                $query->whereIn('major', $majors);
             }
         }
 

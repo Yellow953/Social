@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
+use App\Models\HomepageSlide;
 use App\Models\Material;
 use App\Models\MaterialAccessLog;
 use App\Models\Notification;
@@ -20,9 +21,9 @@ class DashboardController extends Controller
 
         // Get unique courses the user has accessed
         $activeCourses = MaterialAccessLog::where('user_id', $user->id)
-            ->join('materials', 'material_access_logs.material_id', '=', 'materials.id')
+            ->join('course_material', 'material_access_logs.material_id', '=', 'course_material.material_id')
             ->distinct()
-            ->count('materials.course_id');
+            ->count('course_material.course_id');
 
         // Get unique materials completed (materials with watch time > 0)
         $sessionsCompleted = MaterialAccessLog::where('user_id', $user->id)
@@ -53,7 +54,7 @@ class DashboardController extends Controller
 
         // Get recent activity (last 10 access logs)
         $recentActivity = MaterialAccessLog::where('user_id', $user->id)
-            ->with(['material.course'])
+            ->with(['material.courses'])
             ->orderBy('accessed_at', 'desc')
             ->limit(10)
             ->get()
@@ -101,7 +102,10 @@ class DashboardController extends Controller
             ];
         });
 
+        $slides = HomepageSlide::orderBy('order')->orderBy('id')->get();
+
         return view('dashboard', [
+            'slides' => $slides,
             'activeCourses' => $activeCourses,
             'sessionsCompleted' => $sessionsCompleted,
             'studyTimeFormatted' => $studyTimeFormatted,

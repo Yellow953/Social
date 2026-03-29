@@ -59,8 +59,7 @@ export default function Footer() {
                             </span>
                         </div>
                         <p className="text-white/80 text-xs sm:text-sm leading-relaxed">
-                            Your comprehensive learning platform for social
-                            sciences.
+                            Your comprehensive learning platform for engineering majors.
                         </p>
                     </motion.div>
 
@@ -153,31 +152,13 @@ export default function Footer() {
                         </h4>
                         <div className="flex space-x-3 sm:space-x-4 mb-3 sm:mb-4">
                             <a
-                                href="https://instagram.com"
+                                href="https://www.instagram.com/esibsocialclub/"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-[#ec682a] to-[#d45a20] hover:shadow-lg rounded-lg flex items-center justify-center transition-all"
                                 aria-label="Instagram"
                             >
                                 <i className="fab fa-instagram text-white text-sm sm:text-base"></i>
-                            </a>
-                            <a
-                                href="https://facebook.com"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-[#ec682a] to-[#d45a20] hover:shadow-lg rounded-lg flex items-center justify-center transition-all"
-                                aria-label="Facebook"
-                            >
-                                <i className="fab fa-facebook text-white text-sm sm:text-base"></i>
-                            </a>
-                            <a
-                                href="https://twitter.com"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-[#ec682a] to-[#d45a20] hover:shadow-lg rounded-lg flex items-center justify-center transition-all"
-                                aria-label="Twitter"
-                            >
-                                <i className="fab fa-twitter text-white text-sm sm:text-base"></i>
                             </a>
                         </div>
                         <p className="text-white/80 text-xs sm:text-sm">

@@ -13,9 +13,9 @@ class ProfileController extends Controller
         $user = auth()->user();
 
         $coursesCount = MaterialAccessLog::where('user_id', $user->id)
-            ->join('materials', 'material_access_logs.material_id', '=', 'materials.id')
+            ->join('course_material', 'material_access_logs.material_id', '=', 'course_material.material_id')
             ->distinct()
-            ->count('materials.course_id');
+            ->count('course_material.course_id');
 
         $sessionsCount = MaterialAccessLog::where('user_id', $user->id)
             ->where('duration_seconds', '>', 0)

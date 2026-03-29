@@ -142,6 +142,21 @@
                             </div>
                         </div>
 
+                        <!-- Account Status -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold d-block">Account Status</label>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch"
+                                       id="is_active" name="is_active" value="1"
+                                       {{ old('is_active', $user->is_active) ? 'checked' : '' }}
+                                       style="width: 3em; height: 1.5em; cursor: pointer;">
+                                <label class="form-check-label ms-2 fw-semibold" for="is_active" id="is_active_label"
+                                       style="color: {{ $user->is_active ? '#059669' : '#dc2626' }};">
+                                    {{ old('is_active', $user->is_active) ? 'Active' : 'Disabled' }}
+                                </label>
+                            </div>
+                        </div>
+
                         <!-- Actions -->
                         <div class="d-flex gap-2">
                             <button type="submit" class="btn btn-primary">
@@ -157,4 +172,20 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+    document.getElementById('is_active').addEventListener('change', function() {
+        var label = document.getElementById('is_active_label');
+        if (this.checked) {
+            label.textContent = 'Active';
+            label.style.color = '#059669';
+        } else {
+            label.textContent = 'Disabled';
+            label.style.color = '#dc2626';
+        }
+    });
+</script>
+@endpush
+
 @endsection

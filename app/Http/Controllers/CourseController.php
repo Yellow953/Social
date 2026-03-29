@@ -11,7 +11,7 @@ class CourseController extends Controller
     {
         $query = Course::withCount('materials')
             ->with(['materials' => function($q) {
-                $q->select('id', 'course_id', 'title');
+                $q->select('id', 'title');
             }]);
 
         // Search functionality

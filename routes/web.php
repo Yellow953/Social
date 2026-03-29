@@ -102,8 +102,10 @@ Route::middleware(['auth', 'two_factor', 'admin'])->prefix('admin')->name('admin
     Route::get('/analytics', [AdminAnalyticsController::class, 'index'])->name('analytics');
     Route::get('/access-logs', [AdminAccessLogController::class, 'index'])->name('access-logs');
 
+    Route::post('users/disable-all', [AdminUserController::class, 'disableAllUsers'])->name('users.disable-all');
     Route::resource('users', AdminUserController::class);
     Route::post('users/{user}/quick-subscription', [AdminUserController::class, 'createQuickSubscription'])->name('users.quick-subscription');
+    Route::post('users/{user}/toggle-active', [AdminUserController::class, 'toggleActive'])->name('users.toggle-active');
 
     Route::get('/subscriptions', [AdminSubscriptionController::class, 'index'])->name('subscriptions');
     Route::post('/subscriptions/{subscription}/approve', [AdminSubscriptionController::class, 'approve'])->name('subscriptions.approve');

@@ -64,56 +64,16 @@
                             @enderror
                         </div>
 
-                        <div class="row">
-                            <!-- Major -->
-                            <div class="col-md-4 mb-3">
-                                <label for="major" class="form-label fw-bold">Major / Speciality <span class="text-danger">*</span></label>
-                                <select class="form-control @error('major') is-invalid @enderror"
-                                        id="major"
-                                        name="major" required>
-                                    <option value="">Select major</option>
-                                    @foreach(config('majors') as $major)
-                                        <option value="{{ $major }}" {{ old('major', $course->major) == $major ? 'selected' : '' }}>{{ $major }}</option>
-                                    @endforeach
-                                </select>
-                                @error('major')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                        <!-- Combinations -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Year / Major / Semester Combinations <span class="text-danger">*</span></label>
+                            <small class="text-muted d-block mb-2">Each row defines a group of students who can see this course.</small>
+                            <div id="combinations-container">
+                                <!-- rows injected by JS -->
                             </div>
-
-                            <!-- Year -->
-                            <div class="col-md-4 mb-3">
-                                <label for="year" class="form-label fw-bold">Year <span class="text-danger">*</span></label>
-                                <select class="form-control @error('year') is-invalid @enderror"
-                                        id="year"
-                                        name="year">
-                                    <option value="">Select year</option>
-                                    <option value="Sup" {{ old('year', $course->year) == 'Sup' ? 'selected' : '' }}>Sup</option>
-                                    <option value="Spé" {{ old('year', $course->year) == 'Spé' ? 'selected' : '' }}>Spé</option>
-                                    <option value="1e" {{ old('year', $course->year) == '1e' ? 'selected' : '' }}>1e</option>
-                                    <option value="2e" {{ old('year', $course->year) == '2e' ? 'selected' : '' }}>2e</option>
-                                    <option value="3e" {{ old('year', $course->year) == '3e' ? 'selected' : '' }}>3e</option>
-                                </select>
-                                @error('year')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <!-- Semester -->
-                            <div class="col-md-4 mb-3">
-                                <label for="semester" class="form-label fw-bold">Semester <span class="text-danger">*</span></label>
-                                <select class="form-control @error('semester') is-invalid @enderror"
-                                        id="semester"
-                                        name="semester"
-                                        required>
-                                    <option value="">Select semester</option>
-                                    <option value="1" {{ old('semester', $course->semester) == '1' ? 'selected' : '' }}>Semester 1</option>
-                                    <option value="2" {{ old('semester', $course->semester) == '2' ? 'selected' : '' }}>Semester 2</option>
-                                </select>
-                                @error('semester')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
+                            <button type="button" class="btn btn-sm btn-outline-secondary mt-2" id="add-combination-btn">
+                                <i class="fas fa-plus me-1"></i> Add Row
+                            </button>
                         </div>
 
                         <!-- Actions -->
@@ -275,3 +235,103 @@ document.getElementById('deleteMaterialModal').addEventListener('show.bs.modal',
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+(function () {
+    const majors   = @json(config('majors'));
+    const years    = ['Sup', 'Spé', '1e', '2e', '3e'];
+    const oldCombinations = @json(old('combinations', []));
+    let rowIndex = 0;
+
+    function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+    function buildRow(combo) {
+        const i = rowIndex++;
+        const selectedYear = combo.year ?? '';
+        const selectedSem  = combo.semester ?? '';
+        const selectedMajors = combo.majors ?? [];
+        const isAll = selectedMajors.includes('*');
+
+        const majorCheckboxes = majors.map(m => {
+            const checked = (!isAll && selectedMajors.includes(m)) ? 'checked' : '';
+            return `<div class="form-check form-check-inline">
+                <input class="form-check-input combo-major-cb" type="checkbox"
+                       name="combinations[${i}][majors][]" value="${m}" ${checked}
+                       ${isAll ? 'disabled' : ''}>
+                <label class="form-check-label small">${esc(m)}</label>
+            </div>`;
+        }).join('');
+
+        return `
+        <div class="combination-row border rounded p-3 mb-2 bg-light position-relative">
+            <div class="row g-2 align-items-start">
+                <div class="col-md-2">
+                    <label class="form-label small fw-bold mb-1">Year</label>
+                    <select class="form-select form-select-sm" name="combinations[${i}][year]" required>
+                        <option value="">—</option>
+                        ${years.map(y => `<option value="${esc(y)}" ${y === selectedYear ? 'selected' : ''}>${esc(y)}</option>`).join('')}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small fw-bold mb-1">Semester</label>
+                    <select class="form-select form-select-sm" name="combinations[${i}][semester]" required>
+                        <option value="">—</option>
+                        <option value="1" ${selectedSem === '1' ? 'selected' : ''}>Semester 1</option>
+                        <option value="2" ${selectedSem === '2' ? 'selected' : ''}>Semester 2</option>
+                    </select>
+                </div>
+                <div class="col-md-7">
+                    <label class="form-label small fw-bold mb-1">Majors</label>
+                    <div class="form-check mb-1">
+                        <input class="form-check-input all-majors-cb" type="checkbox"
+                               name="combinations[${i}][majors][]" value="*"
+                               id="all_majors_${i}" ${isAll ? 'checked' : ''}>
+                        <label class="form-check-label small fw-bold" for="all_majors_${i}">All Majors</label>
+                    </div>
+                    <div class="combo-majors-wrap">
+                        ${majorCheckboxes}
+                    </div>
+                </div>
+                <div class="col-md-1 text-end">
+                    <button type="button" class="btn btn-sm btn-outline-danger remove-combo-btn mt-3">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        </div>`;
+    }
+
+    const container = document.getElementById('combinations-container');
+
+    function addRow(combo = {}) {
+        const div = document.createElement('div');
+        div.innerHTML = buildRow(combo);
+        const row = div.firstElementChild;
+        container.appendChild(row);
+        bindRow(row);
+    }
+
+    function bindRow(row) {
+        const allCb = row.querySelector('.all-majors-cb');
+        const majorCbs = row.querySelectorAll('.combo-major-cb');
+        allCb.addEventListener('change', function () {
+            majorCbs.forEach(cb => {
+                cb.disabled = this.checked;
+                if (this.checked) cb.checked = false;
+            });
+        });
+        row.querySelector('.remove-combo-btn').addEventListener('click', function () {
+            row.remove();
+        });
+    }
+
+    document.getElementById('add-combination-btn').addEventListener('click', () => addRow());
+
+    // Seed with old() values on validation failure, or pre-populate with existing course data
+    const courseCombinations = @json($course->combinations ?? []);
+    const seed = oldCombinations.length ? oldCombinations : (courseCombinations.length ? courseCombinations : [{}]);
+    seed.forEach(c => addRow(c));
+})();
+</script>
+@endpush

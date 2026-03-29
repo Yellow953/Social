@@ -9,7 +9,7 @@ import CalculatricePage from '../components/pages/CalculatricePage';
 const PAGE_SEO = {
     home: {
         title: 'ESIB SOCIAL',
-        description: 'Your comprehensive learning platform for social sciences. Access courses, sessions, and materials organized by subject.',
+        description: 'Your comprehensive learning platform for engineering majors. Access courses, sessions, and materials organized by subject.',
     },
     about: {
         title: 'About',
@@ -64,7 +64,7 @@ export default function Welcome({ page = 'home' }) {
                 <meta name="description" content={description} />
             </Head>
             <Header activeTab={activeTab} />
-            
+
             {/* Main Content */}
             <div>
                 {renderPage()}

@@ -38,7 +38,7 @@
     <section id="section-majors" class="mb-5 d-none">
         <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-4">
             <h5 class="fw-bold mb-0" style="color: #c2410c;"><i class="fas fa-user-graduate me-2" style="color: #ec682a;"></i>2. Choisir une filière pour <span id="majors-year-label"></span></h5>
-            <a href="#" id="back-from-majors" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left me-1"></i> Changer d'année</a>
+            <a href="#" id="back-from-majors" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left me-1"></i> Back</a>
         </div>
         <div id="majors-cards" class="academique-step-cards academique-majors-wrap row g-4"></div>
     </section>
@@ -47,7 +47,7 @@
     <section id="section-semester" class="mb-5 d-none">
         <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-4">
             <h5 class="fw-bold mb-0" style="color: #c2410c;"><i class="fas fa-layer-group me-2" style="color: #ec682a;"></i>3. Choisir un semestre pour <span id="semester-year-label"></span> – <span id="semester-major-label"></span></h5>
-            <a href="#" id="back-from-semester" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left me-1"></i> Changer de filière</a>
+            <a href="#" id="back-from-semester" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left me-1"></i> Back</a>
         </div>
         <div id="semester-cards" class="row g-4" style="max-width:100%;width:100%;"></div>
     </section>
@@ -56,7 +56,7 @@
     <section id="section-courses" class="mb-5 d-none">
         <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
             <h5 class="fw-bold mb-0" style="color: #c2410c;"><i class="fas fa-book-open me-2" style="color: #ec682a;"></i>4. Cours pour <span id="courses-year-label"></span> – <span id="courses-major-label"></span> (Semestre <span id="courses-semester-label"></span>)</h5>
-            <a href="#" id="back-from-courses" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left me-1"></i> Changer de semestre</a>
+            <a href="#" id="back-from-courses" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left me-1"></i> Back</a>
         </div>
         <div id="courses-loading" class="text-center py-5 text-muted d-none">
             <div class="spinner-border me-2" role="status"></div> Chargement des cours...
@@ -69,7 +69,7 @@
     <section id="section-materials" class="mb-5 d-none">
         <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
             <h5 class="fw-bold mb-0" style="color: #c2410c;"><i class="fas fa-file-alt me-2" style="color: #ec682a;"></i>5. Matériel pour <span id="materials-course-label"></span></h5>
-            <a href="#" id="back-from-materials" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left me-1"></i> Changer de cours</a>
+            <a href="#" id="back-from-materials" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left me-1"></i> Back</a>
         </div>
         <div id="materials-loading" class="text-center py-5 text-muted d-none">
             <div class="spinner-border me-2" role="status"></div> Chargement du matériel...
@@ -85,7 +85,12 @@
     const coursesUrl = @json(route('academique.courses'));
     const materialsUrl = @json(route('academique.materials'));
     const materialsBaseUrl = @json(url('/materials'));
-    const majorsList = @json($majors);
+    const userYear = @json($userYear);
+    const userMajor = @json($userMajor);
+    const allYears = ['Sup', 'Spé', '1e', '2e', '3e'];
+    const yearsList = userYear ? [userYear] : allYears;
+    const majorsList = userMajor ? [userMajor] : @json($majors);
+    const hasSubscription = @json(auth()->user()->hasActiveSubscription() || auth()->user()->isAdmin());
 
     const sectionYears = document.getElementById('section-years');
     const yearsLoading = document.getElementById('years-loading');
@@ -187,14 +192,12 @@
         materialsGrid.innerHTML = '';
     });
 
-    // Load years on page load (always all 5)
-    fetch(yearsUrl, { headers: csrfHeaders(), credentials: 'same-origin' })
-        .then(r => r.json())
-        .then(data => {
-            yearsLoading.classList.add('d-none');
-            yearsCards.classList.remove('d-none');
-            yearsCards.innerHTML = '';
-            (data.years || []).forEach(year => {
+    // Load years on page load — filtered to user's year if set
+    (function() {
+        yearsLoading.classList.add('d-none');
+        yearsCards.classList.remove('d-none');
+        yearsCards.innerHTML = '';
+        yearsList.forEach(year => {
                 const col = document.createElement('div');
                 col.className = 'col-6 col-md';
                 const card = document.createElement('a');
@@ -222,10 +225,7 @@
                 col.appendChild(card);
                 yearsCards.appendChild(col);
             });
-        })
-        .catch(() => {
-            yearsLoading.innerHTML = '<span class="text-danger">Erreur de chargement</span>';
-        });
+        })();
 
     function renderMajors() {
         majorsCards.innerHTML = '';
@@ -297,7 +297,10 @@
             .then(data => {
                 coursesLoading.classList.add('d-none');
                 if (!data.courses || data.courses.length === 0) {
-                    coursesEmpty.innerHTML = '<div class="academique-empty-state text-center py-5 px-4 mx-auto" style="max-width: 420px;"><div class="academique-empty-icon mb-4"><i class="fas fa-book-open" style="color: #ec682a;"></i></div><h5 class="fw-bold mb-2" style="color: #5c5c5c;">Aucun cours pour le moment</h5><p class="text-muted mb-4 mb-md-0">Aucun cours n\'est disponible pour cette année, filière et semestre. Choisissez un autre semestre ou une autre filière.</p><a href="#" id="courses-empty-back-semester" class="btn btn-outline-secondary mt-3"><i class="fas fa-arrow-left me-2"></i>Changer de semestre</a></div>';
+                    const subHint = !hasSubscription
+                        ? '<p class="text-muted small mt-2 mb-0"><i class="fas fa-lock me-1"></i>Certains cours peuvent nécessiter un <a href="{{ route('subscriptions.create') }}" class="alert-link">abonnement SOCIALPLUS</a>.</p>'
+                        : '';
+                    coursesEmpty.innerHTML = '<div class="academique-empty-state text-center py-5 px-4 mx-auto" style="max-width: 420px;"><div class="academique-empty-icon mb-4"><i class="fas fa-book-open" style="color: #ec682a;"></i></div><h5 class="fw-bold mb-2" style="color: #5c5c5c;">Aucun cours pour le moment</h5><p class="text-muted mb-0">Aucun cours n\'est disponible pour cette année, filière et semestre. Choisissez un autre semestre ou une autre filière.</p>' + subHint + '<a href="#" id="courses-empty-back-semester" class="btn btn-outline-secondary mt-3"><i class="fas fa-arrow-left me-2"></i>Back</a></div>';
                     coursesEmpty.classList.remove('d-none');
                     document.getElementById('courses-empty-back-semester').addEventListener('click', function(ev) { ev.preventDefault(); goBackToSemester(); });
                     return;
@@ -354,6 +357,9 @@
             .then(data => {
                 materialsLoading.classList.add('d-none');
                 if (!data.materials || data.materials.length === 0) {
+                    materialsEmpty.innerHTML = !hasSubscription
+                        ? 'Aucun matériel accessible pour ce cours. <a href="{{ route('subscriptions.create') }}" class="alert-link">Abonnez-vous</a> pour débloquer les matériels verrouillés.'
+                        : 'Aucun matériel pour ce cours.';
                     materialsEmpty.classList.remove('d-none');
                     return;
                 }

@@ -46,6 +46,13 @@ class LoginController extends Controller
         if (Auth::validate($credentials)) {
             $user = User::where('email', $request->email)->first();
 
+            // Block disabled accounts
+            if (!$user->is_active) {
+                throw ValidationException::withMessages([
+                    'email' => ['Your account has been disabled. Please contact an administrator.'],
+                ]);
+            }
+
             // Log the user in immediately
             Auth::login($user, $remember);
             $request->session()->regenerate();

@@ -61,7 +61,7 @@
                             <input type="hidden" id="pdf-view-url-{{ $media->id }}" value="{{ route('media.view', $media) }}">
                         @elseif($media->type === 'image')
                             <div class="image-viewer-container" style="position: relative; width: 100%; text-align: center; background: #f5f5f5; min-height: 80vh; display: flex; align-items: center; justify-content: center;">
-                                <img src="{{ route('media.view', $media) }}" 
+                                <img src="{{ route('media.view', $media) }}"
                                      alt="{{ $media->original_filename }}"
                                      class="img-fluid"
                                      style="max-width: 100%; max-height: 80vh; height: auto;"
@@ -70,8 +70,8 @@
                                      draggable="false">
                                 @if($showLogo)
                                 <div class="watermark-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; display: flex; align-items: center; justify-content: center;">
-                                    <img src="{{ asset('assets/images/logo-transparent.png') }}" 
-                                         alt="Watermark" 
+                                    <img src="{{ asset('assets/images/logo-transparent.png') }}"
+                                         alt="Watermark"
                                          class="media-watermark-logo">
                                 </div>
                                 @endif
@@ -86,7 +86,7 @@
                         @elseif($media->type === 'video')
                             <div class="video-viewer-container">
                                 <div class="video-wrapper">
-                                    <video id="media-video-{{ $media->id }}" 
+                                    <video id="media-video-{{ $media->id }}"
                                            class="media-video-player"
                                            controls
                                            controlsList="nodownload"
@@ -96,8 +96,8 @@
                                     </video>
                                     @if($showLogo)
                                     <div class="watermark-overlay video-watermark-overlay">
-                                        <img src="{{ asset('assets/images/logo-transparent.png') }}" 
-                                             alt="Watermark" 
+                                        <img src="{{ asset('assets/images/logo-transparent.png') }}"
+                                             alt="Watermark"
                                              class="media-watermark-logo">
                                     </div>
                                     @endif
@@ -364,6 +364,9 @@
                     var wrapper = document.createElement('div');
                     wrapper.className = 'pdf-page-wrapper mb-4';
                     wrapper.style.textAlign = 'center';
+                    wrapper.style.display = 'flex';
+                    wrapper.style.justifyContent = 'center';
+
                     var canvas = document.createElement('canvas');
                     var ctx = canvas.getContext('2d');
                     canvas.height = viewport.height;
@@ -415,8 +418,8 @@
 
     document.addEventListener('keydown', function(e) {
         // Disable Print Screen, F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
-        if (e.key === 'PrintScreen' || 
-            e.key === 'F12' || 
+        if (e.key === 'PrintScreen' ||
+            e.key === 'F12' ||
             (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
             (e.ctrlKey && e.key === 'U') ||
             (e.ctrlKey && e.key === 'S')) {

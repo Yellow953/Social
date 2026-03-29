@@ -14,9 +14,19 @@
             <h2 class="fw-bold mb-1" style="color: #c2410c;"><i class="fas fa-users me-2" style="color: #ec682a;"></i>Users Management</h2>
             <p class="text-muted mb-0">Manage all platform users</p>
         </div>
-        <a href="{{ route('admin.users.create') }}" class="btn btn-primary">
-            <i class="fas fa-plus me-2"></i>Add User
-        </a>
+        <div class="d-flex gap-2">
+            @if(auth()->user()->isSuperAdmin())
+            <form method="POST" action="{{ route('admin.users.disable-all') }}" id="disableAllForm">
+                @csrf
+                <button type="submit" class="btn btn-warning fw-semibold" id="disableAllBtn">
+                    <i class="fas fa-ban me-2"></i>Disable All Students
+                </button>
+            </form>
+            @endif
+            <a href="{{ route('admin.users.create') }}" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>Add User
+            </a>
+        </div>
     </div>
 
     @if(session('success'))
@@ -48,8 +58,7 @@
                     <thead>
                         <tr>
                             <th>User</th>
-                            <th>Email</th>
-                            <th>Phone</th>
+                            <th>Contact</th>
                             <th>Role</th>
                             <th>Study Year</th>
                             <th>Subscription</th>
@@ -59,7 +68,7 @@
                     </thead>
                     <tbody>
                         @foreach($users as $user)
-                        <tr class="table-row-hover">
+                        <tr class="table-row-hover{{ !$user->is_active ? ' table-secondary opacity-75' : '' }}">
                             <td>
                                 <div class="d-flex align-items-center">
                                     <div class="bg-gradient-to-br from-[#ec682a] to-[#d45a20] rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm" style="width: 45px; height: 45px;">
@@ -72,10 +81,10 @@
                                 </div>
                             </td>
                             <td>
-                                <span style="color: #5c5c5c;">{{ $user->email }}</span>
-                            </td>
-                            <td>
-                                <span style="color: #5c5c5c;">{{ $user->phone ?? '-' }}</span>
+                                <div style="color: #5c5c5c;">{{ $user->email }}</div>
+                                @if($user->phone)
+                                    <small class="text-muted">{{ $user->phone }}</small>
+                                @endif
                             </td>
                             <td>
                                 @if($user->role === 'super_admin')
@@ -84,6 +93,9 @@
                                     <span class="badge" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 0.4rem 0.8rem; font-weight: 500;">Admin</span>
                                 @else
                                     <span class="badge" style="background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%); color: white; padding: 0.4rem 0.8rem; font-weight: 500;">User</span>
+                                @endif
+                                @if(!$user->is_active)
+                                    <span class="badge bg-danger ms-1" style="padding: 0.3rem 0.6rem; font-weight: 500;">Disabled</span>
                                 @endif
                             </td>
                             <td>
@@ -128,6 +140,16 @@
                                         </button>
                                     @endif
                                     @if(auth()->user()->isSuperAdmin() || !$user->isAdminLevel())
+                                        @if($user->id !== auth()->id())
+                                            <button type="button"
+                                                    class="btn btn-sm shadow-sm toggle-active-btn"
+                                                    data-user-id="{{ $user->id }}"
+                                                    data-active="{{ $user->is_active ? '1' : '0' }}"
+                                                    title="{{ $user->is_active ? 'Disable account' : 'Enable account' }}"
+                                                    style="border-radius: 8px; background: {{ $user->is_active ? 'linear-gradient(135deg,#f59e0b,#d97706)' : 'linear-gradient(135deg,#10b981,#059669)' }}; border: none; color: white;">
+                                                <i class="fas {{ $user->is_active ? 'fa-ban' : 'fa-check' }}"></i>
+                                            </button>
+                                        @endif
                                         <a href="{{ route('admin.users.edit', $user) }}" class="btn btn-sm btn-primary shadow-sm" title="Edit" style="border-radius: 8px;">
                                             <i class="fas fa-edit"></i>
                                         </a>
@@ -301,7 +323,7 @@
             responsive: true,
             pageLength: 10,
             lengthChange: false,
-            order: [[7, 'desc']],
+            order: [[5, 'desc']],
             language: {
                 search: "Search users:",
                 info: "Showing _START_ to _END_ of _TOTAL_ users",
@@ -311,7 +333,7 @@
             },
             dom: 'rt<"row mt-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
             columnDefs: [
-                { orderable: false, targets: 7 }
+                { orderable: false, targets: 6 }
             ],
             drawCallback: function() {
                 attachQuickSubscriptionHandlers();
@@ -375,6 +397,86 @@
 
         // Initial attachment
         attachQuickSubscriptionHandlers();
+
+        // Toggle active per user
+        $(document).on('click', '.toggle-active-btn', function() {
+            var btn = $(this);
+            var userId = btn.data('user-id');
+            var isActive = btn.data('active') == '1';
+            var actionLabel = isActive ? 'disable' : 'enable';
+
+            function doToggle() {
+                btn.prop('disabled', true);
+                $.ajax({
+                    url: '/admin/users/' + userId + '/toggle-active',
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                    success: function(response) {
+                        if (response.success) {
+                            var newActive = response.is_active;
+                            btn.data('active', newActive ? '1' : '0');
+                            btn.attr('title', newActive ? 'Disable account' : 'Enable account');
+                            btn.css('background', newActive
+                                ? 'linear-gradient(135deg,#f59e0b,#d97706)'
+                                : 'linear-gradient(135deg,#10b981,#059669)');
+                            btn.html('<i class="fas ' + (newActive ? 'fa-ban' : 'fa-check') + '"></i>');
+                            // Update row style and disabled badge
+                            var row = btn.closest('tr');
+                            if (newActive) {
+                                row.removeClass('table-secondary opacity-75');
+                                row.find('.badge.bg-danger').filter(function() { return $(this).text().trim() === 'Disabled'; }).remove();
+                            } else {
+                                row.addClass('table-secondary opacity-75');
+                                var roleBadge = row.find('td:nth-child(3) .badge').first();
+                                if (!row.find('.badge.bg-danger').length) {
+                                    roleBadge.after('<span class="badge bg-danger ms-1" style="padding:0.3rem 0.6rem;font-weight:500;">Disabled</span>');
+                                }
+                            }
+                            btn.prop('disabled', false);
+                        }
+                    },
+                    error: function() {
+                        btn.prop('disabled', false);
+                    }
+                });
+            }
+
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    title: (isActive ? 'Disable' : 'Enable') + ' this account?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: isActive ? '#d97706' : '#10b981',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Yes, ' + actionLabel + ' it'
+                }).then(function(result) {
+                    if (result.isConfirmed) doToggle();
+                });
+            } else {
+                if (confirm((isActive ? 'Disable' : 'Enable') + ' this account?')) doToggle();
+            }
+        });
+
+        // Disable all students confirmation
+        $('#disableAllForm').on('submit', function(e) {
+            e.preventDefault();
+            var form = this;
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    title: 'Disable all student accounts?',
+                    text: 'This will prevent all students from logging in. Admins are not affected.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d97706',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Yes, disable all'
+                }).then(function(result) {
+                    if (result.isConfirmed) form.submit();
+                });
+            } else {
+                if (confirm('Disable all student accounts? This will prevent all students from logging in.')) form.submit();
+            }
+        });
     });
 </script>
 @endpush

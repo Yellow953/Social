@@ -24,8 +24,7 @@ export default function AboutPage() {
 
     const stats = [
         { number: "1000+", label: "Active Students", icon: "fas fa-users" },
-        { number: "50+", label: "Courses", icon: "fas fa-book" },
-        { number: "500+", label: "Video Sessions", icon: "fas fa-video" },
+        { number: "200+", label: "Courses", icon: "fas fa-book" },
         { number: "24/7", label: "Support", icon: "fas fa-headset" },
     ];
 
@@ -145,7 +144,7 @@ export default function AboutPage() {
                             </h3>
                             <p className="text-gray-600 text-base sm:text-lg leading-relaxed mb-4">
                                 ESIB SOCIAL is your comprehensive learning
-                                platform for social sciences. We provide
+                                platform for engineering majors. We provide
                                 organized access to courses, sessions, and
                                 materials to help you excel in your studies.
                             </p>

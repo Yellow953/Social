@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Material extends Model
@@ -14,7 +14,6 @@ class Material extends Model
     protected $fillable = [
         'title',
         'description',
-        'course_id',
         'type', // 'cours', 'tp', 'video_recording'
         'is_locked',
         'watermark_type', // 'none', 'full', 'logo_only', 'username_only'
@@ -25,11 +24,20 @@ class Material extends Model
     ];
 
     /**
-     * Get the course that owns this material
+     * Get the courses this material belongs to
      */
-    public function course(): BelongsTo
+    public function courses(): BelongsToMany
     {
-        return $this->belongsTo(Course::class);
+        return $this->belongsToMany(Course::class);
+    }
+
+    /**
+     * Convenience accessor — returns the first attached course.
+     * Keeps backward-compatible access to $material->course->name in views.
+     */
+    public function getCourseAttribute(): ?Course
+    {
+        return $this->courses->first();
     }
 
     /**

@@ -59,7 +59,7 @@
                         {{-- Apply-to-all banner --}}
                         <div class="card border bg-light mb-4">
                             <div class="card-body py-3">
-                                <p class="fw-bold mb-2 small text-muted text-uppercase">Add this material to all files</p>
+                                <p class="fw-bold mb-2 small text-muted text-uppercase">Check a material on all files at once</p>
                                 <div class="row g-2 align-items-end">
                                     <div class="col-md-4">
                                         <label class="form-label small fw-bold mb-1">Course</label>
@@ -164,9 +164,6 @@
     .file-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; margin-bottom: 16px; overflow: hidden; }
     .file-card-header { background: #f8fafc; border-bottom: 1px solid #e5e7eb; padding: 12px 16px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
     .file-card-body { padding: 12px 16px; }
-    .assignment-row { display: flex; align-items: flex-end; gap: 10px; flex-wrap: wrap; padding: 8px 0; border-bottom: 1px dashed #e5e7eb; }
-    .assignment-row:last-child { border-bottom: none; }
-
     /* preview cards in step 3 */
     .preview-file-card { border: 1px solid #e5e7eb; border-radius: 12px; margin-bottom: 16px; overflow: hidden; }
     .preview-file-card.has-error { border-color: #fbbf24; }
@@ -209,6 +206,7 @@ document.addEventListener('DOMContentLoaded', function () {
      *   assignments: [ {_courseId, materialId}, ... ]
      * }
      */
+    // files[i] = { uuid, originalName, type, displayName, watermarkType, isLocked, materialIds: [] }
     const files = [];
 
     /* ── Dropzone ────────────────────────────────────────────────────── */
@@ -277,7 +275,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     displayName:   response.original_filename || file.name || '',
                     watermarkType: 'full',
                     isLocked:      true,
-                    assignments:   [{ _courseId: '', materialId: null }],
+                    materialIds:   [],
                 });
                 const prog    = file.previewElement.querySelector('.dz-progress');
                 const success = file.previewElement.querySelector('.dz-success');
@@ -338,7 +336,6 @@ document.addEventListener('DOMContentLoaded', function () {
         files.forEach((f, fi) => {
             const card = document.createElement('div');
             card.className = 'file-card';
-            card.dataset.fi = fi;
 
             /* header: icon + name + per-file settings */
             const header = document.createElement('div');
@@ -369,7 +366,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             card.appendChild(header);
 
-            /* body: assignment rows */
+            /* body: checkbox list grouped by course */
             const body = document.createElement('div');
             body.className = 'file-card-body';
 
@@ -378,73 +375,46 @@ document.addEventListener('DOMContentLoaded', function () {
             assignLabel.innerHTML = '<i class="fas fa-link me-1"></i>Assign to materials <span class="text-danger">*</span>';
             body.appendChild(assignLabel);
 
-            const aList = document.createElement('div');
-            aList.className = 'assignment-list';
-            body.appendChild(aList);
+            const listWrap = document.createElement('div');
+            listWrap.className = 'border rounded p-3';
+            listWrap.style.cssText = 'max-height:220px;overflow-y:auto;';
 
-            function renderAssignments() {
-                aList.innerHTML = '';
-                files[fi].assignments.forEach((a, ai) => {
-                    const courseOptions = '<option value="">— select course —</option>' +
-                        coursesData.map(c =>
-                            `<option value="${c.id}" ${c.id == a._courseId ? 'selected' : ''}>${escHtml(c.label)}</option>`
-                        ).join('');
+            coursesData.forEach(course => {
+                if (!course.materials.length) return;
 
-                    const row = document.createElement('div');
-                    row.className = 'assignment-row';
-                    row.innerHTML = `
-                        <div style="min-width:220px;flex:1.5;">
-                            <label class="form-label small mb-1">Course</label>
-                            <select class="form-select form-select-sm ar-course">${courseOptions}</select>
-                        </div>
-                        <div style="min-width:220px;flex:1.5;">
-                            <label class="form-label small mb-1">Material</label>
-                            <select class="form-select form-select-sm ar-material" ${a._courseId ? '' : 'disabled'}>
-                                ${a._courseId ? buildMaterialOptions(a._courseId, a.materialId) : '<option value="">— select material —</option>'}
-                            </select>
-                        </div>
-                        <div class="pb-1">
-                            <button type="button" class="btn btn-sm btn-outline-danger ar-remove" ${files[fi].assignments.length === 1 ? 'disabled' : ''}>
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>`;
+                const groupHeader = document.createElement('div');
+                groupHeader.className = 'fw-bold small text-muted mt-2 mb-1';
+                groupHeader.textContent = course.label;
+                listWrap.appendChild(groupHeader);
 
-                    const courseSelect   = row.querySelector('.ar-course');
-                    const materialSelect = row.querySelector('.ar-material');
+                course.materials.forEach(m => {
+                    const checkDiv = document.createElement('div');
+                    checkDiv.className = 'form-check';
+                    const cbId = `cb-f${fi}-m${m.id}`;
+                    checkDiv.innerHTML = `
+                        <input class="form-check-input mat-cb" type="checkbox"
+                               id="${cbId}" data-mid="${m.id}"
+                               ${f.materialIds.includes(m.id) ? 'checked' : ''}>
+                        <label class="form-check-label" for="${cbId}">${escHtml(m.title)}</label>`;
 
-                    courseSelect.addEventListener('change', function () {
-                        files[fi].assignments[ai]._courseId  = this.value;
-                        files[fi].assignments[ai].materialId = null;
-                        materialSelect.innerHTML = this.value ? buildMaterialOptions(this.value, null) : '<option value="">— select material —</option>';
-                        materialSelect.disabled  = !this.value;
+                    checkDiv.querySelector('.mat-cb').addEventListener('change', function () {
+                        const mid = parseInt(this.dataset.mid);
+                        if (this.checked) {
+                            if (!files[fi].materialIds.includes(mid)) files[fi].materialIds.push(mid);
+                        } else {
+                            files[fi].materialIds = files[fi].materialIds.filter(id => id !== mid);
+                        }
                     });
 
-                    materialSelect.addEventListener('change', function () {
-                        files[fi].assignments[ai].materialId = this.value ? parseInt(this.value) : null;
-                    });
-
-                    row.querySelector('.ar-remove').addEventListener('click', function () {
-                        files[fi].assignments.splice(ai, 1);
-                        renderAssignments();
-                    });
-
-                    aList.appendChild(row);
+                    listWrap.appendChild(checkDiv);
                 });
+            });
+
+            if (!listWrap.children.length) {
+                listWrap.innerHTML = '<p class="text-muted small mb-0">No materials available.</p>';
             }
 
-            renderAssignments();
-
-            /* "+ Add material" button */
-            const addBtn = document.createElement('button');
-            addBtn.type = 'button';
-            addBtn.className = 'btn btn-sm btn-outline-secondary mt-2';
-            addBtn.innerHTML = '<i class="fas fa-plus me-1"></i>Add another material';
-            addBtn.addEventListener('click', function () {
-                files[fi].assignments.push({ _courseId: '', materialId: null });
-                renderAssignments();
-            });
-            body.appendChild(addBtn);
-
+            body.appendChild(listWrap);
             card.appendChild(body);
             container.appendChild(card);
         });
@@ -462,20 +432,10 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     document.getElementById('btn-apply-all').addEventListener('click', function () {
-        const cid = globalCourse.value;
         const mid = globalMaterial.value ? parseInt(globalMaterial.value) : null;
-        if (!cid || !mid) return;
+        if (!mid) return;
         files.forEach(f => {
-            const alreadyAssigned = f.assignments.some(a => a.materialId === mid);
-            if (!alreadyAssigned) {
-                /* replace the first empty slot, or append */
-                const emptyIdx = f.assignments.findIndex(a => !a.materialId);
-                if (emptyIdx > -1) {
-                    f.assignments[emptyIdx] = { _courseId: cid, materialId: mid };
-                } else {
-                    f.assignments.push({ _courseId: cid, materialId: mid });
-                }
-            }
+            if (!f.materialIds.includes(mid)) f.materialIds.push(mid);
         });
         renderAssignRows();
     });
@@ -494,7 +454,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let problems    = 0;
 
         files.forEach(f => {
-            const validAssignments = f.assignments.filter(a => a.materialId);
+            const validAssignments = f.materialIds.map(mid => ({ materialId: mid }));
             const hasError = validAssignments.length === 0;
             if (hasError) problems++;
 
@@ -541,7 +501,7 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 validAssignments.forEach((a, ai) => {
                     const mat    = materialMap[a.materialId];
-                    const course = mat ? coursesData.find(c => c.id == mat.courseId) : null;
+                    const course = mat ? coursesData.find(c => c.materials.some(m => m.id === a.materialId)) : null;
 
                     const row = document.createElement('div');
                     row.className = 'preview-assignment-row';
@@ -587,7 +547,7 @@ document.addEventListener('DOMContentLoaded', function () {
             display_name:   f.displayName || f.originalName,
             watermark_type: f.watermarkType,
             is_locked:      f.isLocked,
-            material_ids:   f.assignments.map(a => a.materialId).filter(Boolean),
+            material_ids:   f.materialIds,
         }));
         document.getElementById('assignments-input').value = JSON.stringify(payload);
     });

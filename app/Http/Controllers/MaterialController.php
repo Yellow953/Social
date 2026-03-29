@@ -12,26 +12,29 @@ class MaterialController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        $query = Material::with('course')
-            ->orderBy('course_id')
+        $query = Material::with('courses')
             ->orderBy('created_at');
 
         if ($request->has('course') && $request->course) {
-            $query->where('course_id', $request->course);
+            $query->whereHas('courses', fn ($q) => $q->where('courses.id', $request->course));
         }
 
         $materials = $query->get();
 
-        // Group materials by course
-        $groupedMaterials = $materials->groupBy(function ($material) {
-            return $material->course->name;
-        });
+        // Group materials by course — a material appears under each course it belongs to
+        $groupedMaterials = [];
+        foreach ($materials as $material) {
+            foreach ($material->courses as $course) {
+                $groupedMaterials[$course->name][] = $material;
+            }
+        }
 
         return view('materials.index', compact('materials', 'groupedMaterials'));
     }
 
     public function show(Material $material)
     {
+        $material->loadMissing('courses');
         $user = Auth::user();
 
         if (!$material->canBeAccessedBy($user)) {

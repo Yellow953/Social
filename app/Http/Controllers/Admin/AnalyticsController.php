@@ -95,7 +95,7 @@ class AnalyticsController extends Controller
             ->values();
         
         // Recent Activity
-        $recentActivity = MaterialAccessLog::with(['user', 'material.course'])
+        $recentActivity = MaterialAccessLog::with(['user', 'material.courses'])
             ->where('accessed_at', '>=', $startDate)
             ->orderBy('accessed_at', 'desc')
             ->limit(10)

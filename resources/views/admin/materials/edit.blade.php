@@ -62,21 +62,25 @@
                             </div>
 
                             <!-- Course -->
-                            <div class="col-md-6 mb-3">
-                                <label for="course_id" class="form-label fw-bold">Course <span class="text-danger">*</span></label>
-                                <select class="form-control @error('course_id') is-invalid @enderror"
-                                        id="course_id"
-                                        name="course_id"
-                                        required>
-                                    <option value="">Select a course</option>
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label fw-bold">Course(s) <span class="text-danger">*</span></label>
+                                @php $selectedCourseIds = old('course_ids', $material->courses->pluck('id')->toArray()); @endphp
+                                <div class="border rounded p-3 @error('course_ids') border-danger @enderror" style="max-height: 220px; overflow-y: auto;">
                                     @foreach($courses as $course)
-                                        <option value="{{ $course->id }}" {{ old('course_id', $material->course_id) == $course->id ? 'selected' : '' }}>
-                                            {{ $course->name }} | {{ $course->code }} | {{ $course->major }} | {{ $course->year }} | {{ $course->semester }}
-                                        </option>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox"
+                                                   name="course_ids[]"
+                                                   id="course_{{ $course->id }}"
+                                                   value="{{ $course->id }}"
+                                                   {{ in_array($course->id, $selectedCourseIds) ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="course_{{ $course->id }}">
+                                                {{ $course->name }} | {{ $course->code }} | {{ implode('/', $course->majors ?? []) }} | {{ implode('/', $course->years ?? []) }} | S{{ implode('/', $course->semesters ?? []) }}
+                                            </label>
+                                        </div>
                                     @endforeach
-                                </select>
-                                @error('course_id')
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                                </div>
+                                @error('course_ids')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
                             </div>
 
@@ -343,10 +347,9 @@ document.addEventListener('DOMContentLoaded', function() {
         maxFilesize: 500,
         timeout: 120000,
         acceptedFiles: ".pdf,.mp4,.webm,.ogg,.mov,.avi,.mkv,.m4v,.jpg,.jpeg,.png,.gif,.webp",
-        addRemoveLinks: true,
+        addRemoveLinks: false,
         clickable: true,
         dictDefaultMessage: "",
-        dictRemoveFile: '<i class="fas fa-times"></i> Remove',
         parallelUploads: 3,
         uploadMultiple: false,
         autoProcessQueue: true,

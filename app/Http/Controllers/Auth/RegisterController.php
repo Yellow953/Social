@@ -50,7 +50,6 @@ class RegisterController extends Controller
                     }
                 },
             ],
-            'phone' => 'required|string|max:20',
             'study_year' => 'required|string|in:Sup,Spé,1e,2e,3e',
             'major' => ['required', 'string', Rule::in(config('majors'))],
             'password' => ['required', 'confirmed', Password::defaults()],
@@ -60,7 +59,6 @@ class RegisterController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'phone' => $request->phone,
             'study_year' => $request->study_year,
             'major' => $request->major,
             'password' => Hash::make($request->password),

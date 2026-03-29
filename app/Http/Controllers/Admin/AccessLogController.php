@@ -10,7 +10,7 @@ class AccessLogController extends Controller
 {
     public function index(Request $request)
     {
-        $query = MaterialAccessLog::with(['user', 'material.course']);
+        $query = MaterialAccessLog::with(['user', 'material.courses']);
 
         // Filter by user if provided
         if ($request->has('user_id') && $request->user_id) {

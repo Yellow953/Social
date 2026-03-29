@@ -16,14 +16,14 @@ class MaterialController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Material::with('course');
+        $query = Material::with('courses');
 
         if ($request->filled('search')) {
             $query->where('title', 'like', '%' . $request->search . '%');
         }
 
         if ($request->filled('course_id')) {
-            $query->where('course_id', $request->course_id);
+            $query->whereHas('courses', fn ($q) => $q->where('courses.id', $request->course_id));
         }
 
         if ($request->filled('type')) {
@@ -34,7 +34,7 @@ class MaterialController extends Controller
             $query->where('is_locked', $request->locked === '1');
         }
 
-        $materials = $query->orderBy('course_id')->orderBy('created_at')->paginate(20)->withQueryString();
+        $materials = $query->orderBy('created_at')->paginate(20)->withQueryString();
         $courses   = Course::select('id', 'name', 'code')->orderBy('name')->get();
 
         return view('admin.materials.index', [
@@ -46,7 +46,7 @@ class MaterialController extends Controller
 
     public function create()
     {
-        $courses = Course::select('id', 'name', 'code', 'major', 'year', 'semester')->orderBy('id', 'DESC')->get();
+        $courses = Course::select('id', 'name', 'code', 'combinations')->orderBy('id', 'DESC')->get();
         return view('admin.materials.create', compact('courses'));
     }
 
@@ -55,7 +55,8 @@ class MaterialController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'course_id' => 'required|exists:courses,id',
+            'course_ids' => 'required|array|min:1',
+            'course_ids.*' => 'exists:courses,id',
             'type' => 'required|string|in:cours,tp,td,tc,resume,partiel,final,video_recording',
             'is_locked' => 'boolean',
             'watermark_type' => 'nullable|string|in:none,full,logo_only,username_only',
@@ -65,10 +66,14 @@ class MaterialController extends Controller
             'material_temp_names' => 'nullable|string',
         ]);
 
+        $courseIds = $validated['course_ids'];
+        unset($validated['course_ids']);
+
         $validated['is_locked'] = $request->has('is_locked');
         $validated['watermark_type'] = $validated['watermark_type'] ?? 'full';
 
         $material = Material::create($validated);
+        $material->courses()->attach($courseIds);
 
         if ($request->hasFile('media')) {
             $this->handleMediaUploads($request, $material);
@@ -88,8 +93,8 @@ class MaterialController extends Controller
 
     public function edit(Material $material)
     {
-        $courses = Course::select('id', 'name', 'code', 'major', 'year', 'semester')->orderBy('id', 'DESC')->get();
-        $material->load('media');
+        $courses = Course::select('id', 'name', 'code', 'combinations')->orderBy('id', 'DESC')->get();
+        $material->load('media', 'courses');
         return view('admin.materials.edit', compact('material', 'courses'));
     }
 
@@ -98,7 +103,8 @@ class MaterialController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'course_id' => 'required|exists:courses,id',
+            'course_ids' => 'required|array|min:1',
+            'course_ids.*' => 'exists:courses,id',
             'type' => 'required|string|in:cours,tp,td,tc,resume,partiel,final,video_recording',
             'is_locked' => 'boolean',
             'watermark_type' => 'nullable|string|in:none,full,logo_only,username_only',
@@ -114,12 +120,16 @@ class MaterialController extends Controller
             'media_watermark.*' => 'nullable|string|in:none,full,logo_only,username_only',
         ]);
 
+        $courseIds = $validated['course_ids'];
+        unset($validated['course_ids']);
+
         $validated['is_locked'] = $request->has('is_locked');
         if (array_key_exists('watermark_type', $validated)) {
             $validated['watermark_type'] = $validated['watermark_type'] ?? 'full';
         }
 
         $material->update($validated);
+        $material->courses()->sync($courseIds);
 
         $newMediaIds = [];
 
@@ -352,14 +362,15 @@ class MaterialController extends Controller
 
     public function duplicate(Material $material)
     {
+        $material->loadMissing('courses');
         $newMaterial = Material::create([
             'title' => $material->title,
             'description' => $material->description,
-            'course_id' => $material->course_id,
             'type' => $material->type,
             'is_locked' => $material->is_locked,
             'watermark_type' => $material->watermark_type,
         ]);
+        $newMaterial->courses()->attach($material->courses->pluck('id'));
 
         foreach ($material->media as $media) {
             $newFilePath = null;
@@ -390,12 +401,12 @@ class MaterialController extends Controller
     {
         $courses = Course::with(['materials' => function ($q) {
             $q->orderBy('title');
-        }])->orderBy('name')->get(['id', 'name', 'code', 'major', 'year', 'semester']);
+        }])->orderBy('name')->get(['id', 'name', 'code', 'combinations']);
 
         $coursesData = $courses->map(function ($c) {
             return [
                 'id'        => $c->id,
-                'label'     => $c->name . ' | ' . $c->code . ' | Yr' . $c->year . ' ' . $c->major,
+                'label'     => $c->name . ' | ' . $c->code,
                 'materials' => $c->materials->map(fn ($m) => ['id' => $m->id, 'title' => $m->title])->values(),
             ];
         })->values();
@@ -662,44 +673,51 @@ class MaterialController extends Controller
 
     private function notifyUsersAboutMaterial(Material $material, string $action = 'created')
     {
-        $material->load('course');
-        $course = $material->course;
+        $material->loadMissing('courses');
 
-        // Only notify users whose study year and major match the course
-        $query = User::where('role', 'user');
-        if ($course->year !== null && $course->year !== '') {
-            $query->where('study_year', $course->year);
-        } else {
-            // Course has no year set — skip notification to avoid spamming all users
-            return;
-        }
-        if ($course->major !== null && $course->major !== '') {
-            $query->where('major', $course->major);
-        } else {
-            // Course has no major set — skip notification to avoid spamming all users
-            return;
-        }
-        $users = $query->get();
+        foreach ($material->courses as $course) {
+            // Only notify users whose study year and major match the course
+            if (empty($course->combinations)) {
+                continue;
+            }
 
-        $title = $action === 'created' ? 'New Material Available' : 'Material Updated';
-        $message = $action === 'created'
-            ? "New material \"{$material->title}\" has been added to the course \"{$course->name}\"."
-            : "The material \"{$material->title}\" in course \"{$course->name}\" has been updated.";
+            $years   = collect($course->combinations)->pluck('year')->unique()->values()->all();
+            $hasStar = collect($course->combinations)
+                ->flatMap(fn($c) => $c['majors'] ?? [])->contains('*');
+            $majors  = collect($course->combinations)
+                ->flatMap(fn($c) => $c['majors'] ?? [])
+                ->filter(fn($m) => $m !== '*')
+                ->unique()->values()->all();
 
-        foreach ($users as $user) {
-            Notification::create([
-                'user_id' => $user->id,
-                'type' => 'session',
-                'title' => $title,
-                'message' => $message,
-                'data' => [
-                    'material_id' => $material->id,
-                    'material_title' => $material->title,
-                    'course_id' => $material->course_id,
-                    'course_name' => $course->name,
-                ],
-                'read' => false,
-            ]);
+            $userQuery = User::where('role', 'user');
+            if (!empty($years)) {
+                $userQuery->whereIn('study_year', $years);
+            }
+            if (!$hasStar && !empty($majors)) {
+                $userQuery->whereIn('major', $majors);
+            }
+            $users = $userQuery->get();
+
+            $title = $action === 'created' ? 'New Material Available' : 'Material Updated';
+            $message = $action === 'created'
+                ? "New material \"{$material->title}\" has been added to the course \"{$course->name}\"."
+                : "The material \"{$material->title}\" in course \"{$course->name}\" has been updated.";
+
+            foreach ($users as $user) {
+                Notification::create([
+                    'user_id' => $user->id,
+                    'type' => 'session',
+                    'title' => $title,
+                    'message' => $message,
+                    'data' => [
+                        'material_id' => $material->id,
+                        'material_title' => $material->title,
+                        'course_id' => $course->id,
+                        'course_name' => $course->name,
+                    ],
+                    'read' => false,
+                ]);
+            }
         }
     }
 

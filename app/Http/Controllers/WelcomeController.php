@@ -32,9 +32,13 @@ class WelcomeController extends Controller
     public function academique(): Response
     {
         $yearOrder = ['Sup', 'Spé', '1e', '2e', '3e'];
-        $existingYears = Course::distinct()->pluck('year')->filter()->flip();
+        $allCombinations = Course::pluck('combinations')->flatten(1);
+        $existingYears = $allCombinations->pluck('year')->unique()->flip();
         $years = collect($yearOrder)->filter(fn($y) => $existingYears->has($y))->values();
-        $majors = Course::distinct()->orderBy('major')->pluck('major')->filter()->values();
+        $majors = $allCombinations
+            ->flatMap(fn($c) => $c['majors'] ?? [])
+            ->filter(fn($m) => $m !== '*')
+            ->unique()->sort()->values();
 
         return Inertia::render('Welcome', [
             'page'   => 'academique',

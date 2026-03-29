@@ -6,7 +6,7 @@ const defaultContentBoxes = [
         id: 1,
         title: "Welcome to ESIB SOCIAL",
         description:
-            "Your comprehensive learning platform for social sciences. Access courses, sessions, and materials organized by subject.",
+            "Your comprehensive learning platform for engineering majors. Access courses, sessions, and materials organized by subject.",
         icon: "fas fa-graduation-cap",
     },
     {
@@ -31,6 +31,12 @@ export default function HomePage({ homepageSlides = [] }) {
     const carouselLength = carouselItems.length;
 
     const [carouselIndex, setCarouselIndex] = useState(0);
+    const [landscapeSlides, setLandscapeSlides] = useState({});
+
+    const handleImageLoad = (e, id) => {
+        const { naturalWidth, naturalHeight } = e.target;
+        setLandscapeSlides(prev => ({ ...prev, [id]: naturalWidth > naturalHeight }));
+    };
 
     // Keep index in bounds when switching between slides/content or when slides change
     useEffect(() => {
@@ -281,7 +287,7 @@ export default function HomePage({ homepageSlides = [] }) {
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.6, delay: 0.4 }}
                     >
-                        Your comprehensive learning platform for social sciences
+                        Your comprehensive learning platform for engineering majors
                     </motion.p>
 
                     {/* CTA Buttons */}
@@ -324,7 +330,7 @@ export default function HomePage({ homepageSlides = [] }) {
                                     hasSlides ? (
                                         <div
                                             key={item.id != null ? `slide-${item.id}` : `slide-${index}`}
-                                            className="flex-shrink-0 rounded-xl overflow-hidden shadow-lg relative bg-gray-900 flex items-center justify-center"
+                                            className="flex-shrink-0 rounded-xl overflow-hidden shadow-lg relative flex items-center justify-center"
                                             style={{
                                                 width: `${100 / carouselLength}%`,
                                                 minHeight: "300px",
@@ -336,10 +342,11 @@ export default function HomePage({ homepageSlides = [] }) {
                                                 alt={item.title || "Slide"}
                                                 className="w-full h-full object-contain"
                                                 style={{ maxHeight: "600px" }}
+                                                onLoad={(e) => handleImageLoad(e, item.id ?? index)}
                                             />
                                             {(item.title || item.description) && (
                                                 <div
-                                                    className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 sm:p-8 md:p-12 bg-gradient-to-t from-black/70 via-black/30 to-transparent"
+                                                    className={`absolute inset-0 flex flex-col items-center justify-center text-center p-6 sm:p-8 md:p-12 ${landscapeSlides[item.id ?? index] ? "bg-gradient-to-t from-black/70 via-black/30 to-transparent" : ""}`}
                                                     style={{ color: "#fff" }}
                                                 >
                                                     {item.title && (
@@ -519,7 +526,7 @@ export default function HomePage({ homepageSlides = [] }) {
             >
                 <div className="container mx-auto max-w-6xl">
                     <motion.div
-                        className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 text-center text-white"
+                        className="grid grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 text-center text-white"
                         variants={containerVariants}
                         initial="hidden"
                         whileInView="visible"
@@ -527,8 +534,7 @@ export default function HomePage({ homepageSlides = [] }) {
                     >
                         {[
                             { number: "1000+", label: "Active Students" },
-                            { number: "50+", label: "Courses Available" },
-                            { number: "500+", label: "Video Sessions" },
+                            { number: "200+", label: "Courses Available" },
                             { number: "24/7", label: "Access Anytime" },
                         ].map((stat, index) => (
                             <motion.div key={index} variants={itemVariants}>

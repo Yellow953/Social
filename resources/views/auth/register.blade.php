@@ -70,87 +70,72 @@
                                 @enderror
                             </div>
 
-                            <!-- Phone -->
-                            <div class="mb-3">
-                                <input type="tel"
-                                       class="form-control form-control-lg @error('phone') is-invalid @enderror"
-                                       id="phone"
-                                       name="phone"
-                                       value="{{ old('phone') }}"
-                                       placeholder="Phone Number"
-                                       required
-                                       autocomplete="tel">
-                                @error('phone')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <!-- Study Year -->
-                            <div class="mb-3">
-                                <select class="form-control form-control-lg @error('study_year') is-invalid @enderror"
-                                        id="study_year"
-                                        name="study_year"
-                                        required>
-                                    <option value="">Select Study Year</option>
-                                    <option value="Sup" {{ old('study_year') == 'Sup' ? 'selected' : '' }}>Sup</option>
-                                    <option value="Spé" {{ old('study_year') == 'Spé' ? 'selected' : '' }}>Spé</option>
-                                    <option value="1e" {{ old('study_year') == '1e' ? 'selected' : '' }}>1e</option>
-                                    <option value="2e" {{ old('study_year') == '2e' ? 'selected' : '' }}>2e</option>
-                                    <option value="3e" {{ old('study_year') == '3e' ? 'selected' : '' }}>3e</option>
-                                </select>
-                                @error('study_year')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <!-- Major -->
-                            <div class="mb-3">
-                                <select class="form-control form-control-lg @error('major') is-invalid @enderror"
-                                        id="major"
-                                        name="major"
-                                        required>
-                                    <option value="">Select your major</option>
-                                    @foreach(config('majors') as $major)
-                                        <option value="{{ $major }}" {{ old('major') == $major ? 'selected' : '' }}>{{ $major }}</option>
-                                    @endforeach
-                                </select>
-                                @error('major')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <!-- Password -->
-                            <div class="mb-3">
-                                <div class="input-group">
-                                    <input type="password"
-                                           class="form-control form-control-lg @error('password') is-invalid @enderror"
-                                           id="password"
-                                           name="password"
-                                           placeholder="Password"
-                                           required
-                                           autocomplete="new-password">
-                                    <button class="btn btn-outline-secondary" type="button" id="togglePassword">
-                                        <i class="bi bi-eye" id="togglePasswordIcon"></i>
-                                    </button>
-                                    @error('password')
+                            <!-- Major & Study Year -->
+                            <div class="row mb-3 g-2">
+                                <div class="col-6">
+                                    <select class="form-control form-control-lg @error('major') is-invalid @enderror"
+                                            id="major"
+                                            name="major"
+                                            required>
+                                        <option value="">Select your major</option>
+                                        @foreach(config('majors') as $major)
+                                            <option value="{{ $major }}" {{ old('major') == $major ? 'selected' : '' }}>{{ $major }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('major')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-6">
+                                    <select class="form-control form-control-lg @error('study_year') is-invalid @enderror"
+                                            id="study_year"
+                                            name="study_year"
+                                            required>
+                                        <option value="">Year</option>
+                                        <option value="Sup" {{ old('study_year') == 'Sup' ? 'selected' : '' }}>Sup</option>
+                                        <option value="Spé" {{ old('study_year') == 'Spé' ? 'selected' : '' }}>Spé</option>
+                                        <option value="1e" {{ old('study_year') == '1e' ? 'selected' : '' }}>1e</option>
+                                        <option value="2e" {{ old('study_year') == '2e' ? 'selected' : '' }}>2e</option>
+                                        <option value="3e" {{ old('study_year') == '3e' ? 'selected' : '' }}>3e</option>
+                                    </select>
+                                    @error('study_year')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
 
-                            <!-- Confirm Password -->
-                            <div class="mb-4">
-                                <div class="input-group">
-                                    <input type="password"
-                                           class="form-control form-control-lg"
-                                           id="password_confirmation"
-                                           name="password_confirmation"
-                                           placeholder="Confirm Password"
-                                           required
-                                           autocomplete="new-password">
-                                    <button class="btn btn-outline-secondary" type="button" id="togglePasswordConfirmation">
-                                        <i class="bi bi-eye" id="togglePasswordConfirmationIcon"></i>
-                                    </button>
+                            <!-- Password & Confirm Password -->
+                            <div class="row mb-4 g-2">
+                                <div class="col-6">
+                                    <div class="input-group">
+                                        <input type="password"
+                                               class="form-control form-control-lg @error('password') is-invalid @enderror"
+                                               id="password"
+                                               name="password"
+                                               placeholder="Password"
+                                               required
+                                               autocomplete="new-password">
+                                        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                            <i class="bi bi-eye" id="togglePasswordIcon"></i>
+                                        </button>
+                                        @error('password')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="input-group">
+                                        <input type="password"
+                                               class="form-control form-control-lg"
+                                               id="password_confirmation"
+                                               name="password_confirmation"
+                                               placeholder="Confirm Password"
+                                               required
+                                               autocomplete="new-password">
+                                        <button class="btn btn-outline-secondary" type="button" id="togglePasswordConfirmation">
+                                            <i class="bi bi-eye" id="togglePasswordConfirmationIcon"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
 
