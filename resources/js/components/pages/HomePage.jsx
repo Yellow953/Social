@@ -736,28 +736,10 @@ export default function HomePage({ homepageSlides = [] }) {
                     >
                         {[
                             {
-                                href: "https://instagram.com",
+                                href: "https://instagram.com/esibsocialclub/",
                                 icon: "fab fa-instagram",
                                 label: "Instagram",
                                 color: "from-[#ec682a] to-[#d45a20]",
-                            },
-                            {
-                                href: "https://facebook.com",
-                                icon: "fab fa-facebook",
-                                label: "Facebook",
-                                color: "bg-[#1a2744]",
-                            },
-                            {
-                                href: "https://twitter.com",
-                                icon: "fab fa-twitter",
-                                label: "Twitter",
-                                color: "bg-sky-500",
-                            },
-                            {
-                                href: "https://linkedin.com",
-                                icon: "fab fa-linkedin",
-                                label: "LinkedIn",
-                                color: "bg-[#243b55]",
                             },
                         ].map((social, index) => (
                             <motion.a

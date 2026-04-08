@@ -130,7 +130,7 @@
                                 <select class="form-control @error('watermark_type') is-invalid @enderror"
                                         id="watermark_type"
                                         name="watermark_type">
-                                    <option value="full" {{ old('watermark_type', $material->watermark_type ?? 'full') == 'full' ? 'selected' : '' }}>Full (logo + username)</option>
+                                    <option value="full" {{ old('watermark_type', $material->watermark_type ?? 'none') == 'full' ? 'selected' : '' }}>Full (logo + username)</option>
                                     <option value="logo_only" {{ old('watermark_type', $material->watermark_type) == 'logo_only' ? 'selected' : '' }}>Only logo</option>
                                     <option value="username_only" {{ old('watermark_type', $material->watermark_type) == 'username_only' ? 'selected' : '' }}>Only username</option>
                                     <option value="none" {{ old('watermark_type', $material->watermark_type) == 'none' ? 'selected' : '' }}>No watermark</option>

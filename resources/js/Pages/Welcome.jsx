@@ -8,8 +8,8 @@ import CalculatricePage from '../components/pages/CalculatricePage';
 
 const PAGE_SEO = {
     home: {
-        title: 'ESIB SOCIAL',
-        description: 'Your comprehensive learning platform for engineering majors. Access courses, sessions, and materials organized by subject.',
+        title: 'ESIB SOCIAL | Official Website',
+        description: 'ESIB Social official website. Access previouses, materials, and student resources in one place.',
     },
     about: {
         title: 'About',

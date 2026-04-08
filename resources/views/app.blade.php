@@ -11,7 +11,7 @@
         <link rel="icon" type="image/png" href="{{ asset('assets/images/logo.png') }}" sizes="32x32">
         <link rel="icon" type="image/png" href="{{ asset('assets/images/logo.png') }}" sizes="16x16">
         <link rel="apple-touch-icon" href="{{ asset('assets/images/logo.png') }}">
-        <meta name="description" content="ESIB SOCIAL - Your comprehensive learning platform for engineering majors. Access courses, sessions, and materials organized by subject.">
+        <meta name="description" content="ESIB Social official website. Access previouses, materials, and student resources in one place.">
         <meta property="og:type" content="website">
         <meta property="og:site_name" content="ESIB SOCIAL">
         <meta property="og:image" content="{{ asset('assets/images/logo.png') }}">

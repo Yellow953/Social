@@ -100,7 +100,7 @@
                                            id="is_locked"
                                            name="is_locked"
                                            value="1"
-                                           {{ old('is_locked', true) ? 'checked' : '' }}>
+                                           {{ old('is_locked', false) ? 'checked' : '' }}>
                                     <label class="form-check-label" for="is_locked">
                                         <strong>Locked Material</strong> (Requires subscription to access)
                                     </label>
@@ -116,10 +116,10 @@
                                 <select class="form-control @error('watermark_type') is-invalid @enderror"
                                         id="watermark_type"
                                         name="watermark_type">
-                                    <option value="full" {{ old('watermark_type', 'full') == 'full' ? 'selected' : '' }}>Full (logo + username)</option>
+                                    <option value="full" {{ old('watermark_type') == 'full' ? 'selected' : '' }}>Full (logo + username)</option>
                                     <option value="logo_only" {{ old('watermark_type') == 'logo_only' ? 'selected' : '' }}>Only logo</option>
                                     <option value="username_only" {{ old('watermark_type') == 'username_only' ? 'selected' : '' }}>Only username</option>
-                                    <option value="none" {{ old('watermark_type') == 'none' ? 'selected' : '' }}>No watermark</option>
+                                    <option value="none" {{ old('watermark_type', 'none') == 'none' ? 'selected' : '' }}>No watermark</option>
                                 </select>
                                 <small class="text-muted">Applied when users view PDF, images, or video.</small>
                                 @error('watermark_type')

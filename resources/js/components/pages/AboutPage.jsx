@@ -92,7 +92,7 @@ export default function AboutPage() {
 
                 {/* Stats Section */}
                 <motion.div
-                    className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mb-12 sm:mb-16"
+                    className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mb-12 sm:mb-16"
                     variants={containerVariants}
                     initial="hidden"
                     animate="visible"

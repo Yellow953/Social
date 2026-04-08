@@ -644,6 +644,19 @@
         updateSemesterTotalCredits();
     });
 
+    function getUsjGrade(avg) {
+        if (avg >= 18) return { letter: 'A+', gpa: 4.3, definition: 'Excellent' };
+        if (avg >= 16) return { letter: 'A',  gpa: 4.0, definition: 'Excellent' };
+        if (avg >= 15) return { letter: 'A-', gpa: 3.7, definition: 'Very Good' };
+        if (avg >= 14) return { letter: 'B+', gpa: 3.3, definition: 'Good' };
+        if (avg >= 13) return { letter: 'B',  gpa: 3.0, definition: 'Good' };
+        if (avg >= 12) return { letter: 'B-', gpa: 2.7, definition: 'Good' };
+        if (avg >= 11) return { letter: 'C+', gpa: 2.3, definition: 'Average' };
+        if (avg >= 10) return { letter: 'C',  gpa: 2.0, definition: 'Average' };
+        if (avg >= 8)  return { letter: 'D',  gpa: 1.0, definition: 'Jury Range' };
+        return { letter: 'F', gpa: 0.0, definition: 'Fail' };
+    }
+
     function calculateSemesterGpa() {
         var rows = document.querySelectorAll('.semester-course-row');
         if (rows.length === 0) {

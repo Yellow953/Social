@@ -69,6 +69,7 @@ class MaterialController extends Controller
                 'id' => $m->id,
                 'original_filename' => $m->original_filename,
                 'type' => $m->type,
+                'file_size' => (int) $m->file_size,
                 'formatted_file_size' => $m->formatted_file_size,
                 'detail_url' => route('media.detail', $m),
                 'is_locked' => (bool) $m->is_locked,

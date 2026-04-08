@@ -33,8 +33,17 @@
 
             <!-- Media Files (loaded dynamically) -->
             <div class="card border-0 shadow-lg overflow-hidden mb-4" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
-                <div class="card-header bg-white border-bottom">
+                <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between flex-wrap gap-2">
                     <h5 class="mb-0 fw-bold"><i class="fas fa-file me-2 text-primary"></i>Material Media</h5>
+                    <div id="sort-controls" class="d-none d-flex align-items-center gap-2">
+                        <span class="text-muted small">Sort by:</span>
+                        <div class="btn-group btn-group-sm" role="group">
+                            <button type="button" class="btn btn-outline-secondary sort-btn active" data-sort="order" data-dir="asc">Default</button>
+                            <button type="button" class="btn btn-outline-secondary sort-btn" data-sort="name" data-dir="asc">Name <i class="fas fa-sort-alpha-down ms-1"></i></button>
+                            <button type="button" class="btn btn-outline-secondary sort-btn" data-sort="type" data-dir="asc">Type</button>
+                            <button type="button" class="btn btn-outline-secondary sort-btn" data-sort="size" data-dir="desc">Size <i class="fas fa-sort-amount-down ms-1"></i></button>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body p-4">
                     <div id="media-loading" class="text-center py-5 text-muted">
@@ -73,6 +82,14 @@
     const loadingEl = document.getElementById('media-loading');
     const listWrap = document.getElementById('media-list-wrap');
     const emptyEl = document.getElementById('media-empty');
+    const sortControls = document.getElementById('sort-controls');
+    const subscriptionUrl = @json(route('subscriptions.index'));
+
+    let allMedia = [];
+    let currentSort = 'order';
+    let currentDir = { order: 'asc', name: 'asc', type: 'asc', size: 'desc' };
+
+    const typeOrder = { pdf: 0, video: 1, image: 2 };
 
     function escapeHtml(s) {
         const div = document.createElement('div');
@@ -92,6 +109,65 @@
         return 'success';
     }
 
+    function renderCard(m) {
+        var col = document.createElement('div');
+        col.className = 'col-md-4 col-sm-6';
+        var href = m.can_access ? m.detail_url : subscriptionUrl;
+        var lockBadge = !m.can_access
+            ? '<span class="badge bg-warning text-dark mt-2 mx-1"><i class="fas fa-lock me-1"></i>Subscription required</span>'
+            : (m.is_locked ? '<span class="badge bg-secondary mt-2"><i class="fas fa-lock me-1"></i>Protected</span>' : '');
+        col.innerHTML = '<a href="' + escapeHtml(href) + '" class="text-decoration-none">' +
+            '<div class="card border shadow-sm h-100 media-card" style="transition: all 0.3s ease; cursor: pointer;">' +
+            '<div class="card-body text-center p-4">' +
+            '<div class="mb-3">' + typeIcon(m.type) + '</div>' +
+            '<h6 class="mb-2 text-dark text-truncate" style="max-width: 100%;" title="' + escapeHtml(m.original_filename) + '">' + escapeHtml(m.original_filename) + '</h6>' +
+            '<small class="text-muted">' + escapeHtml(m.formatted_file_size || '') + '</small>' +
+            '<div class="mt-3"><span class="badge bg-' + typeBadgeClass(m.type) + ' mx-1">' + escapeHtml((m.type || '').charAt(0).toUpperCase() + (m.type || '').slice(1)) + '</span>' + lockBadge + '</div>' +
+            '</div></div></a>';
+        return col;
+    }
+
+    function sortedMedia() {
+        const key = currentSort;
+        const dir = currentDir[key] === 'asc' ? 1 : -1;
+        return [...allMedia].sort(function(a, b) {
+            if (key === 'name') return dir * a.original_filename.localeCompare(b.original_filename);
+            if (key === 'type') return dir * ((typeOrder[a.type] ?? 9) - (typeOrder[b.type] ?? 9));
+            if (key === 'size') return dir * ((a.file_size || 0) - (b.file_size || 0));
+            return dir * (a._index - b._index); // 'order' = original server order
+        });
+    }
+
+    function renderAll() {
+        listWrap.innerHTML = '';
+        sortedMedia().forEach(function(m) {
+            listWrap.appendChild(renderCard(m));
+        });
+    }
+
+    // Sort button click handler
+    document.querySelectorAll('.sort-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const sort = this.dataset.sort;
+            if (currentSort === sort) {
+                // Toggle direction
+                currentDir[sort] = currentDir[sort] === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSort = sort;
+            }
+            // Update button states and icons
+            document.querySelectorAll('.sort-btn').forEach(function(b) {
+                b.classList.remove('active');
+                // Reset direction icons
+                const s = b.dataset.sort;
+                if (s === 'name') b.innerHTML = 'Name <i class="fas fa-sort-alpha-' + (currentSort === 'name' && currentDir.name === 'desc' ? 'up' : 'down') + ' ms-1"></i>';
+                if (s === 'size') b.innerHTML = 'Size <i class="fas fa-sort-amount-' + (currentSort === 'size' && currentDir.size === 'asc' ? 'up' : 'down') + ' ms-1"></i>';
+            });
+            this.classList.add('active');
+            renderAll();
+        });
+    });
+
     fetch(mediaApiUrl, {
         headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
         credentials: 'same-origin'
@@ -104,23 +180,11 @@
                 emptyEl.classList.remove('d-none');
                 return;
             }
+            // Tag each item with its original index for "Default" sort
+            allMedia = media.map(function(m, i) { return Object.assign({ _index: i }, m); });
             listWrap.classList.remove('d-none');
-            var subscriptionUrl = @json(route('subscriptions.index'));
-            media.forEach(function(m) {
-                var col = document.createElement('div');
-                col.className = 'col-md-4 col-sm-6';
-                var href = m.can_access ? m.detail_url : subscriptionUrl;
-                var lockBadge = !m.can_access ? '<span class="badge bg-warning text-dark mt-2 mx-1"><i class="fas fa-lock me-1"></i>Subscription required</span>' : (m.is_locked ? '<span class="badge bg-secondary mt-2"><i class="fas fa-lock me-1"></i>Protected</span>' : '');
-                col.innerHTML = '<a href="' + escapeHtml(href) + '" class="text-decoration-none">' +
-                    '<div class="card border shadow-sm h-100 media-card" style="transition: all 0.3s ease; cursor: pointer;">' +
-                    '<div class="card-body text-center p-4">' +
-                    '<div class="mb-3">' + typeIcon(m.type) + '</div>' +
-                    '<h6 class="mb-2 text-dark text-truncate" style="max-width: 100%;" title="' + escapeHtml(m.original_filename) + '">' + escapeHtml(m.original_filename) + '</h6>' +
-                    '<small class="text-muted">' + escapeHtml(m.formatted_file_size || '') + '</small>' +
-                    '<div class="mt-3"><span class="badge bg-' + typeBadgeClass(m.type) + ' mx-1">' + escapeHtml((m.type || '').charAt(0).toUpperCase() + (m.type || '').slice(1)) + '</span>' + lockBadge + '</div>' +
-                    '</div></div></a>';
-                listWrap.appendChild(col);
-            });
+            if (media.length > 1) sortControls.classList.remove('d-none');
+            renderAll();
         })
         .catch(function() {
             loadingEl.classList.add('d-none');
