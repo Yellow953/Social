@@ -36,11 +36,12 @@
         <div class="card border-0 shadow-sm mb-4">
             <div class="card-body py-3">
                 <form method="GET" action="{{ route('admin.materials.index') }}" class="row g-2 align-items-end">
+                    {{-- Row 1 --}}
                     <div class="col-md-4">
                         <input type="text" name="search" class="form-control" placeholder="Search by title…"
                             value="{{ $filters['search'] ?? '' }}">
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <select name="course_id" class="form-select">
                             <option value="">All Courses</option>
                             @foreach ($courses as $course)
@@ -52,6 +53,27 @@
                         </select>
                     </div>
                     <div class="col-md-2">
+                        <select name="year" class="form-select">
+                            <option value="">All Years</option>
+                            @foreach ($allYears as $year)
+                                <option value="{{ $year }}" {{ ($filters['year'] ?? '') == $year ? 'selected' : '' }}>
+                                    Year {{ $year }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <select name="major" class="form-select">
+                            <option value="">All Majors</option>
+                            @foreach ($allMajors as $major)
+                                <option value="{{ $major }}" {{ ($filters['major'] ?? '') == $major ? 'selected' : '' }}>
+                                    {{ $major }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    {{-- Row 2 --}}
+                    <div class="col-md-3">
                         <select name="type" class="form-select">
                             <option value="">All Types</option>
                             <option value="cours" {{ ($filters['type'] ?? '') == 'cours' ? 'selected' : '' }}>Cours</option>
@@ -61,17 +83,14 @@
                             <option value="resume" {{ ($filters['type'] ?? '') == 'resume' ? 'selected' : '' }}>Resume</option>
                             <option value="partiel" {{ ($filters['type'] ?? '') == 'partiel' ? 'selected' : '' }}>Partiel</option>
                             <option value="final" {{ ($filters['type'] ?? '') == 'final' ? 'selected' : '' }}>Final</option>
-                            <option value="video_recording" {{ ($filters['type'] ?? '') == 'video_recording' ? 'selected' : '' }}>Video
-                                recording</option>
+                            <option value="video_recording" {{ ($filters['type'] ?? '') == 'video_recording' ? 'selected' : '' }}>Video recording</option>
                         </select>
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-2">
                         <select name="locked" class="form-select">
-                            <option value="">Any</option>
-                            <option value="1" {{ ($filters['locked'] ?? '') === '1' ? 'selected' : '' }}>Locked
-                            </option>
-                            <option value="0" {{ ($filters['locked'] ?? '') === '0' ? 'selected' : '' }}>Available
-                            </option>
+                            <option value="">Any Status</option>
+                            <option value="1" {{ ($filters['locked'] ?? '') === '1' ? 'selected' : '' }}>Locked</option>
+                            <option value="0" {{ ($filters['locked'] ?? '') === '0' ? 'selected' : '' }}>Available</option>
                         </select>
                     </div>
                     <div class="col-md-2 d-flex gap-2">

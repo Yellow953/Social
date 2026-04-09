@@ -34,13 +34,33 @@ class MaterialController extends Controller
             $query->where('is_locked', $request->locked === '1');
         }
 
+        if ($request->filled('year') || $request->filled('major')) {
+            $filterYear  = $request->year;
+            $filterMajor = $request->major;
+            $matchingCourseIds = Course::all()->filter(function ($course) use ($filterYear, $filterMajor) {
+                foreach ($course->combinations ?? [] as $combo) {
+                    $yearOk  = !$filterYear  || ($combo['year'] ?? '') === $filterYear;
+                    $majorOk = !$filterMajor || in_array('*', $combo['majors'] ?? []) || in_array($filterMajor, $combo['majors'] ?? []);
+                    if ($yearOk && $majorOk) return true;
+                }
+                return false;
+            })->pluck('id');
+            $query->whereHas('courses', fn ($q) => $q->whereIn('courses.id', $matchingCourseIds));
+        }
+
         $materials = $query->orderBy('created_at')->paginate(20)->withQueryString();
         $courses   = Course::select('id', 'name', 'code')->orderBy('name')->get();
+
+        $allCombinations = Course::pluck('combinations');
+        $allYears  = $allCombinations->flatMap(fn ($c) => collect($c ?? [])->pluck('year'))->unique()->sort()->values();
+        $allMajors = $allCombinations->flatMap(fn ($c) => collect($c ?? [])->flatMap(fn ($combo) => $combo['majors'] ?? []))->filter(fn ($m) => $m !== '*')->unique()->sort()->values();
 
         return view('admin.materials.index', [
             'materials' => $materials,
             'courses'   => $courses,
-            'filters'   => $request->only(['search', 'course_id', 'type', 'locked']),
+            'allYears'  => $allYears,
+            'allMajors' => $allMajors,
+            'filters'   => $request->only(['search', 'course_id', 'type', 'locked', 'year', 'major']),
         ]);
     }
 
