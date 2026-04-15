@@ -72,7 +72,7 @@
 
                             <!-- Major & Study Year -->
                             <div class="row mb-3 g-2">
-                                <div class="col-6">
+                                <div class="col-md-6">
                                     <select class="form-control form-control-lg @error('major') is-invalid @enderror"
                                             id="major"
                                             name="major"
@@ -86,7 +86,7 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="col-6">
+                                <div class="col-md-6">
                                     <select class="form-control form-control-lg @error('study_year') is-invalid @enderror"
                                             id="study_year"
                                             name="study_year"
@@ -106,7 +106,7 @@
 
                             <!-- Password & Confirm Password -->
                             <div class="row mb-4 g-2">
-                                <div class="col-6">
+                                <div class="col-md-6">
                                     <div class="input-group">
                                         <input type="password"
                                                class="form-control form-control-lg @error('password') is-invalid @enderror"
@@ -123,7 +123,7 @@
                                         @enderror
                                     </div>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-md-6">
                                     <div class="input-group">
                                         <input type="password"
                                                class="form-control form-control-lg"

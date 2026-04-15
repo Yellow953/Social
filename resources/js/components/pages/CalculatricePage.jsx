@@ -104,12 +104,12 @@ export default function CalculatricePage() {
                     <div className="text-center">
                         <motion.a
                             href="/calculator"
-                            className="inline-flex items-center space-x-2 px-8 py-4 bg-gradient-to-r from-[#1a2744] to-[#243b55] text-white font-bold rounded-xl hover:shadow-xl transition-all no-underline"
+                            className="inline-flex items-center space-x-2 px-8 py-4 bg-gradient-to-r from-[#1a2744] to-[#243b55] text-[#ffffff] font-bold rounded-xl hover:shadow-xl transition-all no-underline"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                         >
-                            <i className="fas fa-calculator"></i>
-                            <span>Launch Calculator</span>
+                            <i className="fas fa-calculator text-[#ffffff]"></i>
+                            <span class="text-white">Launch Calculator</span>
                         </motion.a>
                     </div>
                 </motion.div>

@@ -28,7 +28,7 @@
     </div>
 
     <!-- Stats Cards -->
-    <div class="row g-3 g-md-4">
+    {{-- <div class="row g-3 g-md-4">
         <div class="col-6 col-md-6 col-lg-3">
             <div class="card border-0 shadow-lg h-100 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                 <div class="card-body p-3 p-md-4">
@@ -89,7 +89,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <!-- Slideshow + Quick Actions -->
     <div class="row g-3 g-md-4">
