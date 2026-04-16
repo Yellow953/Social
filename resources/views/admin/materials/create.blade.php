@@ -51,6 +51,7 @@
                             <!-- Course -->
                             <div class="col-md-12 mb-3">
                                 <label class="form-label fw-bold">Course(s) <span class="text-danger">*</span></label>
+                                <input type="text" id="course-search" class="form-control form-control-sm mb-2" placeholder="Search courses...">
                                 <div class="border rounded p-3 @error('course_ids') border-danger @enderror" style="max-height: 220px; overflow-y: auto;">
                                     @foreach($courses as $course)
                                         <div class="form-check">
@@ -275,6 +276,14 @@
 <script src="https://cdn.jsdelivr.net/npm/dropzone@6.0.0-beta.2/dist/dropzone-min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Course live search
+    document.getElementById('course-search').addEventListener('input', function() {
+        var q = this.value.toLowerCase();
+        document.querySelectorAll('#course-search ~ div .form-check').forEach(function(item) {
+            item.style.display = item.querySelector('label').textContent.toLowerCase().includes(q) ? '' : 'none';
+        });
+    });
+
     Dropzone.autoDiscover = false;
     const uploadTempUrl = @json(route('admin.materials.upload-temp'));
     const tempIds = [];

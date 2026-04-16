@@ -157,6 +157,29 @@
                             </div>
                         </div>
 
+                        <!-- Extra Courses -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold d-block">Extra Courses <small class="text-muted fw-normal">(assigned on top of year/major courses)</small></label>
+                            <input type="text" id="extra-course-search" class="form-control form-control-sm mb-2" placeholder="Search courses...">
+                            @php $selectedExtraCourseIds = old('extra_course_ids', $user->extraCourses->pluck('id')->toArray()); @endphp
+                            <div class="border rounded p-3" style="max-height: 220px; overflow-y: auto;" id="extra-courses-list">
+                                @forelse($courses as $course)
+                                    <div class="form-check extra-course-item">
+                                        <input class="form-check-input" type="checkbox"
+                                               name="extra_course_ids[]"
+                                               id="extra_course_{{ $course->id }}"
+                                               value="{{ $course->id }}"
+                                               {{ in_array($course->id, $selectedExtraCourseIds) ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="extra_course_{{ $course->id }}">
+                                            {{ $course->name }} | {{ $course->code }} | {{ implode('/', $course->majors ?? []) }} | {{ implode('/', $course->years ?? []) }} | S{{ implode('/', $course->semesters ?? []) }}
+                                        </label>
+                                    </div>
+                                @empty
+                                    <p class="text-muted small mb-0">No courses available.</p>
+                                @endforelse
+                            </div>
+                        </div>
+
                         <!-- Actions -->
                         <div class="d-flex gap-2">
                             <button type="submit" class="btn btn-primary">
@@ -175,6 +198,13 @@
 
 @push('scripts')
 <script>
+    document.getElementById('extra-course-search').addEventListener('input', function() {
+        var q = this.value.toLowerCase();
+        document.querySelectorAll('.extra-course-item').forEach(function(item) {
+            item.style.display = item.querySelector('label').textContent.toLowerCase().includes(q) ? '' : 'none';
+        });
+    });
+
     document.getElementById('is_active').addEventListener('change', function() {
         var label = document.getElementById('is_active_label');
         if (this.checked) {

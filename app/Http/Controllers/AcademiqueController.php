@@ -47,13 +47,23 @@ class AcademiqueController extends Controller
         $major    = $request->major;
         $semester = $request->semester;
 
+        $user = auth()->user();
+
         $courses = Course::orderBy('name')
             ->get(['id', 'name', 'code', 'combinations'])
             ->filter(fn($c) => $c->matchesFilter($year, $major, $semester))
-            ->values()
-            ->map(fn($c) => ['id' => $c->id, 'name' => $c->name, 'code' => $c->code]);
+            ->map(fn($c) => ['id' => $c->id, 'name' => $c->name, 'code' => $c->code, 'is_extra' => false]);
 
-        return response()->json(['courses' => $courses]);
+        $extraCourses = $user->extraCourses()
+            ->orderBy('name')
+            ->get(['courses.id', 'courses.name', 'courses.code'])
+            ->map(fn($c) => ['id' => $c->id, 'name' => $c->name, 'code' => $c->code, 'is_extra' => true]);
+
+        $merged = $courses->keyBy('id')
+            ->merge($extraCourses->keyBy('id'))
+            ->values();
+
+        return response()->json(['courses' => $merged]);
     }
 
     /**

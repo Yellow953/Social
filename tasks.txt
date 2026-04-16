@@ -1,7 +1,0 @@
-in create/edit materials pages -> courses section -> i want to add a search and a max height for the courses outer section
-in subscription page -> i want to add filters
-in the media view page http://localhost:8000/media/3 -> when there is a username watermark currently its 2 columns left and right, lets add a 3rd one in the middle. also on mobile the font is too big make it responsive please. also the fullscreen button is not working on mobile.
-in profile page -> the user needs to be able to change his name in case he made a mistake.
-we need to add a feature to manually assign extra courses to a user on top of his year's courses, in case he failed something last year and redoing it this year.
-
-on production -> in access logs page -> there is some old data of some deleted materials thats throwing an error. give me the tinker command to deleted access logs with no materials and make sure this wont happen again.

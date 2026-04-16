@@ -110,6 +110,7 @@ Route::middleware(['auth', 'two_factor', 'admin'])->prefix('admin')->name('admin
     Route::get('/subscriptions', [AdminSubscriptionController::class, 'index'])->name('subscriptions');
     Route::post('/subscriptions/{subscription}/approve', [AdminSubscriptionController::class, 'approve'])->name('subscriptions.approve');
     Route::post('/subscriptions/{subscription}/reject', [AdminSubscriptionController::class, 'reject'])->name('subscriptions.reject');
+    Route::post('/subscriptions/{subscription}/cancel', [AdminSubscriptionController::class, 'cancel'])->name('subscriptions.cancel');
 
     Route::post('courses/{course}/duplicate', [AdminCourseController::class, 'duplicate'])->name('courses.duplicate');
     Route::resource('courses', AdminCourseController::class);

@@ -210,6 +210,14 @@ class User extends Authenticatable // implements MustVerifyEmail
     }
 
     /**
+     * Get the extra courses manually assigned to this user by an admin.
+     */
+    public function extraCourses()
+    {
+        return $this->belongsToMany(Course::class, 'user_extra_courses');
+    }
+
+    /**
      * Get the user's notifications
      */
     public function notifications()

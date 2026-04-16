@@ -74,8 +74,22 @@
 
     <!-- Subscriptions Table -->
     <div class="card border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
-        <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-3">
-            <h5 class="mb-0 fw-bold" style="color: #c2410c;">All Subscriptions</h5>
+        <div class="card-header bg-white border-bottom py-3">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                <h5 class="mb-0 fw-bold" style="color: #c2410c;">All Subscriptions</h5>
+                <div class="btn-group btn-group-sm" role="group">
+                    <a href="{{ route('admin.subscriptions', array_filter(['search' => $search])) }}" class="btn {{ !$status ? 'btn-primary' : 'btn-outline-secondary' }}">All</a>
+                    <a href="{{ route('admin.subscriptions', array_filter(['status' => 'pending', 'search' => $search])) }}" class="btn {{ $status === 'pending' ? 'btn-warning text-dark' : 'btn-outline-secondary' }}">Pending <span class="badge bg-white text-dark ms-1">{{ $stats['pending'] }}</span></a>
+                    <a href="{{ route('admin.subscriptions', array_filter(['status' => 'approved', 'search' => $search])) }}" class="btn {{ $status === 'approved' ? 'btn-success' : 'btn-outline-secondary' }}">Approved <span class="badge bg-white text-dark ms-1">{{ $stats['approved'] }}</span></a>
+                    <a href="{{ route('admin.subscriptions', array_filter(['status' => 'rejected', 'search' => $search])) }}" class="btn {{ $status === 'rejected' ? 'btn-danger' : 'btn-outline-secondary' }}">Rejected <span class="badge bg-white text-dark ms-1">{{ $stats['rejected'] }}</span></a>
+                </div>
+            </div>
+            <form method="GET" action="{{ route('admin.subscriptions') }}" class="d-flex gap-2">
+                @if($status)<input type="hidden" name="status" value="{{ $status }}">@endif
+                <input type="text" name="search" value="{{ $search }}" placeholder="Search by name, email or phone..." class="form-control form-control-sm" style="max-width: 340px;">
+                <button type="submit" class="btn btn-sm btn-primary"><i class="fas fa-search me-1"></i>Search</button>
+                @if($search)<a href="{{ route('admin.subscriptions', array_filter(['status' => $status])) }}" class="btn btn-sm btn-outline-secondary"><i class="fas fa-times me-1"></i>Clear</a>@endif
+            </form>
         </div>
         <div class="card-body p-4">
             <div class="table-responsive">
@@ -136,7 +150,7 @@
                                     <div class="d-flex gap-2 justify-content-end">
                                         <form method="POST" action="{{ route('admin.subscriptions.approve', $subscription) }}" class="d-inline">
                                             @csrf
-                                            <button type="submit" class="btn btn-sm btn-success shadow-sm" onclick="return confirm('Approve this subscription?')" style="border-radius: 8px;">
+                                            <button type="submit" class="btn btn-sm btn-success shadow-sm" onclick="return confirm('Approve this subscription? It will be valid for 1 year.')" style="border-radius: 8px;">
                                                 <i class="fas fa-check me-1"></i>Approve
                                             </button>
                                         </form>
@@ -169,6 +183,13 @@
                                             </div>
                                         </div>
                                     </div>
+                                @elseif($subscription->status === 'approved' && (!$subscription->expires_at || $subscription->expires_at->isFuture()))
+                                    <form method="POST" action="{{ route('admin.subscriptions.cancel', $subscription) }}" class="d-inline">
+                                        @csrf
+                                        <button type="submit" class="btn btn-sm btn-warning text-dark shadow-sm" onclick="return confirm('Cancel this subscription? The user will lose access immediately.')" style="border-radius: 8px;">
+                                            <i class="fas fa-ban me-1"></i>Cancel
+                                        </button>
+                                    </form>
                                 @else
                                     <span class="text-muted">-</span>
                                 @endif

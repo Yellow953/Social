@@ -97,12 +97,12 @@
                             </td>
                             <td>
                                 <div>
-                                    <strong>{{ $log->material->title }}</strong>
+                                    <strong>{{ $log->material?->title ?? 'Deleted' }}</strong>
                                     <br>
-                                    <small class="text-muted">{{ $log->material->type }}</small>
+                                    <small class="text-muted">{{ $log->material?->type ?? '-' }}</small>
                                 </div>
                             </td>
-                            <td>{{ $log->material->course->name }}</td>
+                            <td>{{ $log->material?->course?->name ?? '-' }}</td>
                             <td>{{ $log->accessed_at->format('M d, Y H:i') }}</td>
                             <td>
                                 @if($log->duration_seconds > 0)

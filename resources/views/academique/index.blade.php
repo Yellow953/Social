@@ -324,7 +324,8 @@
                         sectionMaterials.classList.remove('d-none');
                         loadMaterials(course.id);
                     });
-                    card.innerHTML = '<div class="card-body text-center d-flex flex-column align-items-center justify-content-center py-5 px-3" style="min-height:200px;"><div class="academique-step-icon academique-course-icon mb-4"><i class="fas fa-book-open" style="color: #ec682a;"></i></div><h5 class="fw-bold mb-1 text-dark" title="' + escapeHtml(course.name) + '">' + escapeHtml(course.name) + '</h5>' + (course.code ? '<small class="text-muted fs-6">' + escapeHtml(course.code) + '</small>' : '') + '</div>';
+                    const extraBadge = course.is_extra ? '<span class="badge bg-warning text-dark mt-2" style="font-size:0.7rem;"><i class="fas fa-star me-1"></i>Extra</span>' : '';
+                    card.innerHTML = '<div class="card-body text-center d-flex flex-column align-items-center justify-content-center py-5 px-3" style="min-height:200px;"><div class="academique-step-icon academique-course-icon mb-4"><i class="fas fa-book-open" style="color: #ec682a;"></i></div><h5 class="fw-bold mb-1 text-dark" title="' + escapeHtml(course.name) + '">' + escapeHtml(course.name) + '</h5>' + (course.code ? '<small class="text-muted fs-6">' + escapeHtml(course.code) + '</small>' : '') + extraBadge + '</div>';
                     col.appendChild(card);
                     coursesCards.appendChild(col);
                 });

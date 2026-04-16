@@ -41,12 +41,15 @@
                 </div>
                 <div class="card-body p-0">
                     <div class="media-container" data-media-type="{{ $media->type }}" data-media-id="{{ $media->id }}">
+                        <button id="fake-fs-exit-btn" title="Exit fullscreen" style="display:none;" aria-label="Exit fullscreen">
+                            <i class="fas fa-compress"></i>
+                        </button>
                         @if($media->type === 'pdf')
                             <div id="pdf-viewer-container-{{ $media->id }}" class="pdf-viewer-container" data-pdf-logo-url="{{ asset('assets/images/logo-transparent.png') }}" data-watermark-type="{{ $watermarkType }}" style="position: relative; width: 100%; min-height: 80vh; border: 1px solid #ddd; background: #f5f5f5; overflow: auto;">
                                 @if($showUsername)
                                 <div id="pdf-watermark-{{ $media->id }}" class="pdf-watermark-overlay media-watermark-pdf-wrap">
                                     <div class="media-username-pattern media-username-pattern-pdf">
-                                        @for($i = 0; $i < 80; $i++)
+                                        @for($i = 0; $i < 120; $i++)
                                             <span class="media-username-pattern-item">{{ strtoupper(auth()->user()->name) }}</span>
                                         @endfor
                                     </div>
@@ -77,7 +80,7 @@
                                 @endif
                                 @if($showUsername)
                                 <div class="media-username-pattern media-username-pattern-image">
-                                    @for($i = 0; $i < 16; $i++)
+                                    @for($i = 0; $i < 24; $i++)
                                         <span class="media-username-pattern-item">{{ strtoupper(auth()->user()->name) }}</span>
                                     @endfor
                                 </div>
@@ -103,7 +106,7 @@
                                     @endif
                                     @if($showUsername)
                                     <div class="media-username-pattern media-username-pattern-video">
-                                        @for($i = 0; $i < 16; $i++)
+                                        @for($i = 0; $i < 24; $i++)
                                             <span class="media-username-pattern-item">{{ strtoupper(auth()->user()->name) }}</span>
                                         @endfor
                                     </div>
@@ -168,7 +171,7 @@
         pointer-events: none;
         z-index: 11;
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr;
         grid-template-rows: repeat(8, 1fr);
         gap: 0;
         align-items: center;
@@ -185,7 +188,7 @@
         z-index: 50;
     }
     .media-watermark-pdf-wrap .media-username-pattern-pdf {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr;
         grid-template-rows: repeat(40, 1fr);
         min-height: 100%;
     }
@@ -213,7 +216,7 @@
     .media-username-pattern-item {
         font-style: oblique;
         font-weight: bold;
-        font-size: 1.75rem;
+        font-size: clamp(0.6rem, 2.5vw, 1.75rem);
         white-space: nowrap;
         opacity: 0.18;
         transform: rotate(-28deg);
@@ -221,7 +224,7 @@
     }
     .media-username-pattern-pdf .media-username-pattern-item {
         opacity: 0.22;
-        font-size: 1.6rem;
+        font-size: clamp(0.55rem, 2.2vw, 1.6rem);
     }
     .media-username-pattern-image .media-username-pattern-item {
         color: #5c5c5c;
@@ -279,6 +282,60 @@
         position: absolute;
         inset: 0;
     }
+
+    /* ── Fake fullscreen exit button ─────────────────────────────────── */
+    #fake-fs-exit-btn {
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        z-index: 10000;
+        background: rgba(0, 0, 0, 0.65);
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        width: 48px;
+        height: 48px;
+        font-size: 1.2rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.5);
+        -webkit-tap-highlight-color: transparent;
+    }
+    #fake-fs-exit-btn:active {
+        background: rgba(0,0,0,0.85);
+    }
+
+    /* ── Fake fullscreen (mobile fallback) ───────────────────────────── */
+    .media-fake-fullscreen {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        z-index: 9999 !important;
+        overflow: auto !important;
+        background: #111 !important;
+        display: flex;
+        flex-direction: column;
+    }
+    .media-fake-fullscreen .pdf-viewer-container {
+        flex: 1;
+        min-height: 0;
+        overflow: auto;
+    }
+    .media-fake-fullscreen .image-viewer-container {
+        flex: 1;
+        min-height: 0;
+        background: #111;
+    }
+    .media-fake-fullscreen .image-viewer-container img { max-height: 100vh; }
+    .media-fake-fullscreen .video-viewer-container {
+        flex: 1;
+        height: 100vh;
+    }
+    .media-fake-fullscreen .media-video-player { max-height: 100vh; }
 
     /* ── Fullscreen ─────────────────────────────────────────────────── */
     .media-container:fullscreen,
@@ -449,36 +506,59 @@
 
     // ── Fullscreen ──────────────────────────────────────────────────
     (function () {
-        const btn       = document.getElementById('fullscreen-btn');
-        const icon      = document.getElementById('fullscreen-icon');
-        const label     = document.getElementById('fullscreen-label');
-        const target    = document.querySelector('.media-container');
+        const btn    = document.getElementById('fullscreen-btn');
+        const icon   = document.getElementById('fullscreen-icon');
+        const label  = document.getElementById('fullscreen-label');
+        const target = document.querySelector('.media-container');
 
         if (!btn || !target) return;
 
+        // Detect if native fullscreen is available (desktop browsers)
+        const nativeSupported = !!(document.fullscreenEnabled || document.webkitFullscreenEnabled);
+        let fakeFsActive = false;
+        const exitFloatBtn = document.getElementById('fake-fs-exit-btn');
+
         function enterFullscreen() {
-            if (target.requestFullscreen)       target.requestFullscreen();
-            else if (target.webkitRequestFullscreen) target.webkitRequestFullscreen();
+            if (nativeSupported && target.requestFullscreen) {
+                target.requestFullscreen();
+            } else if (nativeSupported && target.webkitRequestFullscreen) {
+                target.webkitRequestFullscreen();
+            } else {
+                // Mobile fallback: CSS-based fake fullscreen
+                target.classList.add('media-fake-fullscreen');
+                document.body.style.overflow = 'hidden';
+                fakeFsActive = true;
+                if (exitFloatBtn) exitFloatBtn.style.display = 'flex';
+                updateBtn();
+            }
         }
 
         function exitFullscreen() {
-            if (document.exitFullscreen)            document.exitFullscreen();
-            else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+            if (fakeFsActive) {
+                target.classList.remove('media-fake-fullscreen');
+                document.body.style.overflow = '';
+                fakeFsActive = false;
+                if (exitFloatBtn) exitFloatBtn.style.display = 'none';
+                updateBtn();
+            } else {
+                if (document.exitFullscreen)            document.exitFullscreen();
+                else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+            }
         }
 
         function isFullscreen() {
-            return !!(document.fullscreenElement || document.webkitFullscreenElement);
+            return fakeFsActive || !!(document.fullscreenElement || document.webkitFullscreenElement);
         }
 
         function updateBtn() {
             if (isFullscreen()) {
-                icon.className  = 'fas fa-compress';
+                icon.className    = 'fas fa-compress';
                 label.textContent = 'Exit fullscreen';
-                btn.title = 'Exit fullscreen (F or Esc)';
+                btn.title         = 'Exit fullscreen (F or Esc)';
             } else {
-                icon.className  = 'fas fa-expand';
+                icon.className    = 'fas fa-expand';
                 label.textContent = 'Fullscreen';
-                btn.title = 'Fullscreen (F)';
+                btn.title         = 'Fullscreen (F)';
             }
         }
 
@@ -486,11 +566,16 @@
             isFullscreen() ? exitFullscreen() : enterFullscreen();
         });
 
-        document.addEventListener('fullscreenchange',        updateBtn);
-        document.addEventListener('webkitfullscreenchange',  updateBtn);
+        if (exitFloatBtn) {
+            exitFloatBtn.addEventListener('click', exitFullscreen);
+        }
 
-        // F key toggles fullscreen
+        document.addEventListener('fullscreenchange',       updateBtn);
+        document.addEventListener('webkitfullscreenchange', updateBtn);
+
+        // Esc exits fake fullscreen too
         document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && fakeFsActive) { exitFullscreen(); return; }
             if (e.key === 'f' || e.key === 'F') {
                 if (document.activeElement && ['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) return;
                 isFullscreen() ? exitFullscreen() : enterFullscreen();

@@ -61,7 +61,7 @@
         <!-- Profile Content -->
         <div class="col-lg-8">
             <!-- Personal Information -->
-            <!-- <div class="card border-0 shadow-lg mb-4 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
+            <div class="card border-0 shadow-lg mb-4 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                 <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-3">
                     <h5 class="mb-0 fw-bold" style="color: #c2410c;"><i class="fas fa-user me-2" style="color: #ec682a;"></i>Personal Information</h5>
                 </div>
@@ -71,15 +71,8 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">Full Name</label>
-                                <input type="text" class="form-control" name="name" value="{{ auth()->user()->name }}" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Email</label>
-                                <input type="email" class="form-control" name="email" value="{{ auth()->user()->email }}" required autocomplete="off">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Phone Number</label>
-                                <input type="tel" class="form-control" name="phone" value="{{ auth()->user()->phone }}">
+                                <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name', auth()->user()->name) }}" required>
+                                @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
                             <div class="col-12">
                                 <button type="submit" class="btn btn-primary">
@@ -89,7 +82,7 @@
                         </div>
                     </form>
                 </div>
-            </div> -->
+            </div>
 
             <!-- Change Password -->
             <div class="card border-0 shadow-sm mb-4" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">

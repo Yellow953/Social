@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Course;
 use App\Models\User;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
@@ -50,8 +51,10 @@ class UserController extends Controller
         if ($user->isAdminLevel() && !auth()->user()->isSuperAdmin()) {
             abort(403, 'Only a super admin can edit admin users.');
         }
-        
-        return view('admin.users.edit', compact('user'));
+
+        $courses = Course::orderBy('name')->get();
+
+        return view('admin.users.edit', compact('user', 'courses'));
     }
 
     public function update(Request $request, User $user)
@@ -69,6 +72,8 @@ class UserController extends Controller
             'study_year' => 'nullable|string|in:Sup,Spé,1e,2e,3e',
             'major' => ['nullable', 'string', Rule::in(array_merge([null, ''], config('majors')))],
             'is_active' => 'boolean',
+            'extra_course_ids' => 'nullable|array',
+            'extra_course_ids.*' => 'exists:courses,id',
         ]);
 
         $validated['is_active'] = $request->boolean('is_active');
@@ -86,7 +91,9 @@ class UserController extends Controller
             unset($validated['role']);
         }
 
+        unset($validated['extra_course_ids']);
         $user->update($validated);
+        $user->extraCourses()->sync($request->input('extra_course_ids', []));
 
         return redirect()->route('admin.users.index')
             ->with('success', 'User updated successfully.');
