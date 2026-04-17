@@ -6,7 +6,7 @@
             <a href="{{ auth()->user()->isAdmin() ? route('admin.dashboard') : route('dashboard') }}" class="text-decoration-none d-flex align-items-center logo-link">
                 <img src="{{ asset('assets/images/logo-transparent.png') }}" alt="ESIB Social" class="flex-shrink-0" style="width: 40px; height: 40px; object-fit: contain;">
                 <div class="logo-text-container ms-2">
-                    <span class="logo-text fw-bold text-white d-block" id="logo-text">Social Plus</span>
+                    <span class="logo-text fw-bold text-white d-block" id="logo-text">ESIB Social</span>
                     @if(auth()->user()->isAdmin())
                         <span class="admin-badge badge bg-danger ms-1 d-inline-block" style="background: linear-gradient(135deg, #ec682a 0%, #d45a20 100%) !important; font-size: 0.65rem;">ADMIN</span>
                     @endif
