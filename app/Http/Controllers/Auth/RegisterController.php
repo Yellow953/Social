@@ -63,8 +63,8 @@ class RegisterController extends Controller
             'major' => $request->major,
             'password' => Hash::make($request->password),
             'role' => 'user',
-            'email_verified' => true,
-            'email_verified_at' => now(),
+            'email_verified' => false,
+            'email_verified_at' => null,
             'two_factor_enabled' => false,
         ]);
 
