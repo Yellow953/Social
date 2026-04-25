@@ -113,6 +113,12 @@
                                     <strong>{{ $subscription->user->name }}</strong>
                                     <br>
                                     <small class="text-muted">{{ $subscription->user->email }}</small>
+                                    @if($subscription->user->major || $subscription->user->study_year)
+                                        <br>
+                                        <small class="text-muted">
+                                            {{ implode(' · ', array_filter([$subscription->user->major, $subscription->user->study_year ? 'Year ' . $subscription->user->study_year : null])) }}
+                                        </small>
+                                    @endif
                                 </div>
                             </td>
                             <td>{{ $subscription->subscription_type }}</td>

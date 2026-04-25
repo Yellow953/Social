@@ -53,14 +53,16 @@ class LoginController extends Controller
                 ]);
             }
 
+            // Block unverified accounts before creating a session
+            if (!$user->hasVerifiedEmail()) {
+                throw ValidationException::withMessages([
+                    'email' => ['Please verify your email address before logging in. Check your inbox or request a new verification link below.'],
+                ]);
+            }
+
             // Log the user in immediately
             Auth::login($user, $remember);
             $request->session()->regenerate();
-
-            // If email not verified, redirect to verification page
-            if (!$user->hasVerifiedEmail()) {
-                return redirect()->route('verification.notice');
-            }
 
             // If 2FA is enabled, send code and hold behind 2FA gate
             if ($user->two_factor_enabled) {
