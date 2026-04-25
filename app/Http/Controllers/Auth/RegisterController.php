@@ -71,7 +71,12 @@ class RegisterController extends Controller
         Auth::login($user);
 
         event(new Registered($user));
-        $user->sendEmailVerificationNotification();
+
+        try {
+            $user->sendEmailVerificationNotification();
+        } catch (\Exception $e) {
+            // Mail failure must not block registration
+        }
 
         return redirect()->route('verification.notice')
             ->with('success', 'Registration successful! Please check your email for the verification link.');

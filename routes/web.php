@@ -39,8 +39,8 @@ Route::post('/register', [RegisterController::class, 'register']);
 
 Route::get('/email/verify', [EmailVerificationController::class, 'notice'])->middleware('auth')->name('verification.notice');
 Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])->middleware(['auth', 'signed'])->name('verification.verify');
-Route::post('/email/verification-notification', [EmailVerificationController::class, 'send'])->middleware(['auth', 'throttle:6,1'])->name('verification.send');
-Route::post('/email/resend-verification', [EmailVerificationController::class, 'resendFromLogin'])->middleware('throttle:6,1')->name('verification.resend-from-login');
+Route::post('/email/verification-notification', [EmailVerificationController::class, 'send'])->middleware(['auth', 'throttle:2,60'])->name('verification.send');
+Route::post('/email/resend-verification', [EmailVerificationController::class, 'resendFromLogin'])->middleware('throttle:2,60')->name('verification.resend-from-login');
 
 Route::get('/verify-otp', [VerifyOtpController::class, 'show'])->name('verify-otp');
 Route::post('/verify-otp', [VerifyOtpController::class, 'verify']);
@@ -58,7 +58,7 @@ Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showRese
 Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
 
 // ─── Protected (auth email + single device) ───────────────────────
-Route::middleware(['auth', 'two_factor', 'single.device'])->group(function () {
+Route::middleware(['auth', 'verified', 'two_factor', 'single.device'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/academic', [AcademiqueController::class, 'index'])->name('academique');
@@ -106,6 +106,7 @@ Route::middleware(['auth', 'two_factor', 'admin'])->prefix('admin')->name('admin
     Route::resource('users', AdminUserController::class);
     Route::post('users/{user}/quick-subscription', [AdminUserController::class, 'createQuickSubscription'])->name('users.quick-subscription');
     Route::post('users/{user}/toggle-active', [AdminUserController::class, 'toggleActive'])->name('users.toggle-active');
+    Route::post('users/{user}/force-verify', [AdminUserController::class, 'forceVerify'])->name('users.force-verify');
 
     Route::get('/subscriptions', [AdminSubscriptionController::class, 'index'])->name('subscriptions');
     Route::post('/subscriptions/{subscription}/approve', [AdminSubscriptionController::class, 'approve'])->name('subscriptions.approve');

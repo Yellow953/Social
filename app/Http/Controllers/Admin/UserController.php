@@ -143,6 +143,17 @@ class UserController extends Controller
             ->with('success', 'All student accounts have been disabled.');
     }
 
+    public function forceVerify(User $user)
+    {
+        if ($user->hasVerifiedEmail()) {
+            return response()->json(['success' => false, 'message' => 'Email is already verified.'], 400);
+        }
+
+        $user->markEmailAsVerified();
+
+        return response()->json(['success' => true, 'message' => 'Email verified successfully.']);
+    }
+
     public function createQuickSubscription(User $user)
     {
         // Check if user already has an active subscription

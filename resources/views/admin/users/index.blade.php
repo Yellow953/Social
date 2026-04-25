@@ -85,6 +85,13 @@
                                 @if($user->phone)
                                     <small class="text-muted">{{ $user->phone }}</small>
                                 @endif
+                                <div class="mt-1">
+                                    @if($user->hasVerifiedEmail())
+                                        <span class="badge email-verified-badge-{{ $user->id }}" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 0.25rem 0.55rem; font-size: 0.7rem;"><i class="fas fa-check-circle me-1"></i>Verified</span>
+                                    @else
+                                        <span class="badge email-verified-badge-{{ $user->id }}" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; padding: 0.25rem 0.55rem; font-size: 0.7rem;"><i class="fas fa-times-circle me-1"></i>Unverified</span>
+                                    @endif
+                                </div>
                             </td>
                             <td>
                                 @if($user->role === 'super_admin')
@@ -137,6 +144,16 @@
                                                 title="Create 1 Year Subscription"
                                                 style="border-radius: 8px;">
                                             <i class="fas fa-gift me-1"></i>
+                                        </button>
+                                    @endif
+                                    @if(!$user->hasVerifiedEmail())
+                                        <button type="button"
+                                                class="btn btn-sm shadow-sm force-verify-btn"
+                                                data-user-id="{{ $user->id }}"
+                                                data-user-name="{{ $user->name }}"
+                                                title="Force verify email"
+                                                style="border-radius: 8px; background: linear-gradient(135deg, #3b82f6, #2563eb); border: none; color: white;">
+                                            <i class="fas fa-envelope-open-text"></i>
                                         </button>
                                     @endif
                                     @if(auth()->user()->isSuperAdmin() || !$user->isAdminLevel())
@@ -397,6 +414,62 @@
 
         // Initial attachment
         attachQuickSubscriptionHandlers();
+
+        // Force verify email
+        $(document).on('click', '.force-verify-btn', function() {
+            var btn = $(this);
+            var userId = btn.data('user-id');
+            var userName = btn.data('user-name');
+
+            function doForceVerify() {
+                btn.prop('disabled', true);
+                btn.html('<i class="fas fa-spinner fa-spin"></i>');
+                $.ajax({
+                    url: '/admin/users/' + userId + '/force-verify',
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                    success: function(response) {
+                        if (response.success) {
+                            btn.remove();
+                            $('.email-verified-badge-' + userId)
+                                .removeClass()
+                                .addClass('badge email-verified-badge-' + userId)
+                                .attr('style', 'background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 0.25rem 0.55rem; font-size: 0.7rem;')
+                                .html('<i class="fas fa-check-circle me-1"></i>Verified');
+                            var alert = $('<div class="alert alert-success alert-dismissible fade show" role="alert">' +
+                                '<i class="fas fa-check-circle me-2"></i>' + response.message +
+                                '<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
+                            $('.container-fluid').prepend(alert);
+                        }
+                    },
+                    error: function(xhr) {
+                        var message = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'An error occurred.';
+                        var alert = $('<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
+                            '<i class="fas fa-exclamation-circle me-2"></i>' + message +
+                            '<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
+                        $('.container-fluid').prepend(alert);
+                        btn.prop('disabled', false);
+                        btn.html('<i class="fas fa-envelope-open-text"></i>');
+                    }
+                });
+            }
+
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    title: 'Force verify ' + userName + '?',
+                    text: 'This will mark their email as verified without them clicking the link.',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#2563eb',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Yes, verify it'
+                }).then(function(result) {
+                    if (result.isConfirmed) doForceVerify();
+                });
+            } else {
+                if (confirm('Force verify email for ' + userName + '?')) doForceVerify();
+            }
+        });
 
         // Toggle active per user
         $(document).on('click', '.toggle-active-btn', function() {

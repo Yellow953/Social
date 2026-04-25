@@ -43,7 +43,7 @@
                         
                         <!-- Actions -->
                         <div class="d-flex gap-3 justify-content-center flex-wrap">
-                            <button onclick="window.location.reload()" class="btn btn-lg text-white fw-semibold" style="background: linear-gradient(135deg, #ec682a 0%, #d45a20 100%); border: none;">
+                            <button onclick="window.location.href = document.referrer || '/'" class="btn btn-lg text-white fw-semibold" style="background: linear-gradient(135deg, #ec682a 0%, #d45a20 100%); border: none;">
                                 <i class="fas fa-sync-alt me-2"></i>Refresh Page
                             </button>
                             @auth
