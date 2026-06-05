@@ -143,6 +143,52 @@ class UserController extends Controller
             ->with('success', 'All student accounts have been disabled.');
     }
 
+    public function enableAllUsers()
+    {
+        if (!auth()->user()->isSuperAdmin()) {
+            abort(403);
+        }
+
+        User::where('role', 'user')->update(['is_active' => true]);
+
+        return redirect()->route('admin.users.index')
+            ->with('success', 'All student accounts have been enabled.');
+    }
+
+    public function promoteAllUsers()
+    {
+        if (!auth()->user()->isSuperAdmin()) {
+            abort(403);
+        }
+
+        // Study-year progression: Sup -> Spé -> 1e -> 2e -> 3e -> graduated (disabled)
+        $nextYear = [
+            'Sup' => 'Spé',
+            'Spé' => '1e',
+            '1e' => '2e',
+            '2e' => '3e',
+        ];
+
+        $promoted = 0;
+        $graduated = 0;
+
+        User::where('role', 'user')->each(function (User $user) use ($nextYear, &$promoted, &$graduated) {
+            if (isset($nextYear[$user->study_year])) {
+                $user->study_year = $nextYear[$user->study_year];
+                $user->save();
+                $promoted++;
+            } elseif ($user->study_year === '3e') {
+                // Final year graduates: disable the account
+                $user->is_active = false;
+                $user->save();
+                $graduated++;
+            }
+        });
+
+        return redirect()->route('admin.users.index')
+            ->with('success', "{$promoted} student(s) promoted to the next year, {$graduated} graduating student(s) disabled.");
+    }
+
     public function forceVerify(User $user)
     {
         if ($user->hasVerifiedEmail()) {

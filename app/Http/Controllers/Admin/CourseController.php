@@ -9,6 +9,7 @@ use App\Models\MaterialMedia;
 use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -177,16 +178,32 @@ class CourseController extends Controller
 
     public function destroy(Course $course)
     {
-        // Check if course has materials
-        if ($course->materials()->count() > 0) {
-            return redirect()->route('admin.courses.index')
-                ->with('error', 'Cannot delete course with existing materials. Please delete or reassign materials first.');
-        }
+        DB::transaction(function () use ($course) {
+            $course->load('materials.media', 'materials.courses');
 
-        $course->delete();
+            foreach ($course->materials as $material) {
+                // Material still belongs to another course -> keep it (just unlink via course cascade).
+                $belongsElsewhere = $material->courses->where('id', '!=', $course->id)->isNotEmpty();
+                if ($belongsElsewhere) {
+                    continue;
+                }
+
+                // True orphan: delete its media files from disk, then the material itself.
+                // Deleting the material cascades material_media rows + material_access_logs.
+                foreach ($material->media as $media) {
+                    if ($media->file_path) {
+                        Storage::disk('local')->delete($media->file_path);
+                    }
+                }
+                $material->delete();
+            }
+
+            // Cascades course_material pivot + user_extra_courses.
+            $course->delete();
+        });
 
         return redirect()->route('admin.courses.index')
-            ->with('success', 'Course deleted successfully.');
+            ->with('success', 'Course deleted. Orphaned materials and their files were removed.');
     }
 
     /**

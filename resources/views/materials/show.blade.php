@@ -8,9 +8,27 @@
 @endsection
 
 @section('content')
+@php
+    // If we arrived from the Académique wizard, build a link that restores step 5 (the materials list).
+    $backToStep5 = request('ret') === 'academique' && request('course')
+        ? route('academique', [
+            'ret'        => 'academique',
+            'year'       => request('year'),
+            'major'      => request('major'),
+            'semester'   => request('semester'),
+            'course'     => request('course'),
+            'courseName' => request('courseName'),
+        ])
+        : null;
+@endphp
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-12">
+            @if($backToStep5)
+                <a href="{{ $backToStep5 }}" class="btn btn-outline-secondary mb-3">
+                    <i class="fas fa-arrow-left me-2"></i>Retour aux matériels
+                </a>
+            @endif
             <!-- Material Details -->
             <div class="card border-0 shadow-lg overflow-hidden mb-4" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
                 <div class="card-body p-4">

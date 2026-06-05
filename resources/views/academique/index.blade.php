@@ -365,6 +365,15 @@
                     return;
                 }
 
+                // Context appended to each material link so the material view page
+                // can offer a "Back" button that restores this materials step (step 5).
+                const retQs = '?ret=academique'
+                    + '&year=' + encodeURIComponent(selectedYear || '')
+                    + '&major=' + encodeURIComponent(selectedMajor || '')
+                    + '&semester=' + encodeURIComponent(selectedSemester || '')
+                    + '&course=' + encodeURIComponent(selectedCourseId || '')
+                    + '&courseName=' + encodeURIComponent(selectedCourseName || '');
+
                 data.materials.forEach(m => {
                     const meta    = materialTypeMeta[m.type] || { label: m.type, icon: 'fa-file', color: '#6b7280', bg: '#f3f4f6' };
                     const summary = m.media_summary || {};
@@ -397,7 +406,7 @@
                             </div>
                             <div class="material-card-footer">
                                 ${m.can_access
-                                    ? `<a href="${materialsBaseUrl}/${m.id}" class="material-btn-access"><i class="fas fa-eye me-2"></i>Voir le matériel</a>`
+                                    ? `<a href="${materialsBaseUrl}/${m.id}${retQs}" class="material-btn-access"><i class="fas fa-eye me-2"></i>Voir le matériel</a>`
                                     : `<span class="material-btn-locked"><i class="fas fa-lock me-2"></i>Abonnement requis</span>`}
                             </div>
                         </div>`;
@@ -411,6 +420,39 @@
                 materialsEmpty.textContent = 'Erreur de chargement';
             });
     }
+
+    // When returning from a material view page, jump straight back to the materials step (step 5).
+    (function restoreFromQuery() {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('ret') !== 'academique') return;
+        const course = params.get('course');
+        if (!course) return;
+
+        selectedYear = params.get('year') || null;
+        selectedMajor = params.get('major') || null;
+        selectedSemester = params.get('semester') || null;
+        selectedCourseId = course;
+        selectedCourseName = params.get('courseName') || ('Cours #' + course);
+
+        // Restore labels so the in-page back chain (materials -> courses) still reads correctly.
+        if (selectedYear) { semesterYearLabel.textContent = selectedYear; coursesYearLabel.textContent = selectedYear; }
+        if (selectedMajor) { semesterMajorLabel.textContent = selectedMajor; coursesMajorLabel.textContent = selectedMajor; }
+        if (selectedSemester) coursesSemesterLabel.textContent = selectedSemester;
+        materialsCourseLabel.textContent = selectedCourseName;
+
+        // Populate the courses step underneath so "Back" from materials shows a filled list.
+        if (selectedYear && selectedMajor && selectedSemester) {
+            loadCourses(selectedYear, selectedMajor, selectedSemester);
+        }
+
+        // Show only the materials step.
+        sectionYears.classList.add('d-none');
+        sectionMajors.classList.add('d-none');
+        sectionSemester.classList.add('d-none');
+        sectionCourses.classList.add('d-none');
+        sectionMaterials.classList.remove('d-none');
+        loadMaterials(selectedCourseId);
+    })();
 })();
 </script>
 

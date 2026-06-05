@@ -36,7 +36,19 @@ class RegisterController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'first_name' => 'required|string|max:255',
+            'last_name' => [
+                'required',
+                'string',
+                'max:255',
+                function ($attribute, $value, $fail) use ($request) {
+                    $fullName = trim($request->first_name.' '.$value);
+                    $exists = User::whereRaw('LOWER(name) = ?', [strtolower($fullName)])->exists();
+                    if ($exists) {
+                        $fail('An account with this first and last name already exists.');
+                    }
+                },
+            ],
             'email' => [
                 'required',
                 'string',
@@ -57,7 +69,7 @@ class RegisterController extends Controller
 
         // Create user (email not verified yet)
         $user = User::create([
-            'name' => $request->name,
+            'name' => trim($request->first_name.' '.$request->last_name),
             'email' => $request->email,
             'study_year' => $request->study_year,
             'major' => $request->major,

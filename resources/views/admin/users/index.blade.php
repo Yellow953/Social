@@ -16,6 +16,18 @@
         </div>
         <div class="d-flex gap-2">
             @if(auth()->user()->isSuperAdmin())
+            <form method="POST" action="{{ route('admin.users.enable-all') }}" id="enableAllForm">
+                @csrf
+                <button type="submit" class="btn btn-success fw-semibold" id="enableAllBtn">
+                    <i class="fas fa-check-circle me-2"></i>Enable All Students
+                </button>
+            </form>
+            <form method="POST" action="{{ route('admin.users.promote-all') }}" id="promoteAllForm">
+                @csrf
+                <button type="submit" class="btn btn-info fw-semibold" id="promoteAllBtn">
+                    <i class="fas fa-arrow-up me-2"></i>Promote All (+1 Year)
+                </button>
+            </form>
             <form method="POST" action="{{ route('admin.users.disable-all') }}" id="disableAllForm">
                 @csrf
                 <button type="submit" class="btn btn-warning fw-semibold" id="disableAllBtn">
@@ -548,6 +560,48 @@
                 });
             } else {
                 if (confirm('Disable all student accounts? This will prevent all students from logging in.')) form.submit();
+            }
+        });
+
+        // Enable all students confirmation
+        $('#enableAllForm').on('submit', function(e) {
+            e.preventDefault();
+            var form = this;
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    title: 'Enable all student accounts?',
+                    text: 'This will allow all students to log in again.',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#16a34a',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Yes, enable all'
+                }).then(function(result) {
+                    if (result.isConfirmed) form.submit();
+                });
+            } else {
+                if (confirm('Enable all student accounts? This will allow all students to log in again.')) form.submit();
+            }
+        });
+
+        // Promote all students confirmation
+        $('#promoteAllForm').on('submit', function(e) {
+            e.preventDefault();
+            var form = this;
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    title: 'Promote all students by 1 year?',
+                    text: 'Sup → Spé → 1e → 2e → 3e. Students in 3e will graduate and be disabled.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#0dcaf0',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Yes, promote all'
+                }).then(function(result) {
+                    if (result.isConfirmed) form.submit();
+                });
+            } else {
+                if (confirm('Promote all students by 1 year? Students in 3e will be disabled.')) form.submit();
             }
         });
     });

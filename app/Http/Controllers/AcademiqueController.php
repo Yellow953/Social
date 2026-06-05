@@ -79,16 +79,17 @@ class AcademiqueController extends Controller
             ->with('media:id,material_id,type')
             ->orderBy('created_at')
             ->get()
-            ->filter(fn ($material) => $material->canBeAccessedBy($user))
             ->map(function ($material) use ($user) {
+                $canAccess = $material->canBeAccessedBy($user);
                 $mediaSummary = $material->media->groupBy('type')->map->count()->all();
                 return [
                     'id'            => $material->id,
-                    'title'         => $material->title,
-                    'description'   => $material->description,
+                    // Do not reveal the name/description of locked content the user can't access.
+                    'title'         => $canAccess ? $material->title : 'Contenu verrouillé',
+                    'description'   => $canAccess ? $material->description : null,
                     'type'          => $material->type,
                     'is_locked'     => $material->is_locked,
-                    'can_access'    => true, // only accessible materials are returned
+                    'can_access'    => $canAccess,
                     'media_summary' => $mediaSummary,
                 ];
             })

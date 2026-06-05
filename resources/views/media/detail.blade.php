@@ -49,7 +49,7 @@
                                 @if($showUsername)
                                 <div id="pdf-watermark-{{ $media->id }}" class="pdf-watermark-overlay media-watermark-pdf-wrap">
                                     <div class="media-username-pattern media-username-pattern-pdf">
-                                        @for($i = 0; $i < 120; $i++)
+                                        @for($i = 0; $i < 300; $i++)
                                             <span class="media-username-pattern-item">{{ strtoupper(auth()->user()->name) }}</span>
                                         @endfor
                                     </div>
@@ -80,7 +80,7 @@
                                 @endif
                                 @if($showUsername)
                                 <div class="media-username-pattern media-username-pattern-image">
-                                    @for($i = 0; $i < 24; $i++)
+                                    @for($i = 0; $i < 70; $i++)
                                         <span class="media-username-pattern-item">{{ strtoupper(auth()->user()->name) }}</span>
                                     @endfor
                                 </div>
@@ -106,7 +106,7 @@
                                     @endif
                                     @if($showUsername)
                                     <div class="media-username-pattern media-username-pattern-video">
-                                        @for($i = 0; $i < 24; $i++)
+                                        @for($i = 0; $i < 70; $i++)
                                             <span class="media-username-pattern-item">{{ strtoupper(auth()->user()->name) }}</span>
                                         @endfor
                                     </div>
@@ -158,8 +158,8 @@
 
     /* Bigger logo on top (no server burn) – less transparent for visibility */
     .media-watermark-logo {
-        width: 480px;
-        max-width: 65vw;
+        width: 680px;
+        max-width: 85vw;
         opacity: 0.65;
         pointer-events: none;
     }
@@ -171,8 +171,8 @@
         pointer-events: none;
         z-index: 11;
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        grid-template-rows: repeat(8, 1fr);
+        grid-template-columns: repeat(5, 1fr);
+        grid-template-rows: repeat(14, 1fr);
         gap: 0;
         align-items: center;
         justify-items: center;
@@ -188,8 +188,8 @@
         z-index: 50;
     }
     .media-watermark-pdf-wrap .media-username-pattern-pdf {
-        grid-template-columns: 1fr 1fr 1fr;
-        grid-template-rows: repeat(40, 1fr);
+        grid-template-columns: repeat(5, 1fr);
+        grid-template-rows: repeat(60, 1fr);
         min-height: 100%;
     }
     /* Logo once per PDF page (added by JS in each page wrapper) */
@@ -209,14 +209,14 @@
         z-index: 2;
     }
     .pdf-page-logo-overlay .media-watermark-logo {
-        max-width: 70%;
-        width: 520px;
+        max-width: 88%;
+        width: 700px;
         opacity: 0.65;
     }
     .media-username-pattern-item {
         font-style: oblique;
         font-weight: bold;
-        font-size: clamp(0.6rem, 2.5vw, 1.75rem);
+        font-size: clamp(0.45rem, 1.3vw, 0.95rem);
         white-space: nowrap;
         opacity: 0.18;
         transform: rotate(-28deg);
@@ -224,7 +224,7 @@
     }
     .media-username-pattern-pdf .media-username-pattern-item {
         opacity: 0.22;
-        font-size: clamp(0.55rem, 2.2vw, 1.6rem);
+        font-size: clamp(0.4rem, 1.1vw, 0.85rem);
     }
     .media-username-pattern-image .media-username-pattern-item {
         color: #5c5c5c;

@@ -67,7 +67,8 @@ class MaterialController extends Controller
             $canAccess = $m->canBeAccessedBy($user);
             return [
                 'id' => $m->id,
-                'original_filename' => $m->original_filename,
+                // Do not reveal the filename of locked media the user can't access.
+                'original_filename' => $canAccess ? $m->original_filename : 'Fichier protégé',
                 'type' => $m->type,
                 'file_size' => (int) $m->file_size,
                 'formatted_file_size' => $m->formatted_file_size,

@@ -38,20 +38,35 @@
                         <form method="POST" action="{{ route('register') }}">
                             @csrf
 
-                            <!-- Full Name -->
-                            <div class="mb-3">
-                                <input type="text"
-                                       class="form-control form-control-lg @error('name') is-invalid @enderror"
-                                       id="name"
-                                       name="name"
-                                       value="{{ old('name') }}"
-                                       placeholder="Full Name"
-                                       required
-                                       autocomplete="name"
-                                       autofocus>
-                                @error('name')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                            <!-- First & Last Name -->
+                            <div class="row mb-3 g-2">
+                                <div class="col-md-6">
+                                    <input type="text"
+                                           class="form-control form-control-lg @error('first_name') is-invalid @enderror"
+                                           id="first_name"
+                                           name="first_name"
+                                           value="{{ old('first_name') }}"
+                                           placeholder="First Name"
+                                           required
+                                           autocomplete="given-name"
+                                           autofocus>
+                                    @error('first_name')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text"
+                                           class="form-control form-control-lg @error('last_name') is-invalid @enderror"
+                                           id="last_name"
+                                           name="last_name"
+                                           value="{{ old('last_name') }}"
+                                           placeholder="Last Name"
+                                           required
+                                           autocomplete="family-name">
+                                    @error('last_name')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
 
                             <!-- Email (Outlook only) -->

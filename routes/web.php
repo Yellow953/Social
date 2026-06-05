@@ -103,6 +103,8 @@ Route::middleware(['auth', 'two_factor', 'admin'])->prefix('admin')->name('admin
     Route::get('/access-logs', [AdminAccessLogController::class, 'index'])->name('access-logs');
 
     Route::post('users/disable-all', [AdminUserController::class, 'disableAllUsers'])->name('users.disable-all');
+    Route::post('users/enable-all', [AdminUserController::class, 'enableAllUsers'])->name('users.enable-all');
+    Route::post('users/promote-all', [AdminUserController::class, 'promoteAllUsers'])->name('users.promote-all');
     Route::resource('users', AdminUserController::class);
     Route::post('users/{user}/quick-subscription', [AdminUserController::class, 'createQuickSubscription'])->name('users.quick-subscription');
     Route::post('users/{user}/toggle-active', [AdminUserController::class, 'toggleActive'])->name('users.toggle-active');
