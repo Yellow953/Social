@@ -64,7 +64,7 @@
                                                 </td>
                                                 <td class="py-3 text-end">
                                                     <div class="input-group input-group-sm ms-auto" style="max-width: 90px;">
-                                                        <input type="number" class="form-control border" id="midtermPercent" min="0" max="100" step="0.1" value="25" required style="border-radius: 6px 0 0 6px !important;">
+                                                        <input type="number" class="form-control border" id="midtermPercent" min="0" max="100" step="0.1" value="35" required style="border-radius: 6px 0 0 6px !important;">
                                                         <span class="input-group-text border-start-0 small" style="background: #f8fafc; border-radius: 0 6px 6px 0 !important;">%</span>
                                                     </div>
                                                 </td>
@@ -86,7 +86,7 @@
                                                 </td>
                                                 <td class="py-3 text-end">
                                                     <div class="input-group input-group-sm ms-auto" style="max-width: 90px;">
-                                                        <input type="number" class="form-control border" id="tpPercent" min="0" max="100" step="0.1" value="15" required style="border-radius: 6px 0 0 6px !important;">
+                                                        <input type="number" class="form-control border" id="tpPercent" min="0" max="100" step="0.1" value="0" required style="border-radius: 6px 0 0 6px !important;">
                                                         <span class="input-group-text border-start-0 small" style="background: #f8fafc; border-radius: 0 6px 6px 0 !important;">%</span>
                                                     </div>
                                                 </td>
@@ -108,7 +108,7 @@
                                                 </td>
                                                 <td class="py-3 text-end">
                                                     <div class="input-group input-group-sm ms-auto" style="max-width: 90px;">
-                                                        <input type="number" class="form-control border" id="tcPercent" min="0" max="100" step="0.1" value="10" required style="border-radius: 6px 0 0 6px !important;">
+                                                        <input type="number" class="form-control border" id="tcPercent" min="0" max="100" step="0.1" value="20" required style="border-radius: 6px 0 0 6px !important;">
                                                         <span class="input-group-text border-start-0 small" style="background: #f8fafc; border-radius: 0 6px 6px 0 !important;">%</span>
                                                     </div>
                                                 </td>
@@ -127,7 +127,7 @@
                                                 </td>
                                                 <td class="py-3 text-end">
                                                     <div class="input-group input-group-sm ms-auto" style="max-width: 90px;">
-                                                        <input type="number" class="form-control border" id="finalPercent" min="0" max="100" step="0.1" value="50" required style="border-radius: 6px 0 0 6px !important;">
+                                                        <input type="number" class="form-control border" id="finalPercent" min="0" max="100" step="0.1" value="45" required style="border-radius: 6px 0 0 6px !important;">
                                                         <span class="input-group-text border-start-0 small" style="background: #f8fafc; border-radius: 0 6px 6px 0 !important;">%</span>
                                                     </div>
                                                 </td>
@@ -188,39 +188,43 @@
                                     <p class="text-muted small mt-2 mb-0">To get <strong id="desiredGradeDisplay">10</strong>/20 overall</p>
                                 </div>
                                 <div class="pt-3">
-                                    <p class="small text-muted mb-3 fw-semibold text-uppercase" style="letter-spacing: 0.5px;">Contributions so far</p>
-                                    <div class="breakdown-item mb-2 pb-2" style="border-bottom: 1px solid #f3f4f6;">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <span class="small fw-medium">Partiel</span>
-                                            <span class="fw-bold" id="midtermContribution" style="color: #ec682a;">0</span>
-                                        </div>
-                                    </div>
-                                    <div class="breakdown-item mb-2 pb-2" style="border-bottom: 1px solid #f3f4f6;">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <span class="small fw-medium">TP</span>
-                                            <span class="fw-bold" id="tpContribution" style="color: #ec682a;">0</span>
-                                        </div>
-                                    </div>
-                                    <div class="breakdown-item mb-2 pb-2" style="border-bottom: 1px solid #f3f4f6;">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <span class="small fw-medium">TC</span>
-                                            <span class="fw-bold" id="tcContribution" style="color: #ec682a;">0</span>
-                                        </div>
-                                    </div>
-                                    <div class="breakdown-item mb-3">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <span class="small fw-medium">Final (needed)</span>
-                                            <span class="fw-bold" id="finalContribution" style="color: #ec682a;">0</span>
-                                        </div>
+                                    <p class="small text-muted mb-2 fw-semibold text-uppercase" style="letter-spacing: 0.5px;">Save this course</p>
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control border" id="saveCourseName" placeholder="Course name (e.g. Maths)" style="border-radius: 6px 0 0 6px !important;">
+                                        <button type="button" class="btn fw-semibold px-3" onclick="saveCourse()" style="background: linear-gradient(135deg, #ec682a 0%, #c2410c 100%); color: white; border-radius: 0 6px 6px 0 !important; border: none;">
+                                            <i class="fas fa-save me-1"></i>Save
+                                        </button>
                                     </div>
                                 </div>
-                                <div class="alert mb-0 py-2 px-3 small rounded" id="gradeInterpretation" role="alert" style="border-radius: 8px !important;">
+                                <div class="alert mb-0 mt-3 py-2 px-3 small rounded" id="gradeInterpretation" role="alert" style="border-radius: 8px !important;">
                                     <i class="fas fa-info-circle me-2"></i>
                                     <span id="gradeMessage"></span>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Saved courses -->
+            <div class="card border-0 shadow-lg mt-4 result-card" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid #ec682a !important;">
+                <div class="card-header bg-transparent border-0 pb-0 pt-4 px-4 d-flex align-items-center justify-content-between">
+                    <h5 class="mb-0 fw-bold" style="color: #c2410c;">
+                        <i class="fas fa-bookmark me-2" style="color: #ec682a;"></i>Saved courses
+                    </h5>
+                    <button type="button" class="btn btn-sm btn-outline-danger px-3 py-1 fw-semibold d-none" id="btnClearSaved" onclick="clearSavedCourses()" style="border-radius: 6px;">
+                        <i class="fas fa-trash me-1"></i>Clear all
+                    </button>
+                </div>
+                <div class="card-body p-4">
+                    <div id="savedCoursesEmpty" class="text-center py-4 px-3 semester-empty-state">
+                        <div class="semester-empty-icon mb-3">
+                            <i class="fas fa-bookmark" style="color: #ec682a;"></i>
+                        </div>
+                        <h6 class="fw-bold mb-2" style="color: #5c5c5c;">No saved courses yet</h6>
+                        <p class="text-muted small mb-0 mx-auto" style="max-width: 320px;">Calculate a course above, give it a name and click <strong>Save</strong> to keep its required final score here.</p>
+                    </div>
+                    <div id="savedCoursesList" class="d-none"></div>
                 </div>
             </div>
 
@@ -443,6 +447,8 @@
 
 <script>
     let gradeScale = 20;
+    let lastGradeResult = null;
+    const SAVED_COURSES_KEY = 'esib_saved_courses';
 
     document.getElementById('scale20').addEventListener('change', function() {
         if (this.checked) setScale(20);
@@ -520,10 +526,17 @@
         document.getElementById('requiredFinal').textContent = displayRequired.toFixed(2);
         document.getElementById('gradeOutOf').textContent = '/ ' + gradeScale;
         document.getElementById('desiredGradeDisplay').textContent = desiredGradeOutOf20.toFixed(2);
-        document.getElementById('midtermContribution').textContent = midtermContribution.toFixed(2) + '%';
-        document.getElementById('tpContribution').textContent = tpContribution.toFixed(2) + '%';
-        document.getElementById('tcContribution').textContent = tcContribution.toFixed(2) + '%';
-        document.getElementById('finalContribution').textContent = requiredFinalContribution.toFixed(2) + '%';
+
+        // Remember the latest calculation so it can be saved per course
+        lastGradeResult = {
+            requiredFinal: displayRequired,
+            possible: requiredFinalScore >= 0 && requiredFinalScore <= gradeScale,
+            scale: gradeScale,
+            desired: desiredGradeOutOf20,
+            partiel: midtermScore,
+            tp: tpScore,
+            tc: tcScore
+        };
 
         var message = '', alertClass = '';
         if (requiredFinalScore > gradeScale) {
@@ -550,6 +563,100 @@
     document.getElementById('gradeCalculatorForm').addEventListener('keypress', function(e) {
         if (e.key === 'Enter') { e.preventDefault(); calculateGrade(); }
     });
+
+    // ——— Saved courses (persisted in localStorage) ———
+    function getSavedCourses() {
+        try {
+            return JSON.parse(localStorage.getItem(SAVED_COURSES_KEY)) || [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function setSavedCourses(courses) {
+        localStorage.setItem(SAVED_COURSES_KEY, JSON.stringify(courses));
+    }
+
+    function saveCourse() {
+        if (!lastGradeResult) {
+            alert('Calculate a course first, then save it.');
+            return;
+        }
+        var nameInput = document.getElementById('saveCourseName');
+        var name = (nameInput.value || '').trim();
+        if (!name) {
+            alert('Enter a course name to save it.');
+            nameInput.focus();
+            return;
+        }
+        var courses = getSavedCourses();
+        var entry = {
+            name: name,
+            requiredFinal: lastGradeResult.requiredFinal,
+            possible: lastGradeResult.possible,
+            scale: lastGradeResult.scale,
+            desired: lastGradeResult.desired,
+            partiel: lastGradeResult.partiel,
+            tp: lastGradeResult.tp,
+            tc: lastGradeResult.tc
+        };
+        // Overwrite an existing course with the same name (case-insensitive)
+        var idx = courses.findIndex(function(c) { return c.name.toLowerCase() === name.toLowerCase(); });
+        if (idx >= 0) courses[idx] = entry; else courses.push(entry);
+        setSavedCourses(courses);
+        nameInput.value = '';
+        renderSavedCourses();
+    }
+
+    function removeSavedCourse(index) {
+        var courses = getSavedCourses();
+        courses.splice(index, 1);
+        setSavedCourses(courses);
+        renderSavedCourses();
+    }
+
+    function clearSavedCourses() {
+        if (!confirm('Remove all saved courses?')) return;
+        setSavedCourses([]);
+        renderSavedCourses();
+    }
+
+    function renderSavedCourses() {
+        var courses = getSavedCourses();
+        var empty = document.getElementById('savedCoursesEmpty');
+        var list = document.getElementById('savedCoursesList');
+        var clearBtn = document.getElementById('btnClearSaved');
+        if (courses.length === 0) {
+            empty.classList.remove('d-none');
+            list.classList.add('d-none');
+            clearBtn.classList.add('d-none');
+            return;
+        }
+        empty.classList.add('d-none');
+        list.classList.remove('d-none');
+        clearBtn.classList.remove('d-none');
+        var html = '';
+        courses.forEach(function(c, i) {
+            var resultText = c.possible
+                ? c.requiredFinal.toFixed(2) + ' / ' + c.scale
+                : 'Not reachable';
+            var resultColor = c.possible ? '#ec682a' : '#dc2626';
+            html += '<div class="breakdown-item d-flex justify-content-between align-items-center mb-2 pb-2" style="border-bottom: 1px solid #f3f4f6;">' +
+                '<div class="me-2">' +
+                    '<span class="fw-bold d-block" style="color: #c2410c;">' + escapeHtml(c.name) + '</span>' +
+                    '<span class="text-muted" style="font-size: 0.78rem;">Target ' + c.desired.toFixed(2) + '/20 · Partiel ' + c.partiel + ' · TP ' + c.tp + ' · TC ' + c.tc + '</span>' +
+                '</div>' +
+                '<div class="d-flex align-items-center gap-3">' +
+                    '<div class="text-end">' +
+                        '<span class="text-muted d-block" style="font-size: 0.7rem;">Final needed</span>' +
+                        '<span class="fw-bold" style="color: ' + resultColor + ';">' + resultText + '</span>' +
+                    '</div>' +
+                    '<button type="button" class="btn btn-sm btn-outline-danger p-1" onclick="removeSavedCourse(' + i + ')" title="Remove" style="border-radius: 6px;"><i class="fas fa-times small"></i></button>' +
+                '</div>' +
+            '</div>';
+        });
+        list.innerHTML = html;
+    }
 
     // ——— Semester GPA Calculator ———
     let semesterScale = 20;
@@ -727,5 +834,6 @@
     });
 
     toggleSemesterCoursesEmpty();
+    renderSavedCourses();
 </script>
 @endsection

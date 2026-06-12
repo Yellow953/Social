@@ -45,7 +45,8 @@
                         @endif
 
                         <p class="text-muted text-center mb-4">
-                            Please check your inbox and click the verification link in the email we sent you. You can then access your account.
+                            Please check your email inbox or spam folder and click the verification link.
+                            The email can take up to 10 mins to arrive.
                         </p>
 
                         <form method="POST" action="{{ route('verification.send') }}">

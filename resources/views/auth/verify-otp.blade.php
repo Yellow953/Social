@@ -11,7 +11,7 @@
         <div class="position-absolute" style="bottom: 20%; left: 20%; width: 100px; height: 100px; background: rgba(236,104,42,0.4); border-radius: 50%; animation: float 7s ease-in-out infinite;"></div>
         <div class="position-absolute" style="top: 30%; right: 30%; width: 120px; height: 120px; background: rgba(236,104,42,0.4); border-radius: 50%; animation: float 9s ease-in-out infinite;"></div>
     </div>
-    
+
     <style>
         @keyframes float {
             0%, 100% { transform: translateY(0px) translateX(0px); }
@@ -50,6 +50,11 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                             </div>
                         @endif
+
+                        <p class="text-muted text-center mb-4">
+                            Please check your email inbox or spam folder and click the verification link.
+                            The email can take up to 10 mins to arrive.
+                        </p>
 
                         <!-- Form -->
                         <form method="POST" action="{{ route('verify-otp') }}">

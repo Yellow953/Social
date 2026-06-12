@@ -3,16 +3,14 @@
 Bugs:
 1- el watermark aam bi tawil ta yeftah
 2- watermark aam yetla3 barat el saf7a
-3- yzid aal page mn  baad el register check junk emails w on same device
+// 3- yzid aal page mn  baad el register check junk emails w on same device
 4- w ma ykoun el social plus bas la sene
-5- bass wahad yaamol change password w yfout bel password l jdid ma byozbat
-6- calculatrice: men shil 'Contributions so far' men hot option ykoun fiya name of the course ma3 l calcul li kenna deja 3emlino mtl ka2an tsayyiv kell course adde bdna fi mesh kel marra naamello calcul + les coefficients ykouno Partiel: 35%
-TC:20%
-TP:0%
+// 5- bass wahad yaamol change password w yfout bel password l jdid ma byozbat
+// 6- calculatrice: men shil 'Contributions so far' men hot option ykoun fiya name of the course ma3 l calcul li kenna deja 3emlino mtl ka2an tsayyiv kell course adde bdna fi mesh kel marra naamello calcul + les coefficients ykouno Partiel: 35% TC:20% TP:0%
 
-Priorities:
-1- kabse to enable the users w tkoun el disable w el enable not for all the users lal subscription social plus
-4- duplicate the watermak so it gets harder to remove
-5- obligation yenhat last name w ma yezbat kaza esem nafs el chi
-7- Session el locked ma ybayin esmoun
-8- Nchill el policy ano ma ne2dir nchil course ella ma tkoun fadye
+// Priorities:
+// 1- kabse to enable the users w tkoun el disable w el enable not for all the users lal subscription social plus
+// 4- duplicate the watermak so it gets harder to remove
+// 5- obligation yenhat last name w ma yezbat kaza esem nafs el chi
+// 7- Session el locked ma ybayin esmoun
+// 8- Nchill el policy ano ma ne2dir nchil course ella ma tkoun fadye
