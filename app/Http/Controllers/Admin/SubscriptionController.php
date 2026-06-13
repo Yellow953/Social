@@ -47,7 +47,7 @@ class SubscriptionController extends Controller
             'status'      => 'approved',
             'approved_at' => now(),
             'approved_by' => auth()->id(),
-            'expires_at'  => now()->addYear(),
+            'expires_at'  => null, // never expires
         ]);
 
         Notification::create([
@@ -62,7 +62,7 @@ class SubscriptionController extends Controller
             'read' => false,
         ]);
 
-        return redirect()->back()->with('success', 'Subscription approved successfully (valid for 1 year).');
+        return redirect()->back()->with('success', 'Subscription approved successfully.');
     }
 
     public function reject(Request $request, Subscription $subscription)

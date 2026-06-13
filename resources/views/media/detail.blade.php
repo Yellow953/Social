@@ -397,6 +397,14 @@
             if (watermarkEl) watermarkEl.style.height = container.offsetHeight + 'px';
         }
 
+        // Keep the username watermark height in sync with the document as each
+        // page renders in, so the watermark grows together with the PDF instead
+        // of popping in all at once after every page has finished rendering.
+        if (window.ResizeObserver) {
+            var watermarkResizeObserver = new ResizeObserver(function() { sizePdfWatermark(); });
+            watermarkResizeObserver.observe(container);
+        }
+
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
         var watermarkType = (viewerEl && viewerEl.getAttribute('data-watermark-type')) || 'full';
@@ -442,7 +450,10 @@
                         wrapper.appendChild(logoOverlay);
                     }
                     container.appendChild(wrapper);
-                    return page.render({ canvasContext: ctx, viewport: viewport }).promise;
+                    sizePdfWatermark();
+                    return page.render({ canvasContext: ctx, viewport: viewport }).promise.then(function() {
+                        sizePdfWatermark();
+                    });
                 });
             }
             var chain = renderPage(1);

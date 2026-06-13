@@ -153,7 +153,7 @@
                                                 class="btn btn-sm btn-success quick-subscription-btn shadow-sm"
                                                 data-user-id="{{ $user->id }}"
                                                 data-user-name="{{ $user->name }}"
-                                                title="Create 1 Year Subscription"
+                                                title="Create Lifetime Subscription"
                                                 style="border-radius: 8px;">
                                             <i class="fas fa-gift me-1"></i>
                                         </button>
@@ -409,7 +409,7 @@
                 if (typeof Swal !== 'undefined') {
                     Swal.fire({
                         title: 'Create subscription?',
-                        text: 'Create a free 1-year subscription for ' + userName + '?',
+                        text: 'Create a free lifetime subscription for ' + userName + '?',
                         icon: 'question',
                         showCancelButton: true,
                         confirmButtonColor: '#10b981',
@@ -419,7 +419,7 @@
                         if (result.isConfirmed) doQuickSubscription(btn, userId);
                     });
                 } else {
-                    if (confirm('Create a free 1-year subscription for ' + userName + '?')) doQuickSubscription(btn, userId);
+                    if (confirm('Create a free lifetime subscription for ' + userName + '?')) doQuickSubscription(btn, userId);
                 }
             });
         }

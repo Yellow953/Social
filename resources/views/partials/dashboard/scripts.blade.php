@@ -47,14 +47,37 @@
             });
         });
     }
+    // Generic confirmation with SweetAlert (configurable via data attributes)
+    function attachGenericConfirmations() {
+        document.querySelectorAll('form.form-confirm').forEach(function(form) {
+            if (form.dataset.swalAttached) return;
+            form.dataset.swalAttached = '1';
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: form.getAttribute('data-confirm-title') || 'Are you sure?',
+                    text: form.getAttribute('data-confirm') || 'Please confirm this action.',
+                    icon: form.getAttribute('data-confirm-icon') || 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: form.getAttribute('data-confirm-color') || '#10b981',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: form.getAttribute('data-confirm-button') || 'Yes, confirm'
+                }).then(function(result) {
+                    if (result.isConfirmed) form.submit();
+                });
+            });
+        });
+    }
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', function() {
             attachDeleteConfirmations();
             attachDuplicateConfirmations();
+            attachGenericConfirmations();
         });
     } else {
         attachDeleteConfirmations();
         attachDuplicateConfirmations();
+        attachGenericConfirmations();
     }
 </script>
 

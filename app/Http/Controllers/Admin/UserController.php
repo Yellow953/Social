@@ -212,19 +212,19 @@ class UserController extends Controller
             ], 400);
         }
 
-        // Create and approve subscription for 1 year
+        // Create and approve subscription (never expires)
         $subscription = Subscription::create([
             'user_id' => $user->id,
             'status' => 'approved',
             'subscription_type' => 'SOCIALPLUS',
             'approved_at' => now(),
             'approved_by' => auth()->id(),
-            'expires_at' => now()->addYear(), // 1 year from now
+            'expires_at' => null, // never expires
         ]);
 
         return response()->json([
             'success' => true,
-            'message' => 'Subscription created successfully for 1 year.',
+            'message' => 'Subscription created successfully.',
             'subscription' => $subscription
         ]);
     }

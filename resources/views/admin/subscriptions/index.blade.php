@@ -154,9 +154,14 @@
                             <td class="text-end">
                                 @if($subscription->status === 'pending')
                                     <div class="d-flex gap-2 justify-content-end">
-                                        <form method="POST" action="{{ route('admin.subscriptions.approve', $subscription) }}" class="d-inline">
+                                        <form method="POST" action="{{ route('admin.subscriptions.approve', $subscription) }}" class="d-inline form-confirm"
+                                              data-confirm-title="Approve subscription?"
+                                              data-confirm="This subscription will never expire."
+                                              data-confirm-icon="question"
+                                              data-confirm-color="#10b981"
+                                              data-confirm-button="Yes, approve">
                                             @csrf
-                                            <button type="submit" class="btn btn-sm btn-success shadow-sm" onclick="return confirm('Approve this subscription? It will be valid for 1 year.')" style="border-radius: 8px;">
+                                            <button type="submit" class="btn btn-sm btn-success shadow-sm" style="border-radius: 8px;">
                                                 <i class="fas fa-check me-1"></i>Approve
                                             </button>
                                         </form>
@@ -190,9 +195,14 @@
                                         </div>
                                     </div>
                                 @elseif($subscription->status === 'approved' && (!$subscription->expires_at || $subscription->expires_at->isFuture()))
-                                    <form method="POST" action="{{ route('admin.subscriptions.cancel', $subscription) }}" class="d-inline">
+                                    <form method="POST" action="{{ route('admin.subscriptions.cancel', $subscription) }}" class="d-inline form-confirm"
+                                          data-confirm-title="Cancel subscription?"
+                                          data-confirm="The user will lose access immediately."
+                                          data-confirm-icon="warning"
+                                          data-confirm-color="#f59e0b"
+                                          data-confirm-button="Yes, cancel">
                                         @csrf
-                                        <button type="submit" class="btn btn-sm btn-warning text-dark shadow-sm" onclick="return confirm('Cancel this subscription? The user will lose access immediately.')" style="border-radius: 8px;">
+                                        <button type="submit" class="btn btn-sm btn-warning text-dark shadow-sm" style="border-radius: 8px;">
                                             <i class="fas fa-ban me-1"></i>Cancel
                                         </button>
                                     </form>

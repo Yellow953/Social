@@ -1,10 +1,10 @@
 3- verification code? Yzid el mails
 
 Bugs:
-1- el watermark aam bi tawil ta yeftah
-2- watermark aam yetla3 barat el saf7a
+// 1- el watermark aam bi tawil ta yeftah
+// 2- watermark aam yetla3 barat el saf7a
 // 3- yzid aal page mn  baad el register check junk emails w on same device
-4- w ma ykoun el social plus bas la sene
+// 4- w ma ykoun el social plus bas la sene
 // 5- bass wahad yaamol change password w yfout bel password l jdid ma byozbat
 // 6- calculatrice: men shil 'Contributions so far' men hot option ykoun fiya name of the course ma3 l calcul li kenna deja 3emlino mtl ka2an tsayyiv kell course adde bdna fi mesh kel marra naamello calcul + les coefficients ykouno Partiel: 35% TC:20% TP:0%
 
