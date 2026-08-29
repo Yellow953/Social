@@ -91,6 +91,6 @@ class RegisterController extends Controller
         }
 
         return redirect()->route('verification.notice')
-            ->with('success', 'Registration successful! Please check your email for the verification link.');
+            ->with('success', 'Registration successful! Please check your inbox and your junk/spam folder for the verification link.');
     }
 }

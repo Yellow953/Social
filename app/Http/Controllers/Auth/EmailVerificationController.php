@@ -42,7 +42,7 @@ class EmailVerificationController extends Controller
                 : redirect()->route('dashboard');
         }
         $request->user()->sendEmailVerificationNotification();
-        return back()->with('success', 'Verification link sent! Please check your email.');
+        return back()->with('success', 'Verification link sent! Please check your inbox and your junk/spam folder.');
     }
 
     /**

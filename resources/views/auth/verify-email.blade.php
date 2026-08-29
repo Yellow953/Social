@@ -44,9 +44,20 @@
                             </div>
                         @endif
 
+                        <div class="alert alert-warning d-flex mb-3" role="alert">
+                            <i class="fas fa-folder-open me-2 mt-1"></i>
+                            <div>
+                                <strong>Check your inbox &mdash; and your junk/spam folder.</strong>
+                                <div class="small mt-1">
+                                    The verification email often lands in <strong>Junk</strong>, <strong>Spam</strong> or
+                                    <strong>Promotions</strong>. If you find it there, mark it as &ldquo;Not spam&rdquo; so
+                                    future emails reach your inbox.
+                                </div>
+                            </div>
+                        </div>
+
                         <p class="text-muted text-center mb-4">
-                            Please check your email inbox or spam folder and click the verification link.
-                            The email can take up to 10 mins to arrive.
+                            Open the email and click the verification link. It can take up to 10 minutes to arrive.
                         </p>
 
                         <form method="POST" action="{{ route('verification.send') }}">
@@ -56,6 +67,15 @@
                                 <i class="fas fa-paper-plane me-2"></i>Resend Verification Email
                             </button>
                         </form>
+
+                        <p class="text-center text-muted small mb-3">
+                            Still nothing after checking your junk/spam folder?
+                            <a href="mailto:support@esibsocial.com?subject=Email%20verification%20issue"
+                               class="text-decoration-none fw-semibold" style="color: #ec682a;">
+                                <i class="fas fa-envelope me-1"></i>Contact the admins
+                            </a>
+                            and we'll verify your account manually.
+                        </p>
 
                         <div class="text-center">
                             <form method="POST" action="{{ route('logout') }}" class="d-inline">
