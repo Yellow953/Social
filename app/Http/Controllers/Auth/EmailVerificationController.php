@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 
@@ -18,6 +19,7 @@ class EmailVerificationController extends Controller
                 ? redirect()->route('admin.dashboard')
                 : redirect()->route('dashboard');
         }
+
         return view('auth.verify-email');
     }
 
@@ -27,6 +29,7 @@ class EmailVerificationController extends Controller
     public function verify(EmailVerificationRequest $request)
     {
         $request->fulfill();
+
         return redirect()->route($request->user()->isAdmin() ? 'admin.dashboard' : 'dashboard')
             ->with('success', 'Email verified successfully! Welcome to ESIB SOCIAL.');
     }
@@ -42,6 +45,7 @@ class EmailVerificationController extends Controller
                 : redirect()->route('dashboard');
         }
         $request->user()->sendEmailVerificationNotification();
+
         return back()->with('success', 'Verification link sent! Please check your inbox and your junk/spam folder.');
     }
 
@@ -52,9 +56,9 @@ class EmailVerificationController extends Controller
     {
         $request->validate(['email' => 'required|email']);
 
-        $user = \App\Models\User::where('email', $request->email)->first();
+        $user = User::where('email', $request->email)->first();
 
-        if ($user && !$user->hasVerifiedEmail()) {
+        if ($user && ! $user->hasVerifiedEmail()) {
             $user->sendEmailVerificationNotification();
         }
 

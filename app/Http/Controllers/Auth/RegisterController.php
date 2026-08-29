@@ -8,8 +8,8 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 
 class RegisterController extends Controller
 {
@@ -24,6 +24,7 @@ class RegisterController extends Controller
             if ($user->isAdmin()) {
                 return redirect('/admin/dashboard');
             }
+
             return redirect('/dashboard');
         }
 

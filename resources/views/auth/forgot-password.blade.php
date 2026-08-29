@@ -42,6 +42,14 @@
                             </div>
                         @endif
 
+                        <div class="alert alert-warning d-flex mb-3 py-2" role="alert">
+                            <i class="fas fa-folder-open me-2 mt-1"></i>
+                            <div class="small">
+                                The reset link often lands in <strong>Junk</strong>, <strong>Spam</strong> or
+                                <strong>Promotions</strong>. Check those folders too &mdash; the link is valid for 60 minutes.
+                            </div>
+                        </div>
+
                         <!-- Form -->
                         <form method="POST" action="{{ route('password.email') }}">
                             @csrf

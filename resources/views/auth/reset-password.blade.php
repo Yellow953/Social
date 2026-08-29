@@ -39,16 +39,19 @@
                             <input type="hidden" name="token" value="{{ $token }}">
 
                             <!-- Email -->
+                            @php($prefilledEmail = $email ?? old('email'))
                             <div class="mb-3">
                                 <input type="email"
                                        class="form-control form-control-lg @error('email') is-invalid @enderror"
                                        id="email"
                                        name="email"
-                                       value="{{ $email ?? old('email') }}"
+                                       value="{{ $prefilledEmail }}"
                                        placeholder="Email"
                                        required
                                        autocomplete="email"
-                                       readonly>
+                                       {{-- only lock the field when we actually know the address;
+                                            some mail clients strip the ?email= param from the link --}}
+                                       @if($prefilledEmail) readonly @endif>
                                 @error('email')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror

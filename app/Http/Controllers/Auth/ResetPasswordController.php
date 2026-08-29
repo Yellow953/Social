@@ -42,11 +42,21 @@ class ResetPasswordController extends Controller
         );
 
         if ($status === Password::PASSWORD_RESET) {
-            return redirect()->route('login')->with('status', __($status));
+            return redirect()->route('login')->with('status', 'Your password has been reset. You can now sign in with your new password.');
+        }
+
+        // An expired link is the common case here, and "invalid token" reads
+        // like a broken site, so send them back to request a fresh one.
+        if ($status === Password::INVALID_TOKEN) {
+            return redirect()->route('password.request')->withErrors([
+                'email' => 'This reset link is no longer valid — links expire 60 minutes after they are sent, and each one can only be used once. Please request a new link below.',
+            ]);
         }
 
         throw ValidationException::withMessages([
-            'email' => [__($status)],
+            'email' => [$status === Password::INVALID_USER
+                ? 'We could not find an account with that email address. Make sure you are using the university email you registered with.'
+                : __($status)],
         ]);
     }
 }

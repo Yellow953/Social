@@ -37,6 +37,13 @@
                             <div class="alert alert-success small py-2 mb-3">{{ session('resend_success') }}</div>
                         @endif
 
+                        {{-- e.g. the confirmation after a successful password reset --}}
+                        @if(session('status'))
+                            <div class="alert alert-success small py-2 mb-3">
+                                <i class="fas fa-check-circle me-2"></i>{{ session('status') }}
+                            </div>
+                        @endif
+
                         <!-- Form -->
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
