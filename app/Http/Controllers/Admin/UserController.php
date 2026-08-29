@@ -219,7 +219,7 @@ class UserController extends Controller
             'subscription_type' => 'SOCIALPLUS',
             'approved_at' => now(),
             'approved_by' => auth()->id(),
-            'expires_at' => null, // never expires
+            'expires_at' => now()->addYears(3), // SOCIALPLUS lasts 3 years
         ]);
 
         return response()->json([

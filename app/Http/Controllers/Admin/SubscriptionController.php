@@ -47,14 +47,14 @@ class SubscriptionController extends Controller
             'status'      => 'approved',
             'approved_at' => now(),
             'approved_by' => auth()->id(),
-            'expires_at'  => null, // never expires
+            'expires_at'  => now()->addYears(3), // SOCIALPLUS lasts 3 years
         ]);
 
         Notification::create([
             'user_id' => $subscription->user_id,
             'type'    => 'subscription',
             'title'   => 'Subscription Approved',
-            'message' => "Your {$subscription->subscription_type} subscription has been approved! You now have access to all locked materials.",
+            'message' => "Your {$subscription->subscription_type} subscription has been approved! You now have access to all locked materials until {$subscription->expires_at->format('M d, Y')}.",
             'data'    => [
                 'subscription_id'   => $subscription->id,
                 'subscription_type' => $subscription->subscription_type,
