@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EmailVerificationController extends Controller
 {
@@ -25,12 +26,24 @@ class EmailVerificationController extends Controller
 
     /**
      * Handle the verification link click.
+     *
      */
-    public function verify(EmailVerificationRequest $request)
+    public function verify(Request $request, $id, $hash)
     {
-        $request->fulfill();
+        $user = User::findOrFail($id);
 
-        return redirect()->route($request->user()->isAdmin() ? 'admin.dashboard' : 'dashboard')
+        if (! hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {
+            abort(403, 'Invalid verification link.');
+        }
+
+        if (! $user->hasVerifiedEmail()) {
+            $user->markEmailAsVerified();
+            event(new Verified($user));
+        }
+
+        Auth::login($user);
+
+        return redirect()->route($user->isAdmin() ? 'admin.dashboard' : 'dashboard')
             ->with('success', 'Email verified successfully! Welcome to ESIB SOCIAL.');
     }
 
